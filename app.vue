@@ -19,6 +19,7 @@ useHead({
 
 <style>
 .page-enter-active,
+<<<<<<< HEAD
 .page-leave-active,
 .layout-enter-active,
 .layout-leave-active {
@@ -28,6 +29,13 @@ useHead({
 .page-leave-to,
 .layout-enter-from,
 .layout-leave-to {
+=======
+.page-leave-active {
+  transition: all 0.4s;
+}
+.page-enter-from,
+.page-leave-to {
+>>>>>>> df1469f0 (Initial commit)
   opacity: 0;
   filter: blur(1rem);
 }

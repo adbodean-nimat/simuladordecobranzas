@@ -1,5 +1,6 @@
 <template>
     <UContainer :ui="{ constrained: 'max-w-screen-2xl'}">
+<<<<<<< HEAD
       <nav class="flex flex-row items-center justify-between h-16"> 
             <div>
                 <UHorizontalNavigation :ui="navbar" :links="links" />
@@ -91,12 +92,33 @@
                     </UModal>
                   <!-- <UHorizontalNavigation :links="linkLogout"/> -->
                 </template>
+=======
+        <nav class="flex flex-row items-center justify-between h-16"> 
+            <div>
+                <UHorizontalNavigation :links="links" />
+            </div>
+            <div>
+                <!-- {{ new Date().toLocaleDateString() }} -->
+                <ClientOnly>
+                    <UButton
+                        :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
+                        color="gray"
+                        variant="ghost"
+                        aria-label="Theme"
+                        @click="isDark = !isDark"
+                    />
+                    <template #fallback>
+                        <div class="w-5 h-5" />
+                    </template>
+                </ClientOnly>
+>>>>>>> df1469f0 (Initial commit)
             </div>
         </nav>
     </UContainer>
 </template>
 
 <script setup lang="ts">
+<<<<<<< HEAD
 import { storeToRefs } from 'pinia'; 
 import { useAuthStore } from '~/store/auth'
 const authStore = useAuthStore()
@@ -117,6 +139,8 @@ const userName : any = authenticated ? useCookie('username') : ''
 const avatar : any = authenticated ? useCookie('avatar') : ''
 const isRol : any = authenticated ? useCookie('rol') : ''
 
+=======
+>>>>>>> df1469f0 (Initial commit)
 const colorMode = useColorMode()
 const isDark = computed({
   get () {
@@ -126,6 +150,7 @@ const isDark = computed({
     colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
   }
 })
+<<<<<<< HEAD
 const dropItems = reactive([
     [{
       label: fullName,
@@ -169,6 +194,8 @@ const linkLogout = [
   }]
 ]
 
+=======
+>>>>>>> df1469f0 (Initial commit)
 const links = [
   [{
     label: '',
@@ -177,20 +204,33 @@ const links = [
   },
   {
     label: '',
+<<<<<<< HEAD
     icon: 'i-heroicons-adjustments-horizontal-solid',
     to: '/parametros'
   },
   {
     label: 'Costo de financiación',
+=======
+    icon: 'i-heroicons-cog-solid',
+    to: '/parametros'
+  },
+  {
+    label: '',
+>>>>>>> df1469f0 (Initial commit)
     icon: 'i-heroicons-percent-badge-solid',
     to: '/financiacion'
   },
   {
+<<<<<<< HEAD
     label: 'Tarjetas',
+=======
+    label: '',
+>>>>>>> df1469f0 (Initial commit)
     icon: 'i-heroicons-credit-card',
     to: '/tarjetas'
   },
   {
+<<<<<<< HEAD
     label: 'Ventas / Acopios (con PRE)',
     icon: 'i-heroicons-currency-dollar-solid',
     to: '/simulador'
@@ -213,4 +253,11 @@ const navbar = {
   inactive: 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white',
   label: 'truncate relative'
 }
+=======
+    label: '',
+    icon: 'i-heroicons-currency-dollar-solid',
+    to: '/simulador'
+  }]
+]
+>>>>>>> df1469f0 (Initial commit)
 </script>

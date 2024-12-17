@@ -6,8 +6,12 @@
     },
     "editor.quickSuggestions": {
         "strings": true
+<<<<<<< HEAD
     },
     "editor.minimap.enabled": true,
     "editor.inlineSuggest.showToolbar": "onHover"
+=======
+    }
+>>>>>>> df1469f0 (Initial commit)
   }
   

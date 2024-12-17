@@ -1,6 +1,9 @@
 generator client {
   provider = "prisma-client-js"
+<<<<<<< HEAD
   output   = "app/generated/prisma/client"
+=======
+>>>>>>> df1469f0 (Initial commit)
 }
 
 datasource db {
@@ -8,6 +11,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+<<<<<<< HEAD
+=======
+model costo_financiacion_visa_master_nativa {
+  id            Int     @id @default(autoincrement())
+  cuotas        String? @db.VarChar(30)
+  tasas_interes String? @db.VarChar(30)
+}
+
+model costo_financiacion_naranja {
+  id            Int     @id @default(autoincrement())
+  cuotas        String? @db.VarChar(30)
+  tasas_interes String? @db.VarChar(30)
+}
+
+model costo_financiacion_cuota_simple {
+  id            Int     @id @default(autoincrement())
+  cuotas        String? @db.VarChar(30)
+  tasas_interes String? @db.VarChar(30)
+}
+
+model simulador_cobranzas_parametros_generales {
+  id                   Int      @id @default(autoincrement())
+  max_dto_financiero   Decimal? @db.Decimal
+  tolerncia_dif        Decimal? @db.Decimal
+  unidad_tiempo_cheq   String?  @db.VarChar(30)
+  unidad_tiempo_tc     String?  @db.VarChar(30)
+  abv_tarjetas_credito String?  @db.VarChar(30)
+  abv_tarjetas_debito  String?  @db.VarChar(30)
+  tasa_iva             Decimal? @db.Decimal
+  fecha_alta           DateTime @default(dbgenerated("CURRENT_DATE")) @db.Date
+}
+
+>>>>>>> df1469f0 (Initial commit)
 model acindar_clasif_clientes {
   id                       Int     @id @default(autoincrement())
   clasif_1_ptf             String? @db.VarChar(30)
@@ -86,6 +122,7 @@ model categorias {
   nombre_categorias String?
 }
 
+<<<<<<< HEAD
 model clasif_arts_5_al_consultar {
   id            Int     @id @default(autoincrement())
   arts_clasif_5 Json[]
@@ -99,6 +136,8 @@ model clasif_arts_5_stock_manual {
   stock_manual  String? @db.VarChar
 }
 
+=======
+>>>>>>> df1469f0 (Initial commit)
 model comprobantes_a_omitir {
   id                 Int     @id @default(autoincrement())
   cod_comprobante    String? @db.VarChar(3)
@@ -129,6 +168,7 @@ model const_seco_nombres_configuraciones {
   nombre_conf_cs String? @db.VarChar(70)
 }
 
+<<<<<<< HEAD
 model costo_financiacion_cuota_simple {
   id            Int     @id @default(autoincrement())
   cuotas        String? @db.VarChar(30)
@@ -147,6 +187,8 @@ model costo_financiacion_visa_master_nativa {
   tasas_interes String? @db.VarChar(30)
 }
 
+=======
+>>>>>>> df1469f0 (Initial commit)
 model depos_a_no_considerar {
   id              Int      @id @default(autoincrement())
   cod_depos       Decimal? @db.Decimal
@@ -251,6 +293,23 @@ model sets_de_ventas {
   nombre_set_art String? @db.VarChar(30)
 }
 
+<<<<<<< HEAD
+=======
+model tablas {
+  id               Int     @id @default(autoincrement())
+  nombre_tablas    String? @db.VarChar(70)
+  url_tablas       String? @db.VarChar(70)
+  consultas_tablas String? @db.VarChar(70)
+}
+
+model vincular_articulos_a_familia {
+  cod               Int      @id @default(autoincrement())
+  cod_art           String?  @db.VarChar(30)
+  cod_familia       String?  @db.VarChar(30)
+  orden_art_familia Decimal? @db.Decimal
+}
+
+>>>>>>> df1469f0 (Initial commit)
 model simulador_cobranzas_dto_actualizar_cheques {
   id    Int      @id @default(autoincrement())
   desde Decimal? @db.Decimal
@@ -266,6 +325,7 @@ model simulador_cobranzas_dto_actualizar_facturas {
 }
 
 model simulador_cobranzas_medios_de_pagos {
+<<<<<<< HEAD
   id                 Int      @id @default(autoincrement())
   estado             Boolean?
   nombre             String?
@@ -319,4 +379,12 @@ model vincular_articulos_a_familia {
   cod_art           String?  @db.VarChar(30)
   cod_familia       String?  @db.VarChar(30)
   orden_art_familia Decimal? @db.Decimal
+=======
+  id           Int      @id @default(autoincrement())
+  estado       Boolean?
+  nombre       String?  @db.VarChar(30)
+  medio_pago   String?  @db.VarChar(30)
+  tipo_pago    String?  @db.VarChar(30)
+  interes_base Json[]
+>>>>>>> df1469f0 (Initial commit)
 }

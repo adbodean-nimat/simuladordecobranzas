@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div>
     <div>
       <LazyPromo />
@@ -16,3 +17,11 @@
 </template>
 <script setup lang="ts">
 </script>
+=======
+    <div>
+      <Header />
+      <slot />
+      <Footer />
+    </div>
+  </template>
+>>>>>>> df1469f0 (Initial commit)

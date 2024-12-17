@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 import { PrismaClient } from '~/prisma/app/generated/prisma/client';
 
 const prismaClientSingleton = () => {
   return new PrismaClient();
+=======
+import { PrismaClient } from '@prisma/client'
+
+const prismaClientSingleton = () => {
+  return new PrismaClient()
+>>>>>>> df1469f0 (Initial commit)
 }
 
 declare const globalThis: {

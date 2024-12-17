@@ -9,7 +9,11 @@
         <NuxtLink to="/parametros">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
+<<<<<<< HEAD
               <UIcon name="i-heroicons-adjustments-horizontal-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
+=======
+              <UIcon name="i-heroicons-cog-solid" class="w-8 h-8 bg-sea-green-500 flex items-center" />
+>>>>>>> df1469f0 (Initial commit)
             </template>
 
             
@@ -24,7 +28,11 @@
         <NuxtLink to="/financiacion">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
+<<<<<<< HEAD
               <UIcon name="i-heroicons-percent-badge-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
+=======
+              <UIcon name="i-heroicons-percent-badge-solid" class="w-8 h-8 bg-sea-green-500 flex items-center" />
+>>>>>>> df1469f0 (Initial commit)
             </template>
 
             
@@ -39,7 +47,11 @@
         <NuxtLink to="/tarjetas">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
+<<<<<<< HEAD
               <UIcon name="i-heroicons-credit-card-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
+=======
+              <UIcon name="i-heroicons-credit-card-solid" class="w-8 h-8 bg-sea-green-500 flex items-center" />
+>>>>>>> df1469f0 (Initial commit)
             </template>
 
             
@@ -54,7 +66,11 @@
         <NuxtLink to="/simulador">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
+<<<<<<< HEAD
               <UIcon name="i-heroicons-currency-dollar-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
+=======
+              <UIcon name="i-heroicons-currency-dollar-solid" class="w-8 h-8 bg-sea-green-500 flex items-center" />
+>>>>>>> df1469f0 (Initial commit)
             </template>
 
             
@@ -66,6 +82,7 @@
             </template>
           </UCard>
         </NuxtLink>
+<<<<<<< HEAD
         <NuxtLink to="/simulador2">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
@@ -84,6 +101,11 @@
         <!-- <UCard :ui="Card" ref="wrapper">
           <template #header>
             <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-primary dark:bg-sea-green-600 flex items-center" />
+=======
+        <UCard :ui="Card" ref="wrapper">
+          <template #header>
+            <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-sea-green-500 flex items-center" />
+>>>>>>> df1469f0 (Initial commit)
           </template>
 
           <template #footer>
@@ -92,13 +114,21 @@
         </UCard>
         <UCard :ui="Card" ref="wrapper">
           <template #header >
+<<<<<<< HEAD
             <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-primary dark:bg-sea-green-600 flex items-center" />  
+=======
+            <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-sea-green-500 flex items-center" />  
+>>>>>>> df1469f0 (Initial commit)
           </template>
 
           <template #footer >
             
           </template>
+<<<<<<< HEAD
         </UCard> -->
+=======
+        </UCard>
+>>>>>>> df1469f0 (Initial commit)
       </div>
       
     </UContainer>
@@ -106,6 +136,7 @@
 </template>
 
 <script setup lang="ts">
+<<<<<<< HEAD
 definePageMeta({
     title: 'Tablero - Simulador de cobranzas'
     })
@@ -119,6 +150,21 @@ const Card = {
           divide: 'divide-y divide-sea-green-200 dark:divide-sea-green-800',
           ring: 'ring-2 ring-sea-green-200 dark:ring-sea-green-800',
           rounded: 'rounded-md',
+=======
+
+definePageMeta({
+    title: 'Tablero - Simulador de cobranzas'
+    })
+
+const wrapper = ref<Array<HTMLElement | null>>([]);
+
+const Card = { 
+          base: '', 
+          background: 'bg-sea-green dark:bg-sea-green-900',
+          divide: 'divide-y divide-sea-green-200 dark:divide-sea-green-800',
+          ring: 'ring-2 ring-sea-green-200 dark:ring-sea-green-800',
+          rounded: 'rounded-lg',
+>>>>>>> df1469f0 (Initial commit)
           shadow: 'shadow',
           body: {
             base: '',

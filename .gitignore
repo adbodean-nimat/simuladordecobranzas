@@ -8,7 +8,10 @@ dist
 
 # Node dependencies
 node_modules
+<<<<<<< HEAD
 package-lock.json
+=======
+>>>>>>> df1469f0 (Initial commit)
 
 # Logs
 logs
@@ -23,7 +26,10 @@ logs
 .env
 .env.*
 !.env.example
+<<<<<<< HEAD
 
 # Crt Key
 *.crt
 *.key
+=======
+>>>>>>> df1469f0 (Initial commit)

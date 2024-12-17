@@ -1,0 +1,287 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model costo_financiacion_visa_master_nativa {
+  id            Int     @id @default(autoincrement())
+  cuotas        String? @db.VarChar(30)
+  tasas_interes String? @db.VarChar(30)
+}
+
+model costo_financiacion_naranja {
+  id            Int     @id @default(autoincrement())
+  cuotas        String? @db.VarChar(30)
+  tasas_interes String? @db.VarChar(30)
+}
+
+model costo_financiacion_cuota_simple {
+  id            Int     @id @default(autoincrement())
+  cuotas        String? @db.VarChar(30)
+  tasas_interes String? @db.VarChar(30)
+}
+
+model simulador_cobranzas_parametros_generales {
+  id                   Int      @id @default(autoincrement())
+  max_dto_financiero   Decimal? @db.Decimal
+  tolerncia_dif        Decimal? @db.Decimal
+  unidad_tiempo_cheq   String?  @db.VarChar(30)
+  unidad_tiempo_tc     String?  @db.VarChar(30)
+  abv_tarjetas_credito String?  @db.VarChar(30)
+  abv_tarjetas_debito  String?  @db.VarChar(30)
+  tasa_iva             Decimal? @db.Decimal
+  fecha_alta           DateTime @default(dbgenerated("CURRENT_DATE")) @db.Date
+}
+
+model acindar_clasif_clientes {
+  id                       Int     @id @default(autoincrement())
+  clasif_1_ptf             String? @db.VarChar(30)
+  segmento_cliente_acindar String? @db.VarChar(30)
+  descrip_segmento         String?
+  observacion              String?
+}
+
+model acindar_comprobantes {
+  id                  Int     @id @default(autoincrement())
+  comprobante_ptf     String? @db.VarChar(30)
+  tipo_de_transaccion String? @db.VarChar(30)
+  comprobante_acindar String? @db.VarChar(30)
+  tipo_doc_legal      String? @db.VarChar(30)
+}
+
+model acindar_equivalcod_factorcant {
+  id             Int      @id @default(autoincrement())
+  codigo_ptf     String?  @db.VarChar(30)
+  codigo_acindar String?  @db.VarChar(30)
+  factor_cant    Decimal? @db.Decimal
+}
+
+model acindar_filtro_plataforma {
+  id          Int   @id @default(autoincrement())
+  clasif6_inc Json? @db.Json
+  clasif5_exc Json? @db.Json
+}
+
+model actualizacion_web {
+  id                               Int       @id @default(autoincrement())
+  actualizacion_automatica         Boolean?
+  actualizacion_fecha              DateTime? @default(now()) @db.Timestamp(6)
+  actualizacion_cron_lunesaviernes String?   @db.VarChar(70)
+  actualizacion_cron_sabados       String?   @db.VarChar(70)
+}
+
+model articulos {
+  id             Int      @id @default(autoincrement())
+  publicado      Boolean?
+  codigo_art     String?
+  nombre_art     String?
+  orden_art      Int?
+  marcar_nuevo   Boolean?
+  mostrar_inicio Boolean?
+  outlet         Boolean?
+  copete         String?
+  descripcion    String?
+  bloq_vtas      Boolean?
+  min_para_web   Decimal? @db.Decimal
+  stock          Decimal? @db.Decimal
+  categorias1    String?
+  categorias2    String?
+  categorias3    String?
+  categorias4    String?
+}
+
+model cales_cementos_plasticor {
+  id               Int     @id @default(autoincrement())
+  cod_articulos    String? @db.VarChar(30)
+  nombre_articulos String? @db.VarChar(70)
+}
+
+model cartel_manual {
+  id        Int      @id @default(autoincrement())
+  titulo    String?
+  subtitulo String?
+  precio    String?
+  unimed    String?
+  outlet    Boolean?
+}
+
+model categorias {
+  id                Int     @id @default(autoincrement())
+  id_categorias     Int?
+  nombre_categorias String?
+}
+
+model comprobantes_a_omitir {
+  id                 Int     @id @default(autoincrement())
+  cod_comprobante    String? @db.VarChar(3)
+  nombre_comprobante String? @db.VarChar(70)
+}
+
+model const_seco_armado_config_1 {
+  id       Int      @id @default(autoincrement())
+  codptf   String?  @db.VarChar(30)
+  configcs String?  @db.VarChar(3)
+  cant     Decimal? @db.Decimal
+}
+
+model const_seco_armado_config_2 {
+  id                    Int      @id @default(autoincrement())
+  cod_art               String?  @db.VarChar(30)
+  nombre_art_ptf        String?  @db.VarChar(70)
+  nombre_art_lp         String?  @db.VarChar(70)
+  uni_lp_x_cada_uni_ptf Decimal? @db.Decimal
+  uni                   String?  @db.VarChar(30)
+  fracciona_uni_ptf     String?  @db.VarChar(2)
+  observacion           String?
+}
+
+model const_seco_nombres_configuraciones {
+  id             Int     @id @default(autoincrement())
+  cod_conf_cs    String? @db.VarChar(30)
+  nombre_conf_cs String? @db.VarChar(70)
+}
+
+model depos_a_no_considerar {
+  id              Int      @id @default(autoincrement())
+  cod_depos       Decimal? @db.Decimal
+  nombre_deposito String?  @db.VarChar(30)
+}
+
+model depos_a_no_considerar_para_stock_fisico {
+  id              Int      @id @default(autoincrement())
+  codigo_deposito Decimal? @db.Decimal
+  nombre_deposito String?
+}
+
+model dimensiones_contenedores {
+  id                    Int     @id @default(autoincrement())
+  clas4_clas5           String? @db.VarChar(30)
+  nombre                String? @db.VarChar(30)
+  medidas_ancho         String? @db.VarChar(30)
+  medidas_alto_puerta   String? @db.VarChar(30)
+  medidas_alto_interior String? @db.VarChar(30)
+  medidas_largo         String? @db.VarChar(30)
+}
+
+model familias_articulos_distribucion {
+  id                 Int      @id @default(autoincrement())
+  cod_familia_art    String?  @db.VarChar(30)
+  nombre_familia_art String?  @db.VarChar(70)
+  nro_orden_familia  Decimal? @db.Decimal
+  cod_set_art        String?  @db.VarChar(30)
+  nombre_set_art     String?  @db.VarChar(70)
+}
+
+model familias_de_articulos {
+  id                   Int      @id @default(autoincrement())
+  nombre_fami_art      String?  @db.VarChar(70)
+  nro_orden_de_la_fami Decimal? @db.Decimal
+  set_ventas           String?  @default("") @db.VarChar(30)
+}
+
+model familias_distribuciones {
+  id             Int      @id @default(autoincrement())
+  nombre_familia String?  @db.VarChar(70)
+  orden_familia  Decimal? @db.Decimal
+}
+
+model filtro_clientes_plataforma {
+  id                Int   @id @default(autoincrement())
+  tipo_de_cliente   Json? @db.Json
+  perfil_crediticio Json? @db.Json
+}
+
+model lista_de_precios_breve_uso_interno {
+  id                Int     @id(map: "lista_de_precio_breve_uso_interno_pkey") @default(autoincrement())
+  arts_articulo_emp String? @db.VarChar(30)
+  arts_nombre       String? @db.VarChar(70)
+  grupo_del_art     String? @db.VarChar(70)
+  comentario        String?
+  nro_orden_art     String?
+}
+
+model movimientos_de_contenedores {
+  id                Int      @id @default(autoincrement())
+  cod_cant_mov      String?  @db.VarChar(30)
+  nombre_movimiento String?  @db.VarChar(60)
+  cant_mov_nro      Decimal? @db.Decimal
+}
+
+model np_a_considerar {
+  id        Int     @id @default(autoincrement())
+  cod_comp  String? @db.VarChar(30)
+  nomb_comp String? @db.VarChar(30)
+}
+
+model productos_para_distribucion {
+  id                   Int      @id @default(autoincrement())
+  Codigo_producto      String?  @db.VarChar(30)
+  Orden_producto       Decimal? @db.Decimal
+  Cod_Familia_producto String?  @default(dbgenerated("0")) @db.VarChar(30)
+}
+
+model remitos_de_ventas {
+  id                 Int     @id(map: "Remitos_de_ventas_pkey") @default(autoincrement())
+  cod_comprobante    String? @db.VarChar(3)
+  nombre_comprobante String? @db.VarChar(70)
+}
+
+model rubros_ventas {
+  id             Int      @id @default(autoincrement())
+  rubros_id      String?  @db.VarChar(6)
+  rubros_nombres String?  @db.VarChar(70)
+  orden_rubros   Decimal? @db.Decimal
+}
+
+model sc_parametros_grales {
+  id                  Int   @id @default(autoincrement())
+  datos_generales     Json?
+  datos_dtos_facturas Json?
+  datos_dtos_cheques  Json?
+}
+
+model sets_de_ventas {
+  id             Int     @id @default(autoincrement())
+  nombre_set_art String? @db.VarChar(30)
+}
+
+model tablas {
+  id               Int     @id @default(autoincrement())
+  nombre_tablas    String? @db.VarChar(70)
+  url_tablas       String? @db.VarChar(70)
+  consultas_tablas String? @db.VarChar(70)
+}
+
+model vincular_articulos_a_familia {
+  cod               Int      @id @default(autoincrement())
+  cod_art           String?  @db.VarChar(30)
+  cod_familia       String?  @db.VarChar(30)
+  orden_art_familia Decimal? @db.Decimal
+}
+
+model simulador_cobranzas_dto_actualizar_cheques {
+  id    Int      @id @default(autoincrement())
+  desde Decimal? @db.Decimal
+  hasta Decimal? @db.Decimal
+  dto   Decimal? @db.Decimal
+}
+
+model simulador_cobranzas_dto_actualizar_facturas {
+  id    Int      @id @default(autoincrement())
+  desde Decimal? @db.Decimal
+  hasta Decimal? @db.Decimal
+  dto   Decimal? @db.Decimal
+}
+
+model simulador_cobranzas_medios_de_pagos {
+  id           Int      @id @default(autoincrement())
+  estado       Boolean?
+  nombre       String?  @db.VarChar(30)
+  medio_pago   String?  @db.VarChar(30)
+  tipo_pago    String?  @db.VarChar(30)
+  interes_base Json[]
+}

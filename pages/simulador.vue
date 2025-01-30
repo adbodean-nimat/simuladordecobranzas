@@ -13,19 +13,18 @@
             icon="clarity:dollar-line" 
             class="mb-8 max-w-2xl" 
             placeholder="Ingresar monto c/IVA" 
-            color="sea-green" 
             v-model="monto" 
             v-maska="optionsMask"
           >
             <template #trailing>
-              <span class="text-sea-green-500 sea-green:text-gray-400 text-xs">ARS</span>
+              <span class="text-xs">ARS</span>
             </template>
           </UInput>
         </div>
         <div class="flex justify-center">
           <template v-if="formData.mediospago?.map(item => item.calculable)[0] === '0.00'">
             <div class="flex flex-col w-full ">
-              <UDivider label="¡¡PAGO CERRADO!!" type="dashed" :ui="{ label: 'text-sea-green-500 dark:text-sea-green-400 text-lg mb-2' }"/>
+              <UDivider label="¡¡PAGO CERRADO!!" type="dashed" :ui="{ label: 'text-sea-green-600 dark:text-sea-green-400 text-lg mb-2' }"/>
               <UTabs :items="itemsTabs">
                 <template #npc-npg="{ item }">
                   <div class="grid grid-cols-2 w-auto h-auto rounded-md gap-4 items-center">
@@ -52,7 +51,7 @@
                       </div>
                     </template>
                     <div><span>FINAL A FACTURAR y A COBRAR</span></div>
-                    <div class=" rounded-md p-2 text-xl text-center bg-sea-green-500 dark:bg-sea-green-600">
+                    <div class="rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
                       $ {{ formatterNumber.format(formData.totalimporte) }}
                     </div>
                   </div>
@@ -83,7 +82,7 @@
                       </div>
                     </template>
                     <div><span>FINAL A FACTURAR y A COBRAR</span></div>
-                    <div class=" rounded-md p-2 text-xl text-center bg-sea-green-500 dark:bg-sea-green-600">
+                    <div class=" rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
                       $ {{ formatterNumber.format(formData.totalimporte) }}
                     </div>
                   </div>
@@ -112,7 +111,7 @@
               </template>
               <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
                 <UFormGroup label="Nro. cuota">
-                  <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(data => data.interes_base)[0].map((x:any) => x.nro_cuota)" v-model="item.cuota"/>
+                  <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map((data : any) => data.interes_base)[0].map((x:any) => x.nro_cuota)" v-model="item.cuota"/>
                 </UFormGroup>
               </template>
               <template v-if="item.nombre == 'CHEQUE'">
@@ -195,6 +194,29 @@
             </pre> -->
           </div>
         </div>
+        <UModal v-model="isOpen" prevent-close>
+          <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+            <template #header>
+              <div class="flex items-center justify-between">
+                <h3 class="text-base flex justify-center font-semibold leading-6 text-gray-900 dark:text-white">
+                  <UIcon :name="'i-heroicons-exclamation-circle'" size="md" class="h-6 w-6 mr-2 text-red-400 dark:text-red-500"  />
+                  Advertencia
+                </h3>
+                <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpen = false" />
+              </div>
+            </template>
+
+            <div>
+              <span> No aceptamos más de 60 días.</span>
+            </div>
+
+            <template #footer>
+              <div class="float-end pb-4">
+                <UButton label="Ok" icon="" @click="isOpen = false" variant="soft" />
+              </div>
+            </template>
+          </UCard>
+        </UModal>
         </template>
       </UContainer>
     </div>
@@ -206,6 +228,7 @@ import { useClipboard } from '@vueuse/core'
 import { DateTime } from 'luxon'
 
 const toast = useToast()
+const isOpen = ref(false)
 
 const optionsMask = reactive<MaskInputOptions>({
   number: {locale: 'es-US', fraction: 2}
@@ -293,12 +316,17 @@ const itemsTabs = [{
 
       formData.value.mediospago.forEach(item =>
        { 
+        
+        const fechaHastaUltima = data_cheques.value?.findLast(data => data.hasta)?.hasta;
+        console.log(fechaHastaUltima)
+        
         const now = DateTime.now().toISODate()
         let fcheque = DateTime.fromISO(item.fecha)
         let fnow = DateTime.fromISO(now)
         let diff = fcheque.diff(fnow,['days']).toObject()
+        console.log(diff?.days ?? '')
         item.dias = diff?.days ? Number(diff.days).toString() : ''
-        
+        const aviso = Number(item.dias) >= Number(fechaHastaUltima) ? isOpen.value = true : false
         let importe = item.importe.replaceAll(",", "");
         const TC = data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.tipo_pago)[0]
         nrocuotas.value = ''
@@ -315,9 +343,10 @@ const itemsTabs = [{
         const itemDto2 = data_cheques.value?.find((element)=> Number(item.dias) >= Number(element.desde) && Number(item.dias) <= Number(element.hasta))
         
         item.dto = 
-                TC == 'TC' && item.cuota ? data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.interes_base?.filter((x:any) => x?.nro_cuota == item.cuota)).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0]
+                TC == 'TC' && item.cuota ? data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map((data: any) => data.interes_base?.filter((x:any) => x?.nro_cuota == item.cuota)).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0]
                 : TC == 'CHEQ' ? (itemDto2?.dto ? itemDto2?.dto : 0)
                 : data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.interes_base).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0] as any
+
 
         item.impacto = 
                 item.importe ?  (Number(importe) / (1 - Number(item.dto) / 100)).toFixed(2)

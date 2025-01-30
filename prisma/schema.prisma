@@ -283,5 +283,33 @@ model simulador_cobranzas_medios_de_pagos {
   nombre       String?  @db.VarChar(30)
   medio_pago   String?  @db.VarChar(30)
   tipo_pago    String?  @db.VarChar(30)
-  interes_base Json[]
+  interes_base Json?
+}
+
+model clasif_arts_5_al_consultar {
+  id            Int     @id @default(autoincrement())
+  arts_clasif_5 Json[]
+  descripcion   String?
+  whatsapp      String?
+}
+
+model clasif_arts_5_stock_manual {
+  id            Int     @id @default(autoincrement())
+  arts_clasif_5 Json[]
+  stock_manual  String? @db.VarChar
+}
+
+model simulador_cobranzas_roles {
+  id                           Int                            @id
+  nombre                       String?
+  descripcion                  String?
+  simulador_cobranzas_usuarios simulador_cobranzas_usuarios[]
+}
+
+model simulador_cobranzas_usuarios {
+  id                        Int                        @id
+  nombre                    String?
+  usuario_ad                String?
+  id_roles                  Int?
+  simulador_cobranzas_roles simulador_cobranzas_roles? @relation(fields: [id_roles], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "roles")
 }

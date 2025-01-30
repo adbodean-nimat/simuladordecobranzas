@@ -2,7 +2,10 @@ import prisma from "~/lib/prisma";
 
 export default defineEventHandler(async (event) => {
   try{
-    const data = await prisma.simulador_cobranzas_medios_de_pagos.findMany()
+    const id = Number(event.context.params?.id)
+    const data = await prisma.costo_financiacion_cuota_simple.delete({
+        where: { id }
+    })
     return data;
   }
   catch(error){

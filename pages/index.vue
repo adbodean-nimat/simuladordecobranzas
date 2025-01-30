@@ -9,7 +9,7 @@
         <NuxtLink to="/parametros">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
-              <UIcon name="i-heroicons-cog-solid" class="w-8 h-8 bg-sea-green-500 flex items-center" />
+              <UIcon name="i-heroicons-adjustments-horizontal-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
             </template>
 
             
@@ -24,7 +24,7 @@
         <NuxtLink to="/financiacion">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
-              <UIcon name="i-heroicons-percent-badge-solid" class="w-8 h-8 bg-sea-green-500 flex items-center" />
+              <UIcon name="i-heroicons-percent-badge-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
             </template>
 
             
@@ -39,7 +39,7 @@
         <NuxtLink to="/tarjetas">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
-              <UIcon name="i-heroicons-credit-card-solid" class="w-8 h-8 bg-sea-green-500 flex items-center" />
+              <UIcon name="i-heroicons-credit-card-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
             </template>
 
             
@@ -54,7 +54,7 @@
         <NuxtLink to="/simulador">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
-              <UIcon name="i-heroicons-currency-dollar-solid" class="w-8 h-8 bg-sea-green-500 flex items-center" />
+              <UIcon name="i-heroicons-currency-dollar-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
             </template>
 
             
@@ -66,9 +66,24 @@
             </template>
           </UCard>
         </NuxtLink>
-        <UCard :ui="Card" ref="wrapper">
+        <NuxtLink to="">
+          <UCard :ui="Card" ref="wrapper"> 
+            <template #header>
+              <UIcon name="i-heroicons-currency-dollar" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
+            </template>
+
+            
+            <span class="text-3xl font-bold">Cuentas a cobrar</span><br>
+            <span>Varias facturas, varios medios de pago.</span>
+            
+            <template #footer>
+              <span>1.0.0</span>
+            </template>
+          </UCard>
+        </NuxtLink>
+        <!-- <UCard :ui="Card" ref="wrapper">
           <template #header>
-            <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-sea-green-500 flex items-center" />
+            <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-primary dark:bg-sea-green-600 flex items-center" />
           </template>
 
           <template #footer>
@@ -77,13 +92,13 @@
         </UCard>
         <UCard :ui="Card" ref="wrapper">
           <template #header >
-            <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-sea-green-500 flex items-center" />  
+            <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-primary dark:bg-sea-green-600 flex items-center" />  
           </template>
 
           <template #footer >
             
           </template>
-        </UCard>
+        </UCard> -->
       </div>
       
     </UContainer>
@@ -91,7 +106,6 @@
 </template>
 
 <script setup lang="ts">
-
 definePageMeta({
     title: 'Tablero - Simulador de cobranzas'
     })
@@ -100,10 +114,10 @@ const wrapper = ref<Array<HTMLElement | null>>([]);
 
 const Card = { 
           base: '', 
-          background: 'bg-sea-green dark:bg-sea-green-900',
+          background: 'bg-sea-green-50 dark:bg-sea-green-900',
           divide: 'divide-y divide-sea-green-200 dark:divide-sea-green-800',
           ring: 'ring-2 ring-sea-green-200 dark:ring-sea-green-800',
-          rounded: 'rounded-lg',
+          rounded: 'rounded-md',
           shadow: 'shadow',
           body: {
             base: '',

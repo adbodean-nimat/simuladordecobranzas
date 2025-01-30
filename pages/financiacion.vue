@@ -1,14 +1,23 @@
 <template>
     <div>
         <UContainer :ui="{ constrained: 'max-w-screen-2xl' }">
-            <div class="text-center p-4 text-base">
+            <div class="flex justify-center gap-2 items-center text-center p-4 text-base">
                 <h2>COSTO DE FINANCIACIÓN</h2>
+                <div class="justify-items-end" v-if="authenticated">
+                    <UButton icon="i-heroicons-pencil-square"
+                            size="sm"
+                            variant="soft"
+                            square
+                            label="Editar"
+                            to="/edit/financiacion"
+                            :trailing="false"></UButton>
+                </div>
             </div>
             <div class="grid grid-cols-3 gap-4">
                 <div>
-                    <UAccordion default-open multiple color="sea-green" variant="solid" size="xl" open-icon="i-heroicons-null" close-icon="i-heroicons-null" :items="financiero1">
+                    <UAccordion default-open multiple variant="soft" size="xl" :items="financiero1">
                         <template #visa-master-nativa v-if="data_visamasternativa">
-                            <div class="text-sea-green-900 dark:text-white text-center">
+                            <div class="text-sea-green dark:text-white text-center">
                                 <UTable 
                                     :ui="tableUI"
                                     :columns="columns1"
@@ -23,9 +32,9 @@
                     </UAccordion>
                 </div>
                 <div>
-                    <UAccordion default-open multiple color="sea-green" variant="solid" size="xl" open-icon="i-heroicons-null" close-icon="i-heroicons-null" :items="financiero2">
+                    <UAccordion default-open multiple variant="soft" size="xl" :items="financiero2">
                         <template #naranja v-if="data_naranja">
-                            <div class="text-sea-green-900 dark:text-white text-center">
+                            <div class="text-sea-green dark:text-white text-center">
                                 <UTable 
                                     :ui="tableUI"
                                     :columns="columns1" 
@@ -41,9 +50,9 @@
                     </UAccordion>
                 </div>
                 <div>
-                    <UAccordion default-open multiple color="sea-green" variant="solid" size="xl" open-icon="i-heroicons-null" close-icon="i-heroicons-null" :items="financiero3">
+                    <UAccordion default-open multiple variant="soft" size="xl" :items="financiero3">
                         <template #cuota-simple v-if="data_cuotasimple">
-                            <div class="text-sea-green-900 dark:text-white text-center">
+                            <div class="text-sea-green dark:text-white text-center">
                                 <UTable 
                                     :ui="tableUI"
                                     :columns="columns1" 
@@ -107,11 +116,14 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '~/store/auth'
+const { authenticated } = storeToRefs(useAuthStore());
 const {status: status_visamasternativa, data: data_visamasternativa} = await useFetch('/api/visamasternativa')
 const {status: status_naranja, data: data_naranja} = await useFetch('/api/naranja')
 const {status: status_cuotasimple, data: data_cuotasimple} = await useFetch('/api/cuotasimple')
 const tableUI = {
-    divide: 'divide-y divide-sea-green-300 dark:divide-sea-green',
+    divide: 'divide-y divide-sea-green-200 dark:divide-sea-green-800',
     th: {
         base: 'text-center rtl:text-right',
         padding: 'px-4 py-3.5',
@@ -122,7 +134,7 @@ const tableUI = {
     td: {
         base: 'whitespace-nowrap',
         padding: 'px-4 py-4',
-        color: 'text-gray-500 dark:text-gray-400',
+        color: 'text-gray-500 dark:text-gray-200',
         font: 'font-semibold',
         size: 'text-md',
     },

@@ -2,7 +2,13 @@ import prisma from "~/lib/prisma";
 
 export default defineEventHandler(async (event) => {
   try{
-    const data = await prisma.costo_financiacion_naranja.findMany()
+    const data = await prisma.simulador_cobranzas_medios_de_pagos.findMany({
+      orderBy: [
+        {
+          id: 'asc'
+        }
+      ]
+    })
     return data;
   }
   catch(error){

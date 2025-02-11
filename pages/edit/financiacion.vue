@@ -228,6 +228,7 @@
 
 <script setup lang="ts">
 definePageMeta({
+    title: 'Editar el costo de financiación',
     middleware: ['auth']
 })
 const {status: status_visamasternativa, data: data_visamasternativa, refresh: refresh_visamasternativa} = await useFetch('/api/visamasternativa')

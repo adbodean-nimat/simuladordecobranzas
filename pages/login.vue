@@ -26,7 +26,7 @@ import { number, z } from 'zod'
 import type { Form, FormSubmitEvent } from '#ui/types'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '~/store/auth'
-
+const runtimeConfig = useRuntimeConfig()
 definePageMeta({
     title: 'Login - Simulador de cobranzas'
 })
@@ -54,7 +54,7 @@ const form = ref<Form<Schema>>()
 })
 
 const login = async (event: FormSubmitEvent<Schema>) => {
-        const { data: data_auth, status: status_auth, error: error_auth } = await useFetch('https://192.168.0.159:8090/login', {
+        const { data: data_auth, status: status_auth, error: error_auth } = await useFetch(runtimeConfig.public.apiBase, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json; charset=utf-8' },
             body: {
@@ -78,12 +78,11 @@ const login = async (event: FormSubmitEvent<Schema>) => {
             
             info.fullname = (data_auth.value as any).user.name
             info.avatar = (data_auth.value as any).avatar            
-            info.disabled = isRol[0] === "Editor" ? true : false
+            info.disabled = isRol ? (isRol[0] === "Editor" ? true : false) : ''
+
             if (isRol === undefined){
                 throw toast.add({title:'Acceso denegado', description: 'No tienes permisos para acceder a esta aplicación.', icon:'i-heroicons-exclamation-circle', color:"red"});
             }
-
-            
 
             await authenticateUser({username: state.username, avatar: info.avatar, fullname: info.fullname, rol: isRol, disabled: info.disabled});
                 

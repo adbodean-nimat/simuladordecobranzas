@@ -176,22 +176,22 @@ const links = [
     to: '/'
   },
   {
-    label: '',
+    label: 'Parametros generales',
     icon: 'i-heroicons-adjustments-horizontal-solid',
     to: '/parametros'
   },
   {
-    label: '',
+    label: 'Costo de financiación',
     icon: 'i-heroicons-percent-badge-solid',
     to: '/financiacion'
   },
   {
-    label: '',
+    label: 'Tarjetas',
     icon: 'i-heroicons-credit-card',
     to: '/tarjetas'
   },
   {
-    label: '',
+    label: 'Ventas / Acopios (con PRE)',
     icon: 'i-heroicons-currency-dollar-solid',
     to: '/simulador'
   }]

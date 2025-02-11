@@ -59,12 +59,6 @@
                 <template #pac="{ item }">
                   <div class="grid grid-cols-2 w-auto h-auto rounded-md gap-4 items-center">
                     <div class="text-lg">
-                    
-                    </div>
-                    <div>
-                    
-                    </div>
-                    <div class="text-lg">
                       <span>Ingresar en cabecera NPC, Dto. 2 -financiero-</span>
                     </div>
 
@@ -93,22 +87,35 @@
             </template> 
         </div>
         <template v-if="formData.monto">
-        <UButton @click="addMore" icon="i-material-symbols-add-circle" size="md" square variant="soft" class="mb-4">Agregar</UButton>
+        
+          <UButton @click="addMore" icon="i-material-symbols-add-circle" size="md" square variant="soft" class="mb-4">Agregar</UButton>
     
-        <div class="grid grid-rows-3 grid-flow-col gap-4">
-          <div class="row-span-3">
+        
+          <div class="grid grid-rows-3 grid-flow-col gap-4">
+        
+            <div class="row-span-3">
             
-            <div class="grid grid-flow-col auto-rows-auto auto-cols-max gap-4 mb-2 p-2 items-end" v-for="(item, i) in formData.mediospago" :key="i">
-              <template v-if="data_mediosdepagos">
-                <UFormGroup>
-                  <UBadge size="lg" variant="soft">{{ i + 1 }}</UBadge>
-                </UFormGroup>
-              </template>
-              <template v-if="data_mediosdepagos">
-                <UFormGroup label="Medio de pago">
-                  <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.map(data => data.nombre)" v-model="item.nombre"/>
-                </UFormGroup>
-              </template>
+        
+              <div class="grid grid-flow-col auto-rows-auto auto-cols-max gap-4 mb-2 p-2 items-end" v-for="(item, i) in formData.mediospago" :key="i">
+        
+                <template v-if="data_mediosdepagos">
+        
+                  <UFormGroup>
+        
+                    <UBadge size="lg" variant="soft">{{ i + 1 }}</UBadge>
+        
+                  </UFormGroup>
+        
+                </template>
+        
+                <template v-if="data_mediosdepagos">
+        
+                  <UFormGroup label="Medio de pago">
+        
+                    <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.map(data => data.nombre)" v-model="item.nombre"/>
+        
+                  </UFormGroup>
+                </template>
               <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
                 <UFormGroup label="Nro. cuota">
                   <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map((data : any) => data.interes_base)[0].map((x:any) => x.nro_cuota)" v-model="item.cuota"/>
@@ -144,8 +151,8 @@
                 <UInput v-model="item.importe" variant="outline" placeholder="" icon="clarity:dollar-line" v-maska="optionsMask"></UInput>
               </UFormGroup>
               
-              <UButton class="flex-none" @click="remove(i)" icon="i-heroicons-trash-solid" size="sm" square variant="soft"></UButton>
-              <UButton class="flex-none" @click="copyItem(i)" icon="i-heroicons-clipboard-document-solid" size="sm" square variant="soft"></UButton>  
+              <UButton class="flex-none" title="Borrar item" @click="remove(i)" icon="i-heroicons-trash" size="sm" square variant="soft"></UButton>
+              <UButton class="flex-none" title="Duplicar item" @click="copyItem(i)" icon="i-heroicons-clipboard" size="sm" square variant="soft"></UButton>  
             </div>
           </div>
           <div class="col-span-2">
@@ -159,29 +166,32 @@
                     </UFormGroup>
                   </template>
                 </div>
-                <div>
+                <div v-if="!item.importe">
                   <template v-if="formData.monto && item.dto">
                     <template v-if="Number(item.calculable) > 0">
                       <UFormGroup size="2xs" label="Importe deseable" @click="toast.add({ title: 'Copiado!' });copy(item.calculable)">
                         <UBadge size="lg">{{'$ ' + formatterNumber.format(Number(item.calculable)) }}</UBadge>
                       </UFormGroup>
                     </template>
-                    <template v-else>
-                      <UFormGroup></UFormGroup>
-                    </template>
                   </template>
                 </div>
                 <div>
                   <template v-if="item.importe">
-                    <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
-                      <UFormGroup size="xs" label="">
-                        <UBadge size="md" color="amber">{{ !item.importe ? item.cuota +' CUOTAS DE $ ' + formatterNumber.format(Number(formData.monto.replace(",","")) / Number(item.cuota)) : item.cuota + ' CUOTAS DE $ ' + formatterNumber.format((Number(item.importe.replace(",","")) / Number(item.cuota)))}}</UBadge>
-                      </UFormGroup>
+                    <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">              
+                        <UBadge size="md" color="amber">{{ !item.importe ? item.cuota +' CUOTAS DE $ ' + formatterNumber.format(Number(formData.monto.replaceAll(",","")) / Number(item.cuota)) : item.cuota + ' CUOTAS DE $ ' + formatterNumber.format((Number(item.importe.replaceAll(",","")) / Number(item.cuota)))}}</UBadge>
                     </template>
                     <template v-else-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] !== 'TC'">
-                      <UFormGroup size="xs" label="">
                         <UBadge size="md" color="amber">{{ item.nombre == "MAESTRO" || item.nombre == "VISA ELECTRON" ||  item.nombre == "CABAL DEBITO" ? 'DÉBITO $ ' + item.importe : item.nombre + ' $ ' + item.importe }}</UBadge>
-                      </UFormGroup>
+                    </template>
+                  </template>
+                </div>
+                <div>
+                  <template v-if="formData.mediospago?.map(item => item.calculable)[0] === '0.00'">
+                    <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
+                      <UButton class="flex-none" title="Copiar" @click="toast.add({ title: 'Copiado!' });copy(!item.importe ? item.nombre + '-' + item.cuota +' CUOTAS DE $ ' + formatterNumber.format(Number(formData.monto.replaceAll(',','')) / Number(item.cuota)) :  item.nombre + ' - Total $ ' + item.importe +  ' - Cada uno ' + item.cuota + ' CUOTAS DE $ ' + formatterNumber.format((Number(item.importe.replaceAll(',','')) / Number(item.cuota))))" icon="i-heroicons-clipboard-document" size="lg" square variant="soft"></UButton>
+                    </template>
+                    <template v-else-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] !== 'TC'">
+                      <UButton class="flex-none" title="Copiar" @click="toast.add({ title: 'Copiado!' });copy(item.nombre == 'MAESTRO' || item.nombre == 'VISA ELECTRON' ||  item.nombre == 'CABAL DEBITO' ? 'DÉBITO $ ' + item.importe : item.nombre + ' $ ' + item.importe)" icon="i-heroicons-clipboard-document" size="lg" square variant="soft"></UButton>
                     </template>
                   </template>
                 </div>

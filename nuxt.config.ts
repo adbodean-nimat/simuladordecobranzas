@@ -2,20 +2,24 @@
 import Aura from '@primevue/themes/aura';
 export default defineNuxtConfig({
   runtimeConfig: {
-    urlMount: ''
+    public: {
+      apiBase: 'adadsadsasd'
+    }
+  },
+  prisma: {
+    autoSetupPrisma: true
   },
   devServer: {
     host: '0.0.0.0',
     port: 3000
   },
   compatibilityDate: '2024-04-03',
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: [
     '@nuxt/ui',
     '@nuxtjs/i18n',
     'nuxt-security',
     '@prisma/nuxt',
-    '@vueuse/nuxt',
     '@primevue/nuxt-module',
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
@@ -33,7 +37,7 @@ export default defineNuxtConfig({
           preset: Aura,
           options: {
             cssLayer: 'tailwind-base, primevue, tailwind-utilities',
-            darkModeSelector:  '.dark',
+            darkModeSelector: '.dark',
         }
       }
   }

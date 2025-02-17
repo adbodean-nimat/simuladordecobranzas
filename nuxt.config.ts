@@ -11,7 +11,11 @@ export default defineNuxtConfig({
   },
   devServer: {
     host: '0.0.0.0',
-    port: 3000
+    port: 3000,
+    https: {
+      key: './_.nimat.com.ar.key',
+      cert: './_.nimat.com.ar.crt'
+    }
   },
   compatibilityDate: '2024-04-03',
   devtools: { enabled: false },

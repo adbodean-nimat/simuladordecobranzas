@@ -91,7 +91,7 @@
           <UButton @click="addMore" icon="i-material-symbols-add-circle" size="md" square variant="soft" class="mb-4">Agregar</UButton>
     
         
-          <div class="grid grid-rows-3 grid-flow-col gap-4">
+          <div class="grid grid-rows-auto grid-flow-col gap-4">
         
             <div class="row-span-3">
             
@@ -156,10 +156,10 @@
             </div>
           </div>
           <div class="col-span-2">
-            <div class="grid grid-flow-col auto-rows-auto auto-cols-max grid-cols-5 gap-4 mb-2 p-2 justify-start items-end" v-for="(item, y) in formData.mediospago" :key="y">
+            <div class="grid grid-flow-col auto-rows-auto auto-cols-max gap-4 mb-2 p-2 items-end" v-for="(item, y) in formData.mediospago" :key="y">
                 <div class="col-start-1 col-end-4">
                   <template v-if="item.impacto">
-                    <UFormGroup size="2xs" label="Impacto sobre el neto de facturas, antes de descuento financiero">
+                    <UFormGroup label="Impacto sobre el neto de facturas, antes de descuento financiero">
                       <UBadge size="lg" variant="solid">
                         {{ '$ '+ formatterNumber.format(Number(item.impacto)) }}
                       </UBadge>
@@ -169,7 +169,7 @@
                 <div v-if="!item.importe">
                   <template v-if="formData.monto && item.dto">
                     <template v-if="Number(item.calculable) > 0">
-                      <UFormGroup size="2xs" label="Importe deseable" @click="toast.add({ title: 'Copiado!' });copy(item.calculable)">
+                      <UFormGroup label="Importe deseable" @click="toast.add({ title: 'Copiado!' });copy(item.calculable)">
                         <UBadge size="lg">{{'$ ' + formatterNumber.format(Number(item.calculable)) }}</UBadge>
                       </UFormGroup>
                     </template>
@@ -178,31 +178,30 @@
                 <div>
                   <template v-if="item.importe">
                     <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">              
-                        <UBadge size="md" color="amber">{{ !item.importe ? item.cuota +' CUOTAS DE $ ' + formatterNumber.format(Number(formData.monto.replaceAll(",","")) / Number(item.cuota)) : item.cuota + ' CUOTAS DE $ ' + formatterNumber.format((Number(item.importe.replaceAll(",","")) / Number(item.cuota)))}}</UBadge>
+                        <UBadge size="lg" color="amber">{{ !item.importe ? item.cuota +' CUOTAS DE $ ' + formatterNumber.format(Number(formData.monto.replaceAll(",","")) / Number(item.cuota)) : item.cuota + ' CUOTAS DE $ ' + formatterNumber.format((Number(item.importe.replaceAll(",","")) / Number(item.cuota)))}}</UBadge>
                     </template>
                     <template v-else-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] !== 'TC'">
-                        <UBadge size="md" color="amber">{{ item.nombre == "MAESTRO" || item.nombre == "VISA ELECTRON" ||  item.nombre == "CABAL DEBITO" ? 'DÉBITO $ ' + item.importe : item.nombre + ' $ ' + item.importe }}</UBadge>
+                        <UBadge size="lg" color="amber">{{ item.nombre == "MAESTRO" || item.nombre == "VISA ELECTRON" ||  item.nombre == "CABAL DEBITO" ? 'DÉBITO $ ' + item.importe : item.nombre + ' $ ' + item.importe }}</UBadge>
                     </template>
                   </template>
                 </div>
                 <div>
                   <template v-if="formData.mediospago?.map(item => item.calculable)[0] === '0.00'">
                     <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
-                      <UButton class="flex-none" title="Copiar" @click="toast.add({ title: 'Copiado!' });copy(!item.importe ? item.nombre + '-' + item.cuota +' CUOTAS DE $ ' + formatterNumber.format(Number(formData.monto.replaceAll(',','')) / Number(item.cuota)) :  item.nombre + ' - Total $ ' + item.importe +  ' - Cada uno ' + item.cuota + ' CUOTAS DE $ ' + formatterNumber.format((Number(item.importe.replaceAll(',','')) / Number(item.cuota))))" icon="i-heroicons-clipboard-document" size="lg" square variant="soft"></UButton>
+                      <UButton class="flex-none" title="Copiar" @click="toast.add({ title: 'Copiado!' });copy(!item.importe ? item.nombre + '-' + item.cuota +' CUOTAS DE $ ' + formatterNumber.format(Number(formData.monto.replaceAll(',','')) / Number(item.cuota)) :  item.nombre + ' - Total $ ' + item.importe +  ' - Cada uno ' + item.cuota + ' CUOTAS DE $ ' + formatterNumber.format((Number(item.importe.replaceAll(',','')) / Number(item.cuota))))" icon="i-heroicons-clipboard-document" size="sm" square variant="soft"></UButton>
                     </template>
                     <template v-else-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] !== 'TC'">
-                      <UButton class="flex-none" title="Copiar" @click="toast.add({ title: 'Copiado!' });copy(item.nombre == 'MAESTRO' || item.nombre == 'VISA ELECTRON' ||  item.nombre == 'CABAL DEBITO' ? 'DÉBITO $ ' + item.importe : item.nombre + ' $ ' + item.importe)" icon="i-heroicons-clipboard-document" size="lg" square variant="soft"></UButton>
+                      <UButton class="flex-none" title="Copiar" @click="toast.add({ title: 'Copiado!' });copy(item.nombre == 'MAESTRO' || item.nombre == 'VISA ELECTRON' ||  item.nombre == 'CABAL DEBITO' ? 'DÉBITO $ ' + item.importe : item.nombre + ' $ ' + item.importe)" icon="i-heroicons-clipboard-document" size="sm" square variant="soft"></UButton>
                     </template>
                   </template>
                 </div>
             </div>
           </div>
-          <div class="col-span-2 row-span-2">
-                       
-          <!-- <pre>
+          <!-- <div class="col-span-2 row-span-2">           
+            <pre>
               {{ formData }}
-            </pre> -->
-          </div>
+            </pre>
+          </div> -->
         </div>
         <UModal v-model="isOpen" prevent-close>
           <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">

@@ -300,14 +300,14 @@ model clasif_arts_5_stock_manual {
 }
 
 model simulador_cobranzas_roles {
-  id                           Int                            @id
+  id                           Int                            @id @default(autoincrement())
   nombre                       String?
   descripcion                  String?
   simulador_cobranzas_usuarios simulador_cobranzas_usuarios[]
 }
 
 model simulador_cobranzas_usuarios {
-  id                        Int                        @id
+  id                        Int                        @id @default(autoincrement())
   nombre                    String?
   usuario_ad                String?
   id_roles                  Int?

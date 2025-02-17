@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 
 interface State {
+  dropitems: any[],
   roles: any[],
   rol: string,
   authenticated: boolean,
@@ -13,6 +14,7 @@ interface State {
 export const useAuthStore = defineStore('auth', {
   state: (): State => {
     return {
+      dropitems: [],
       roles: [],
       rol: '',
       authenticated: false,
@@ -23,7 +25,7 @@ export const useAuthStore = defineStore('auth', {
     }
   },
   actions: {
-    async authenticateUser({fullname, username, avatar, rol, disabled}: any) {
+    async authenticateUser({fullname, username, avatar, rol}: any) {
       const userName = useCookie('username');
       const fullName = useCookie('fullname');
       const getAvatar = useCookie('avatar');
@@ -33,20 +35,24 @@ export const useAuthStore = defineStore('auth', {
       userName.value = username
       isRol.value = rol
       this.rol = rol
-      this.disabled = disabled
-      if(rol === undefined){
-        this.authenticated = false;
-        console.log('No tienes permisos para acceder a esta aplicación');
-        return 
+      rol.includes('Administrador') ? this.disabled = false : this.disabled 
+      rol.includes('Editor') ? this.disabled = true : this.disabled
+      rol.includes('Administrador') ? this.dropitems = [{
+          label: 'Configuración',
+          icon: 'i-heroicons-cog-solid',
+          disabled: false,
+          to: '/config'
+        }
+      ] : rol.includes('Editor') ? this.dropitems = [{
+        label: 'Configuración',
+        icon: 'i-heroicons-cog-solid',
+        disabled: true,
+        to: '/config'
+      }] : this.dropitems = [] 
+      if(rol.includes('Administrador') && rol.includes('Editor')){
+        return this.authenticated = true;
       }
-      if(rol.includes('Administrador')){
-        this.authenticated = true; 
-        return
-      }
-      if(rol.includes('Editor')){
-        this.authenticated = true;
-        return
-      }
+      console.log(this.dropitems)
     },
     async getAvatar(){
       if(this.authenticated){
@@ -61,6 +67,7 @@ export const useAuthStore = defineStore('auth', {
       this.disabled = false;
       this.rol = '';
       this.roles = [];
+      this.dropitems = [];
       this.avatar = '';
       const fullName = useCookie('fullname');
       const userName = useCookie('username');

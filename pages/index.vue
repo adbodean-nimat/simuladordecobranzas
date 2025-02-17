@@ -36,6 +36,21 @@
             </template>
           </UCard>
         </NuxtLink>
+        <NuxtLink to="">
+          <UCard :ui="Card" ref="wrapper"> 
+            <template #header>
+              <UIcon name="i-heroicons-building-library-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
+            </template>
+
+            
+            <span class="text-3xl font-bold">Promoción por día</span><br>
+            <span>Vista general</span>
+            
+            <template #footer>
+              <span>1.0.0</span>
+            </template>
+          </UCard>
+        </NuxtLink>
         <NuxtLink to="/tarjetas">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
@@ -66,7 +81,7 @@
             </template>
           </UCard>
         </NuxtLink>
-        <NuxtLink to="">
+        <NuxtLink to="/simulador2">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
               <UIcon name="i-heroicons-currency-dollar" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
@@ -109,9 +124,10 @@
 definePageMeta({
     title: 'Tablero - Simulador de cobranzas'
     })
-
+import { useAuthStore } from '~/store/auth'; 
+const authStore = useAuthStore()
+const attrs = useAttrs()
 const wrapper = ref<Array<HTMLElement | null>>([]);
-
 const Card = { 
           base: '', 
           background: 'bg-sea-green-50 dark:bg-sea-green-900',

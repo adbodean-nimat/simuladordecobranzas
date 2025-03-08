@@ -61,7 +61,7 @@ const login = async (event: FormSubmitEvent<Schema>) => {
             password: state.password
             },
         }); */
-        const response : any = await $fetch(runtimeConfig.public.apiBase, {
+        const response : any = await $fetch(runtimeConfig.public.apiLogin, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json; charset=utf-8' },
             body: {

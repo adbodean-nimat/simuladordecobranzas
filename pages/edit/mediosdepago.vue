@@ -26,12 +26,22 @@
                                 <UInput id="nombre" v-model="agregarDatosMP.nombre" fluid />
                             </div>
                             <div>
-                                <label for="tasas_interes" class="block font-bold mb-3">Tipo de pago</label>
-                                <UInput id="tasas_interes" v-model="agregarDatosMP.tipodepago" fluid />
+                                <label for="tipodepago" class="block font-bold mb-3">Tipo de pago</label>
+                                <!-- <UInput id="tipodepago" v-model="agregarDatosMP.tipodepago" fluid /> -->
+                                <USelect v-model="agregarDatosMP.tipodepago" :options="tipopago" option-attribute="label" value-attribute="value" fluid></USelect>
                             </div>
                             <div>
                                 <label for="estado" class="block font-bold mb-3">Estado</label>
                                 <USelect v-model="agregarDatosMP.estado" :options="statuses" option-attribute="label" value-attribute="value" />
+                            </div>
+                            <div>
+                                <label for="dias" class="block font-bold mb-3">Días de la semana</label>
+                                    <USelectMenu v-model="agregarDatosMP.dias" :options="dias" option-attribute="label" multiple by="id">
+                                        <template #label>
+                                            <span v-if="agregarDatosMP.dias.length" class="truncate">{{ agregarDatosMP.dias.map((data:any) => data.label).toString() }}</span>
+                                            <span v-else>Elegir días</span>
+                                        </template>
+                                    </USelectMenu>
                             </div>
                         </div>
                         <template #footer>
@@ -60,9 +70,14 @@
                                             <UInput v-model="data[field]" fluid />
                                         </template>
                                     </Column>
-                                    <Column field="tipo_pago" header="Tipo de pago" sortable>
+                                   <!--  <Column field="medio_pago" header="Medio de pago">
                                         <template #editor="{ data, field}">
                                             <UInput v-model="data[field]" fluid />
+                                        </template>
+                                    </Column> -->
+                                    <Column field="tipo_pago" header="Tipo de pago" sortable>
+                                        <template #editor="{ data, field}">
+                                             <USelect v-model="data[field]" :options="tipopago" option-attribute="label" value-attribute="value" placeholder="Seleccione un tipo de pago" fluid /> 
                                         </template>
                                     </Column>
                                     <Column field="estado" header="Estado">
@@ -75,6 +90,25 @@
                                         </template>
                                         <template #body="slotProps">
                                             <Tag :value="slotProps.data.estado == true ? 'HABILITADO' : 'INHABILITADO'" :severity="getStatusLabel(slotProps.data.estado)" />
+                                        </template>
+                                    </Column>
+                                    <Column field="dias" header="Días">
+                                        <template #editor="{data}">
+                                            <USelectMenu v-model="data.dias" :options="dias" multiple by="id">
+                                                <template #label>
+                                                    <UBadge v-if="data.dias.length" v-for="item of data.dias" :key="item.id"> 
+                                                        {{ item.label }}
+                                                    </UBadge>
+                                                    <span v-else>Elegir días</span>
+                                                </template>
+                                            </USelectMenu>
+                                        </template>
+                                        <template #body="slotProps">
+                                            <!-- <span v-if="slotProps.data.dias" class="truncate">{{ slotProps.data.dias.map((data:any) => data.label).toString() }}</span> -->
+                                            <UBadge color="gray" variant="soft" size="md" class="m-1 rounded-lg" v-if="slotProps.data.dias" v-for="item of slotProps.data.dias" :key="item.id">
+                                                {{ item.label.toUpperCase() }}                                            
+                                            </UBadge>
+                                            <span v-else></span>
                                         </template>
                                     </Column>
                                     <Column :rowEditor="true" style="width: 5%; min-width: 8rem" bodyStyle="text-align:right"></Column>
@@ -160,13 +194,31 @@ definePageMeta({
 const toast = useToast()
 const {data: data_parametrosgrales} = await useFetch('/api/parametrosgenerales')
 const {data: data_mediosdepagos, refresh: refresh_mediosdepagos} = await useFetch('/api/mediosdepagos')
+const dataDias = data_mediosdepagos.value ? data_mediosdepagos.value.map(item => item.dias) : ''
+console.log(dataDias)
 const editingRows = ref()
 const expandedRows = ref([])
 const editingRowsGroup = ref([])
+const tipopago = ref([
+    { label: 'Tarjeta Débito', value: 'TD'},
+    { label: 'Tarjeta Crédito', value: 'TC' },
+    { label: 'Contado Efectivo', value: 'CONTADO EFECTIVO' },
+    { label: 'Cheque', value: 'CHEQ'}
+])
+
 const statuses = ref([
     { label: 'HABILITADO', value: true },
     { label: 'INHABILITADO', value: false }
 ]);
+const dias = ref([
+    { id: 1, label: 'Lunes', value: 'Lunes' },
+    { id: 2, label: 'Martes', value: 'Martes' },
+    { id: 3, label: 'Miércoles', value: 'Miércoles' },
+    { id: 4, label: 'Jueves', value: 'Jueves' },
+    { id: 5, label: 'Viernes', value: 'Viernes' },
+    { id: 6, label: 'Sábado', value: 'Sábado' },
+    { id: 0, label: 'Domingo', value: 'Domingo' }
+])
 const isOpenModal = ref(false)
 const isOpenModalGeneral = ref(false)
 const agregarDatos = ref({
@@ -176,8 +228,11 @@ const agregarDatos = ref({
 const agregarDatosMP = ref({
     nombre: '',
     tipodepago: '',
-    estado: ''
+    medio_pago: '',
+    estado: '',
+    dias: []
 })
+
 const maxdtofinanciero = data_parametrosgrales.value ? data_parametrosgrales.value[0].max_dto_financiero : 0
 
 const geUnaFactVariosMP = (e : number) => {
@@ -211,14 +266,14 @@ const getStatusLabel = (status : any) => {
 };
 
 const createMedioPago = async () => {
-    console.log(agregarDatosMP)
     const res = await $fetch('/api/mediosdepagos', {
         method: 'POST',
         body: {
             estado: JSON.parse(agregarDatosMP.value?.estado),
             nombre: agregarDatosMP.value?.nombre,
-            medio_pago: agregarDatosMP.value?.nombre,
+            medio_pago: agregarDatosMP.value?.nombre.trim().replace(/\s/g, '').toLowerCase(),
             tipo_pago: agregarDatosMP.value?.tipodepago,
+            dias: agregarDatosMP.value?.dias
         }
     })
     toast.add({title: "Agregado correctamente"})
@@ -229,14 +284,16 @@ const createMedioPago = async () => {
 const onRowEditSave = async (e: any) => {
     let { newData, index} = e;
     const Id = newData.id
-
+    const mediopago = newData.nombre.trim().replace(/\s/g, '').toLowerCase()
+    console.log(newData.dias)
     const res = await $fetch('/api/mediosdepagos/'+Id , {
         method: 'PUT',
         body: {
             estado: newData.estado,
             nombre: newData.nombre,
-            medio_pago: newData.medio_pago,
-            tipo_pago: newData.tipo_pago
+            medio_pago: mediopago,
+            tipo_pago: newData.tipo_pago,
+            dias: newData.dias
         }
     })
     toast.add({title: "Modificado correctamente"})

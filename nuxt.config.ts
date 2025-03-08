@@ -2,12 +2,12 @@
 import Aura from '@primevue/themes/aura';
 export default defineNuxtConfig({
   runtimeConfig: {
+    
     public: {
-      apiBase: 'adadsadsasd'
+      apiToken: 'adadsadsasdfada',
+      apiBase: 'adadsadsasd',
+      apiLogin: 'adadsadsasdada',
     }
-  },
-  prisma: {
-    autoSetupPrisma: true
   },
   devServer: {
     host: '0.0.0.0',
@@ -18,10 +18,11 @@ export default defineNuxtConfig({
     }
   },
   compatibilityDate: '2024-04-03',
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   modules: [
     '@nuxt/ui',
     '@nuxtjs/i18n',
+    '@nuxt/fonts',
     'nuxt-security',
     '@prisma/nuxt',
     '@primevue/nuxt-module',
@@ -50,7 +51,7 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' }
   },
   i18n: {
-    locales: [{code: 'es', iso: 'es-AR'}],
+    locales: [{code: 'es', iso: 'es-es'}],
     defaultLocale: 'es',
     lazy: true
   },
@@ -62,6 +63,9 @@ export default defineNuxtConfig({
     }
   },
   build: {
-    transpile: ['fs']
+    transpile: ['fs', 'gsap']
+  },
+  prisma:{
+    autoSetupPrisma: true
   }
 })

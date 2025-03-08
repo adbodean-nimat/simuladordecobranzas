@@ -61,6 +61,11 @@
                                             <UInput v-model="data[field]" fluid />
                                         </template>
                                     </Column>
+                                    <Column field="interes_diario" header="INTERÉS DIARIO PARA ACTUALIZAR FACTURAS">
+                                        <template #editor="{ data, field }">
+                                            <UInput v-model="data[field]" fluid />
+                                        </template>
+                                    </Column>
                                     <Column :rowEditor="true" style="width: 5%; min-width: 8rem" bodyStyle="text-align:right"></Column>
                                     <Column style="width: 5%;" bodyStyle="text-align:left">
                                         <template #body="{ data }">
@@ -107,6 +112,10 @@
                                             <div class="col-span">
                                                 <label for="tasa_iva" class="block font-bold mb-3">TASA IVA</label>
                                                 <UInput id="tasa_iva" v-model="agregarDatos.tasa_iva" fluid />
+                                            </div>
+                                            <div class="col-span">
+                                                <label for="tasa_iva" class="block font-bold mb-3">INTERÉS DIARIO PARA ACTUALIZAR FACTURAS</label>
+                                                <UInput id="tasa_iva" v-model="agregarDatos.interes_diario" fluid />
                                             </div>
                                         </div>
                                         <template #footer>
@@ -310,6 +319,7 @@ const agregarDatos = ref({
         abv_tarjetas_credito: '',
         abv_tarjetas_debito: '',
         tasa_iva: '',
+        interes_diario: '',
         fecha_alta: new Date()
 })
 

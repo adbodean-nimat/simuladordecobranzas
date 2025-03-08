@@ -46,7 +46,7 @@
                                     class="w-full" />
                                     <div class="flex justify-around text-left px-3 py-3.5 border-t border-primary dark:border-sea-green-900">
                                         <span>INTERES DIARIO a aplicar sobre base CONTADO EFECTIVO, para actualizar facturas con 61 días o más</span>
-                                        <span>0.417000%</span>
+                                        <span>{{ interesDiario +'%'}}</span>
                                     </div>
                             </div>
                         </template>
@@ -103,7 +103,6 @@ const columns1 = [
   {
     key: 'nombre_modificado',
     label: 'DESCRIPCIÓN',
-    
   },
   {
     key: 'datos',
@@ -154,9 +153,9 @@ const parametros3 = [{
     icon: "",
     slot: "datos3"
 }]
-
+const interesDiario = data_parametros.value?.map(data=> data.interes_diario)[0];
 const data_parametrosgrales_rtl = data_parametros.value ? data_parametros.value : {}
-const dataNameModify = ["ID","MAXIMO DTO.FINANCIERO", "TOLERENCIA DIFERENCIA PARA CERRAR PAGOS", "UNIDAD DE TIEMPO PARA CHEQUES", "UNIDAD DE TIEMPO PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE DEBITO", "TASA IVA", "FECHA DE ALTA"]
+const dataNameModify = ["MAXIMO DTO.FINANCIERO", "TOLERENCIA DIFERENCIA PARA CERRAR PAGOS", "UNIDAD DE TIEMPO PARA CHEQUES", "UNIDAD DE TIEMPO PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE DEBITO", "TASA IVA", "INTERÉS DIARIO PARA FACTURAS"]
 const parametrosNombre = data_parametros.value?.map(f => Object.keys(f))[0];
 
 const newData2 = dataNameModify?.map((v)=>{
@@ -172,13 +171,12 @@ const newData = parametrosNombre?.map((f) => {
         nombre: '',
         datos: ''
     }
-
     dataName.nombre = f
     data_parametros.value?.forEach((d:any)=>{
-        const percent = f == "max_dto_financiero" || f == "tolerncia_dif" || f == "tasa_iva" ? '%' : ''
-        dataName.datos = d[f] + percent
+        const percent = f == "max_dto_financiero" || f == "tolerncia_dif" || f == "tasa_iva" || f == "interes_diario" ? '%' : ''
+        dataName.datos = d[f] + percent 
     });
-
+    
     return dataName
 });
 
@@ -190,7 +188,7 @@ for(let i = 0; i < (newData ? newData.length : 0); i++){
         datos: newData ? newData[i].datos : ''
     })
 }
-const resultadosYes = dataYes.slice(1,8)
+const resultadosYes = dataYes
 
 const dataYes2: any[] = []
 data_parametrosfacturas.value?.forEach(item => dataYes2.push({

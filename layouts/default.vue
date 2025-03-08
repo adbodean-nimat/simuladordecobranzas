@@ -3,7 +3,7 @@
     <div>
       <Header />
     </div>
-    <div class="h-full">
+    <div class="min-h-screen">
       <slot />
     </div>
     <div>

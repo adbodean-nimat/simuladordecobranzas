@@ -1,6 +1,38 @@
 <template>
+  <div class="w-full">
+    <template v-if="promoDia">
+        <div class="marquee">
+          <div class="marquee_inner">
+            <div class="marquee_part">
+              <UIcon name="fxemoji:loudspeaker" />
+              {{ alert?.toString() }}
+            </div>
+            <div class="marquee_part">
+              <UIcon name="fxemoji:loudspeaker" />
+              PROMO DEL DÍA: {{ alert?.toString() }}
+            </div>
+            <div class="marquee_part">
+              <UIcon name="fxemoji:loudspeaker" />
+              PROMO DEL DÍA: {{ alert?.toString() }}
+            </div>
+            <div class="marquee_part">
+              <UIcon name="fxemoji:loudspeaker" />
+              PROMO DEL DÍA: {{ alert?.toString() }}
+            </div>
+            <div class="marquee_part">
+              <UIcon name="fxemoji:loudspeaker" />
+              PROMO DEL DÍA: {{ alert?.toString() }}
+            </div>
+            <div class="marquee_part">
+              <UIcon name="fxemoji:loudspeaker" />
+              PROMO DEL DÍA: {{ alert?.toString() }}
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
     <UContainer :ui="{ constrained: 'max-w-screen-2xl'}">
-        <nav class="flex flex-row items-center justify-between h-16"> 
+      <nav class="flex flex-row items-center justify-between h-16"> 
             <div>
                 <UHorizontalNavigation :ui="navbar" :links="links" />
             </div>
@@ -97,7 +129,28 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'; 
-import { useAuthStore } from '~/store/auth'; 
+import { useAuthStore } from '~/store/auth';
+import { DateTime } from 'luxon'; 
+import gsap from 'gsap'
+const {status: status_mediosdepagos, data: data_mediosdepagos} = await useFetch('/api/mediosdepagos')
+const diaHoy = ref(DateTime.now().weekday)
+const promoDia = ref(false)
+const data_promodia = ref()
+const alert = status_mediosdepagos.value == 'success' ? data_mediosdepagos.value?.filter((element: any) => element.estado && element.dias?.length > 0).map((data : any) => {
+  const dias = new Array(data.dias)
+  const esHoy = dias.map((dia : any) => dia.map((data : any) => data.id).includes(diaHoy.value))[0]
+  if(esHoy){
+    promoDia.value = true
+    data_promodia.value = data.nombre
+    return data.nombre
+  }
+}) : ''
+if(import.meta.client) {  
+  gsap.to(".marquee_part", {xPercent: -100, repeat: -1, duration: 10, ease: "linear"}).totalProgress(0.5);
+
+  gsap.set(".marquee_inner", {xPercent: -20});
+}
+
 const router = useRouter();
 const { logUserOut } = useAuthStore();
 const authStore = useAuthStore()
@@ -192,6 +245,11 @@ const links = [
     label: 'Ventas / Acopios (con PRE)',
     icon: 'i-heroicons-currency-dollar-solid',
     to: '/simulador'
+  },
+  {
+    label: 'Cuentas a Cobrar',
+    icon: 'i-heroicons-currency-dollar',
+    to: '/simulador2'
   }]
 ]
 
@@ -206,5 +264,31 @@ const navbar = {
   inactive: 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white',
   label: 'truncate relative'
 }
-
 </script>
+<style scoped>
+.marquee_part {
+  flex-shrink: 0;
+  padding: 0 4px;
+  font-smooth: always;
+}
+
+.marquee {
+  font-family: "Open Sans", sans-serif;
+  font-style: italic;
+  background: darkorange;
+  color: #EEE;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.marquee_inner {
+  -webkit-font-smoothing: antialiased;
+    width: fit-content;
+    display: flex;
+    flex: auto;
+    flex-direction: row;
+}
+</style>

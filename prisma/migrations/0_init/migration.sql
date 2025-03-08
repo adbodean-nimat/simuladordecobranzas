@@ -1,46 +1,4 @@
 -- CreateTable
-CREATE TABLE "costo_financiacion_visa_master_nativa" (
-    "id" SERIAL NOT NULL,
-    "cuotas" VARCHAR(30),
-    "tasas_interes" VARCHAR(30),
-
-    CONSTRAINT "costo_financiacion_visa_master_nativa_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "costo_financiacion_naranja" (
-    "id" SERIAL NOT NULL,
-    "cuotas" VARCHAR(30),
-    "tasas_interes" VARCHAR(30),
-
-    CONSTRAINT "costo_financiacion_naranja_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "costo_financiacion_cuota_simple" (
-    "id" SERIAL NOT NULL,
-    "cuotas" VARCHAR(30),
-    "tasas_interes" VARCHAR(30),
-
-    CONSTRAINT "costo_financiacion_cuota_simple_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "simulador_cobranzas_parametros_generales" (
-    "id" SERIAL NOT NULL,
-    "max_dto_financiero" DECIMAL,
-    "tolerncia_dif" DECIMAL,
-    "unidad_tiempo_cheq" VARCHAR(30),
-    "unidad_tiempo_tc" VARCHAR(30),
-    "abv_tarjetas_credito" VARCHAR(30),
-    "abv_tarjetas_debito" VARCHAR(30),
-    "tasa_iva" DECIMAL,
-    "fecha_alta" DATE NOT NULL DEFAULT CURRENT_DATE,
-
-    CONSTRAINT "simulador_cobranzas_parametros_generales_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "acindar_clasif_clientes" (
     "id" SERIAL NOT NULL,
     "clasif_1_ptf" VARCHAR(30),
@@ -146,6 +104,25 @@ CREATE TABLE "categorias" (
 );
 
 -- CreateTable
+CREATE TABLE "clasif_arts_5_al_consultar" (
+    "id" SERIAL NOT NULL,
+    "arts_clasif_5" JSONB[],
+    "descripcion" TEXT,
+    "whatsapp" TEXT,
+
+    CONSTRAINT "clasif_arts_5_al_consultar_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "clasif_arts_5_stock_manual" (
+    "id" SERIAL NOT NULL,
+    "arts_clasif_5" JSONB[],
+    "stock_manual" VARCHAR,
+
+    CONSTRAINT "clasif_arts_5_stock_manual_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "comprobantes_a_omitir" (
     "id" SERIAL NOT NULL,
     "cod_comprobante" VARCHAR(3),
@@ -185,6 +162,33 @@ CREATE TABLE "const_seco_nombres_configuraciones" (
     "nombre_conf_cs" VARCHAR(70),
 
     CONSTRAINT "const_seco_nombres_configuraciones_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "costo_financiacion_cuota_simple" (
+    "id" SERIAL NOT NULL,
+    "cuotas" VARCHAR(30),
+    "tasas_interes" VARCHAR(30),
+
+    CONSTRAINT "costo_financiacion_cuota_simple_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "costo_financiacion_naranja" (
+    "id" SERIAL NOT NULL,
+    "cuotas" VARCHAR(30),
+    "tasas_interes" VARCHAR(30),
+
+    CONSTRAINT "costo_financiacion_naranja_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "costo_financiacion_visa_master_nativa" (
+    "id" SERIAL NOT NULL,
+    "cuotas" VARCHAR(30),
+    "tasas_interes" VARCHAR(30),
+
+    CONSTRAINT "costo_financiacion_visa_master_nativa_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -337,26 +341,6 @@ CREATE TABLE "sets_de_ventas" (
 );
 
 -- CreateTable
-CREATE TABLE "tablas" (
-    "id" SERIAL NOT NULL,
-    "nombre_tablas" VARCHAR(70),
-    "url_tablas" VARCHAR(70),
-    "consultas_tablas" VARCHAR(70),
-
-    CONSTRAINT "tablas_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "vincular_articulos_a_familia" (
-    "cod" SERIAL NOT NULL,
-    "cod_art" VARCHAR(30),
-    "cod_familia" VARCHAR(30),
-    "orden_art_familia" DECIMAL,
-
-    CONSTRAINT "vincular_articulos_a_familia_pkey" PRIMARY KEY ("cod")
-);
-
--- CreateTable
 CREATE TABLE "simulador_cobranzas_dto_actualizar_cheques" (
     "id" SERIAL NOT NULL,
     "desde" DECIMAL,
@@ -389,27 +373,23 @@ CREATE TABLE "simulador_cobranzas_medios_de_pagos" (
 );
 
 -- CreateTable
-CREATE TABLE "clasif_arts_5_al_consultar" (
+CREATE TABLE "simulador_cobranzas_parametros_generales" (
     "id" SERIAL NOT NULL,
-    "arts_clasif_5" JSONB[],
-    "descripcion" TEXT,
-    "whatsapp" TEXT,
+    "max_dto_financiero" DECIMAL,
+    "tolerncia_dif" DECIMAL,
+    "unidad_tiempo_cheq" VARCHAR(30),
+    "unidad_tiempo_tc" VARCHAR(30),
+    "abv_tarjetas_credito" VARCHAR(30),
+    "abv_tarjetas_debito" VARCHAR(30),
+    "tasa_iva" DECIMAL,
+    "fecha_alta" DATE NOT NULL DEFAULT CURRENT_DATE,
 
-    CONSTRAINT "clasif_arts_5_al_consultar_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "clasif_arts_5_stock_manual" (
-    "id" SERIAL NOT NULL,
-    "arts_clasif_5" JSONB[],
-    "stock_manual" VARCHAR,
-
-    CONSTRAINT "clasif_arts_5_stock_manual_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "simulador_cobranzas_parametros_generales_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "simulador_cobranzas_roles" (
-    "id" INTEGER NOT NULL,
+    "id" SERIAL NOT NULL,
     "nombre" TEXT,
     "descripcion" TEXT,
 
@@ -418,12 +398,32 @@ CREATE TABLE "simulador_cobranzas_roles" (
 
 -- CreateTable
 CREATE TABLE "simulador_cobranzas_usuarios" (
-    "id" INTEGER NOT NULL,
+    "id" SERIAL NOT NULL,
     "nombre" TEXT,
     "usuario_ad" TEXT,
     "id_roles" INTEGER,
 
     CONSTRAINT "simulador_cobranzas_usuarios_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "tablas" (
+    "id" SERIAL NOT NULL,
+    "nombre_tablas" VARCHAR(70),
+    "url_tablas" VARCHAR(70),
+    "consultas_tablas" VARCHAR(70),
+
+    CONSTRAINT "tablas_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "vincular_articulos_a_familia" (
+    "cod" SERIAL NOT NULL,
+    "cod_art" VARCHAR(30),
+    "cod_familia" VARCHAR(30),
+    "orden_art_familia" DECIMAL,
+
+    CONSTRAINT "vincular_articulos_a_familia_pkey" PRIMARY KEY ("cod")
 );
 
 -- AddForeignKey

@@ -5,7 +5,8 @@ interface MediosDePago {
     estado: boolean,
     nombre: string,
     medio_pago: string,
-    tipo_pago: string
+    tipo_pago: string,
+    dias: []
 }
 
 export default defineEventHandler(async (event) => {
@@ -18,7 +19,8 @@ export default defineEventHandler(async (event) => {
             estado: body.estado,
             nombre: body.nombre,
             medio_pago: body.medio_pago,
-            tipo_pago: body.tipo_pago
+            tipo_pago: body.tipo_pago,
+            dias: body.dias
         }
     })
     return data;

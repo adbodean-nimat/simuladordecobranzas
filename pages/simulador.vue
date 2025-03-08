@@ -86,147 +86,129 @@
             </div>              
             </template> 
         </div>
-        <template v-if="formData.monto">
-        
-          <UButton @click="addMore" icon="i-material-symbols-add-circle" size="md" square variant="soft" class="mb-4">Agregar</UButton>
-    
-        
-          <div class="grid grid-rows-auto grid-flow-col gap-4">
-        
-            <div class="row-span-3">
-            
-        
-              <div class="grid grid-flow-col auto-rows-auto auto-cols-max gap-4 mb-2 p-2 items-end" v-for="(item, i) in formData.mediospago" :key="i">
-        
-                <template v-if="data_mediosdepagos">
-        
-                  <UFormGroup>
-        
-                    <UBadge size="lg" variant="soft">{{ i + 1 }}</UBadge>
-        
-                  </UFormGroup>
-        
-                </template>
-        
-                <template v-if="data_mediosdepagos">
-        
-                  <UFormGroup label="Medio de pago">
-        
-                    <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.map(data => data.nombre)" v-model="item.nombre"/>
-        
-                  </UFormGroup>
-                </template>
-              <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
-                <UFormGroup label="Nro. cuota">
-                  <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map((data : any) => data.interes_base)[0].map((x:any) => x.nro_cuota)" v-model="item.cuota"/>
-                </UFormGroup>
-              </template>
-              <template v-if="item.nombre == 'CHEQUE'">
-                <UFormGroup label="Fecha">
-                  <UInput v-model="item.fecha" variant="outline" placeholder="" type="date"></UInput>
-                </UFormGroup>
-              </template>
-              <template v-if="item.nombre == 'CHEQUE'">
-                <template v-if="item.fecha">
-                <UFormGroup label="">
-                  <UBadge size="lg">{{  item.dias + ' días' }}</UBadge>
-                </UFormGroup>
-                </template>
-                <template v-else>
-                  <UFormGroup></UFormGroup>
-                </template>
-              </template>
-              <template v-if="item.nombre">
-                <UFormGroup label="Dto.">
-                  <template v-if="Number(item.dto) < 0">
-                    <UBadge size="lg" color="red">{{ item.dto +'%'}}</UBadge>
-                  </template>
-                  <template v-else>
-                    <UBadge size="lg">{{ item.dto +'%'}}</UBadge>
-                  </template>
-                </UFormGroup>
-              </template>
-              
-              <UFormGroup label="Importe a pagar">
-                <UInput v-model="item.importe" variant="outline" placeholder="" icon="clarity:dollar-line" v-maska="optionsMask"></UInput>
-              </UFormGroup>
-              
-              <UButton class="flex-none" title="Borrar item" @click="remove(i)" icon="i-heroicons-trash" size="sm" square variant="soft"></UButton>
-              <UButton class="flex-none" title="Duplicar item" @click="copyItem(i)" icon="i-heroicons-clipboard" size="sm" square variant="soft"></UButton>  
-            </div>
-          </div>
-          <div class="col-span-2">
-            <div class="grid grid-flow-col auto-rows-auto auto-cols-max gap-4 mb-2 p-2 items-end" v-for="(item, y) in formData.mediospago" :key="y">
-                <div class="col-start-1 col-end-4">
-                  <template v-if="item.impacto">
-                    <UFormGroup label="Impacto sobre el neto de facturas, antes de descuento financiero">
-                      <UBadge size="lg" variant="solid">
-                        {{ '$ '+ formatterNumber.format(Number(item.impacto)) }}
-                      </UBadge>
+        <div class="tab">
+          <template v-if="formData.monto">
+            <UButton @click="addMore" icon="i-material-symbols-add-circle" size="md" square variant="soft" class="mb-4">Agregar</UButton>
+            <div class="grid grid-rows-auto grid-flow-col gap-4">
+              <div class="row-span-3">
+                <div class="grid grid-flow-col auto-rows-auto auto-cols-max gap-4 mb-2 p-2 items-end" v-for="(item, i) in formData.mediospago" :key="i">
+                  <template v-if="data_mediosdepagos">
+                    <UFormGroup>        
+                      <UBadge size="lg" variant="soft">{{ i + 1 }}</UBadge>
                     </UFormGroup>
                   </template>
-                </div>
-                <div v-if="!item.importe">
-                  <template v-if="formData.monto && item.dto">
-                    <template v-if="Number(item.calculable) > 0">
-                      <UFormGroup label="Importe deseable" @click="toast.add({ title: 'Copiado!' });copy(item.calculable)">
-                        <UBadge size="lg">{{'$ ' + formatterNumber.format(Number(item.calculable)) }}</UBadge>
+                  <template v-if="data_mediosdepagos">
+                    <UFormGroup label="Medio de pago">
+                      <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.map(data => data.nombre)" v-model="item.nombre"/>
+                    </UFormGroup>
+                  </template>
+                  <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
+                    <UFormGroup label="Nro. cuota">
+                      <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map((data : any) => data.interes_base)[0].map((x:any) => x.nro_cuota)" v-model="item.cuota"/>
+                    </UFormGroup>
+                  </template>
+                  <template v-if="item.nombre == 'CHEQUE'">
+                    <UFormGroup label="Fecha">
+                      <UInput v-model="item.fecha" variant="outline" placeholder="" type="date"></UInput>
+                    </UFormGroup>
+                  </template>
+                  <template v-if="item.nombre == 'CHEQUE'">
+                    <template v-if="item.fecha">
+                      <UFormGroup label="">
+                        <UBadge size="lg">{{  item.dias + ' días' }}</UBadge>
                       </UFormGroup>
                     </template>
-                  </template>
-                </div>
-                <div>
-                  <template v-if="item.importe">
-                    <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">              
-                        <UBadge size="lg" color="amber">{{ !item.importe ? item.cuota +' CUOTAS DE $ ' + formatterNumber.format(Number(formData.monto.replaceAll(",","")) / Number(item.cuota)) : item.cuota + ' CUOTAS DE $ ' + formatterNumber.format((Number(item.importe.replaceAll(",","")) / Number(item.cuota)))}}</UBadge>
-                    </template>
-                    <template v-else-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] !== 'TC'">
-                        <UBadge size="lg" color="amber">{{ item.nombre == "MAESTRO" || item.nombre == "VISA ELECTRON" ||  item.nombre == "CABAL DEBITO" ? 'DÉBITO $ ' + item.importe : item.nombre + ' $ ' + item.importe }}</UBadge>
+                    <template v-else>
+                      <UFormGroup></UFormGroup>
                     </template>
                   </template>
-                </div>
-                <div>
-                  <template v-if="formData.mediospago?.map(item => item.calculable)[0] === '0.00'">
-                    <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
-                      <UButton class="flex-none" title="Copiar" @click="toast.add({ title: 'Copiado!' });copy(!item.importe ? item.nombre + '-' + item.cuota +' CUOTAS DE $ ' + formatterNumber.format(Number(formData.monto.replaceAll(',','')) / Number(item.cuota)) :  item.nombre + ' - Total $ ' + item.importe +  ' - Cada uno ' + item.cuota + ' CUOTAS DE $ ' + formatterNumber.format((Number(item.importe.replaceAll(',','')) / Number(item.cuota))))" icon="i-heroicons-clipboard-document" size="sm" square variant="soft"></UButton>
-                    </template>
-                    <template v-else-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] !== 'TC'">
-                      <UButton class="flex-none" title="Copiar" @click="toast.add({ title: 'Copiado!' });copy(item.nombre == 'MAESTRO' || item.nombre == 'VISA ELECTRON' ||  item.nombre == 'CABAL DEBITO' ? 'DÉBITO $ ' + item.importe : item.nombre + ' $ ' + item.importe)" icon="i-heroicons-clipboard-document" size="sm" square variant="soft"></UButton>
-                    </template>
+                  <template v-if="item.nombre">
+                    <UFormGroup label="Dto.">
+                      <template v-if="Number(item.dto) < 0">
+                        <UBadge size="lg" color="red">{{ item.dto +'%'}}</UBadge>
+                      </template>
+                      <template v-else>
+                        <UBadge size="lg">{{ item.dto +'%'}}</UBadge>
+                      </template>
+                    </UFormGroup>
                   </template>
+              
+                  <UFormGroup label="Importe a pagar">
+                    <UInput v-model="item.importe" variant="outline" placeholder="" icon="clarity:dollar-line" v-maska="optionsMask"></UInput>
+                  </UFormGroup>
+              
+                  <UButton class="flex-none" title="Borrar item" @click="remove(i)" icon="i-heroicons-trash" size="sm" square variant="soft"></UButton>
+                  <UButton class="flex-none" title="Duplicar item" @click="copyItem(i)" icon="i-heroicons-clipboard" size="sm" square variant="soft"></UButton>  
                 </div>
+              </div>
+              <div class="col-span-2">
+                <div class="grid grid-flow-col auto-rows-auto auto-cols-max gap-4 mb-2 p-2 items-end" v-for="(item, y) in formData.mediospago" :key="y">
+                    <div class="col-start-1 col-end-4">
+                      <template v-if="item.impacto">
+                        <UFormGroup label="Impacto sobre el neto de facturas, antes de descuento financiero">
+                          <UBadge size="lg" variant="solid">
+                            {{ '$ '+ formatterNumber.format(Number(item.impacto)) }}
+                          </UBadge>
+                        </UFormGroup>
+                      </template>
+                    </div>
+                    <div v-if="!item.importe">
+                      <template v-if="formData.monto && item.dto">
+                        <template v-if="Number(item.calculable) > 0">
+                          <UFormGroup label="Importe deseable" @click="toast.add({ title: 'Copiado!' });copy(item.calculable)">
+                            <UBadge size="lg">{{'$ ' + formatterNumber.format(Number(item.calculable)) }}</UBadge>
+                          </UFormGroup>
+                        </template>
+                      </template>
+                    </div>
+                    <div>
+                      <template v-if="item.importe">
+                        <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">              
+                            <UBadge size="lg" color="amber">{{ !item.importe ? item.cuota +' CUOTAS DE $ ' + formatterNumber.format(Number(formData.monto.replaceAll(",","")) / Number(item.cuota)) : item.cuota + ' CUOTAS DE $ ' + formatterNumber.format((Number(item.importe.replaceAll(",","")) / Number(item.cuota)))}}</UBadge>
+                        </template>
+                        <template v-else-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] !== 'TC'">
+                            <UBadge size="lg" color="amber">{{ item.nombre == "MAESTRO" || item.nombre == "VISA ELECTRON" ||  item.nombre == "CABAL DEBITO" ? 'DÉBITO $ ' + item.importe : item.nombre + ' $ ' + item.importe }}</UBadge>
+                        </template>
+                      </template>
+                    </div>
+                    <div>
+                      <template v-if="formData.mediospago?.map(item => item.calculable)[0] === '0.00'">
+                        <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
+                          <UButton class="flex-none" title="Copiar" @click="toast.add({ title: 'Copiado!' });copy(!item.importe ? item.nombre + '-' + item.cuota +' CUOTAS DE $ ' + formatterNumber.format(Number(formData.monto.replaceAll(',','')) / Number(item.cuota)) :  item.nombre + ' - Total $ ' + item.importe +  ' - Cada uno ' + item.cuota + ' CUOTAS DE $ ' + formatterNumber.format((Number(item.importe.replaceAll(',','')) / Number(item.cuota))))" icon="i-heroicons-clipboard-document" size="sm" square variant="soft"></UButton>
+                        </template>
+                        <template v-else-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] !== 'TC'">
+                          <UButton class="flex-none" title="Copiar" @click="toast.add({ title: 'Copiado!' });copy(item.nombre == 'MAESTRO' || item.nombre == 'VISA ELECTRON' ||  item.nombre == 'CABAL DEBITO' ? 'DÉBITO $ ' + item.importe : item.nombre + ' $ ' + item.importe)" icon="i-heroicons-clipboard-document" size="sm" square variant="soft"></UButton>
+                        </template>
+                      </template>
+                    </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <!-- <div class="col-span-2 row-span-2">           
-            <pre>
-              {{ formData }}
-            </pre>
-          </div> -->
+            <UModal v-model="isOpen" prevent-close>
+              <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                <template #header>
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-base flex justify-center font-semibold leading-6 text-gray-900 dark:text-white">
+                      <UIcon :name="'i-heroicons-exclamation-circle'" size="md" class="h-6 w-6 mr-2 text-red-400 dark:text-red-500"  />
+                      Advertencia
+                    </h3>
+                    <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpen = false" />
+                  </div>
+                </template>
+
+                <div>
+                  <span> No aceptamos más de 60 días.</span>
+                </div>
+
+                <template #footer>
+                  <div class="float-end pb-4">
+                    <UButton label="Ok" icon="" @click="isOpen = false" variant="soft" />
+                  </div>
+                </template>
+              </UCard>
+            </UModal>
+          </template>
         </div>
-        <UModal v-model="isOpen" prevent-close>
-          <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-            <template #header>
-              <div class="flex items-center justify-between">
-                <h3 class="text-base flex justify-center font-semibold leading-6 text-gray-900 dark:text-white">
-                  <UIcon :name="'i-heroicons-exclamation-circle'" size="md" class="h-6 w-6 mr-2 text-red-400 dark:text-red-500"  />
-                  Advertencia
-                </h3>
-                <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpen = false" />
-              </div>
-            </template>
-
-            <div>
-              <span> No aceptamos más de 60 días.</span>
-            </div>
-
-            <template #footer>
-              <div class="float-end pb-4">
-                <UButton label="Ok" icon="" @click="isOpen = false" variant="soft" />
-              </div>
-            </template>
-          </UCard>
-        </UModal>
-        </template>
       </UContainer>
     </div>
 </template>
@@ -235,7 +217,7 @@
 import type { MaskInputOptions} from 'maska'
 import { useClipboard } from '@vueuse/core'
 import { DateTime } from 'luxon'
-
+import gsap from 'gsap'
 const toast = useToast()
 const isOpen = ref(false)
 
@@ -315,6 +297,11 @@ const itemsTabs = [{
       ]
     }
     watch(formData.value, async (newVal, oldVal)=>{
+
+      if(newVal.monto > 0){
+        gsap.to(".tab", {duration: 1.4, x: 0, y: 10})
+    }
+
       let monto = formData.value.monto.replaceAll(",","");
       
       let totalImpacto = formData.value?.mediospago.reduce((acc, act)=> acc + Number(act.impacto), 0)

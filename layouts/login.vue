@@ -3,7 +3,7 @@
       <div class="h-auto">
         <slot />
       </div>
-      <div>
+      <div class="mt-[50px]">
         <Footer />
       </div>
     </div>

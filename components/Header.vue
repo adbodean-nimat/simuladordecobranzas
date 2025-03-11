@@ -5,27 +5,27 @@
           <div class="marquee_inner">
             <div class="marquee_part">
               <UIcon name="fxemoji:loudspeaker" />
-              {{ alert?.toString() }}
+              PROMO DEL DÍA: {{ alert }}
             </div>
             <div class="marquee_part">
               <UIcon name="fxemoji:loudspeaker" />
-              PROMO DEL DÍA: {{ alert?.toString() }}
+              PROMO DEL DÍA: {{ alert }}
             </div>
             <div class="marquee_part">
               <UIcon name="fxemoji:loudspeaker" />
-              PROMO DEL DÍA: {{ alert?.toString() }}
+              PROMO DEL DÍA: {{ alert }}
             </div>
             <div class="marquee_part">
               <UIcon name="fxemoji:loudspeaker" />
-              PROMO DEL DÍA: {{ alert?.toString() }}
+              PROMO DEL DÍA: {{ alert }}
             </div>
             <div class="marquee_part">
               <UIcon name="fxemoji:loudspeaker" />
-              PROMO DEL DÍA: {{ alert?.toString() }}
+              PROMO DEL DÍA: {{ alert }}
             </div>
             <div class="marquee_part">
               <UIcon name="fxemoji:loudspeaker" />
-              PROMO DEL DÍA: {{ alert?.toString() }}
+              PROMO DEL DÍA: {{ alert }}
             </div>
           </div>
         </div>
@@ -136,18 +136,18 @@ const {status: status_mediosdepagos, data: data_mediosdepagos} = await useFetch(
 const diaHoy = ref(DateTime.now().weekday)
 const promoDia = ref(false)
 const data_promodia = ref()
-const alert = status_mediosdepagos.value == 'success' ? data_mediosdepagos.value?.filter((element: any) => element.estado && element.dias?.length > 0).map((data : any) => {
+const alert = status_mediosdepagos.value == 'success' ? data_mediosdepagos.value?.filter((element: any) => element.estado && element.dias.find((data : any)=> data.id == diaHoy.value)).map((data : any) => {
   const dias = new Array(data.dias)
-  const esHoy = dias.map((dia : any) => dia.map((data : any) => data.id).includes(diaHoy.value))[0]
+  const esHoy = dias.map((dia : any) => dia.filter((data : any) => data.id == diaHoy.value))
   if(esHoy){
     promoDia.value = true
     data_promodia.value = data.nombre
     return data.nombre
   }
-}) : ''
-if(import.meta.client) {  
-  gsap.to(".marquee_part", {xPercent: -100, repeat: -1, duration: 10, ease: "linear"}).totalProgress(0.5);
+}).toString() : ''
 
+if(import.meta.client) {  
+  gsap.to(".marquee_part", {xPercent: -100, repeat: -1, duration: 20, ease: "none"}).totalProgress(0.5);
   gsap.set(".marquee_inner", {xPercent: -20});
 }
 
@@ -273,12 +273,12 @@ const navbar = {
 }
 
 .marquee {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Lato", sans-serif;
   font-style: italic;
   background: darkorange;
   color: #EEE;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1vw;
   position: relative;
   overflow: hidden;

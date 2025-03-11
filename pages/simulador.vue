@@ -99,7 +99,7 @@
                   </template>
                   <template v-if="data_mediosdepagos">
                     <UFormGroup label="Medio de pago">
-                      <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.map(data => data.nombre)" v-model="item.nombre"/>
+                      <USelect color="white" variant="outline" placeholder="" :options="dataMediosPagos" option-attribute="name" v-model="item.nombre"/>
                     </UFormGroup>
                   </template>
                   <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
@@ -183,6 +183,11 @@
                     </div>
                 </div>
               </div>
+              <!-- <div class="col-span-2 row-span-2">           
+                <pre>
+                  {{ formData }}
+                </pre>
+              </div> -->
             </div>
             <UModal v-model="isOpen" prevent-close>
               <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
@@ -214,19 +219,19 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  title: 'VENTAS / ACOPIOS (con PRE)'
+})
+
 import type { MaskInputOptions} from 'maska'
 import { useClipboard } from '@vueuse/core'
 import { DateTime } from 'luxon'
 import gsap from 'gsap'
 const toast = useToast()
 const isOpen = ref(false)
-
+const diaHoy = ref(DateTime.now().weekday)
 const optionsMask = reactive<MaskInputOptions>({
   number: {locale: 'es-US', fraction: 2}
-})
-
-definePageMeta({
-  title: 'VENTAS / ACOPIOS (con PRE)'
 })
 
 const itemsTabs = [{
@@ -249,6 +254,20 @@ const itemsTabs = [{
     const nrocuotas = ref()
     const formatter = new Intl.NumberFormat("es-US",{style: "currency", currency: "ARS", currencyDisplay: "symbol", minimumFractionDigits: 2})
     const formatterNumber = new Intl.NumberFormat("es-US",{minimumFractionDigits: 2, maximumFractionDigits: 2})
+
+    const dataMediosPagos: any = status_mediosdepagos.value == 'success' ? data_mediosdepagos.value?.filter(element =>  element.estado == true).map((data : any) => {
+      
+      const esHoy = data.dias.some((dia: any) => dia.id == diaHoy.value)
+
+      console.log(esHoy)
+      return {
+        name: data.nombre,
+        disabled: data.dias == 0 ? false : esHoy ? false : true ,
+        value: data.nombre
+      }
+      
+    }) : ''
+
     const formData = ref(
       {
         monto: monto, 
@@ -300,7 +319,7 @@ const itemsTabs = [{
 
       if(newVal.monto > 0){
         gsap.to(".tab", {duration: 1.4, x: 0, y: 10})
-    }
+      }
 
       let monto = formData.value.monto.replaceAll(",","");
       
@@ -314,13 +333,13 @@ const itemsTabs = [{
        { 
         
         const fechaHastaUltima = data_cheques.value?.findLast(data => data.hasta)?.hasta;
-        console.log(fechaHastaUltima)
+        //console.log(fechaHastaUltima)
         
         const now = DateTime.now().toISODate()
         let fcheque = DateTime.fromISO(item.fecha)
         let fnow = DateTime.fromISO(now)
         let diff = fcheque.diff(fnow,['days']).toObject()
-        console.log(diff?.days ?? '')
+        //console.log(diff?.days ?? '')
         item.dias = diff?.days ? Number(diff.days).toString() : ''
         const aviso = Number(item.dias) >= Number(fechaHastaUltima) ? isOpen.value = true : false
         let importe = item.importe.replaceAll(",", "");

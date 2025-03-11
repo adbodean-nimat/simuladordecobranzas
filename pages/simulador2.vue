@@ -80,7 +80,7 @@
             </UCard>
           </UModal>
         </div>
-        <div class="table-wrapper mb-4">
+        <div class="tab table-wrapper mb-4">
           <template v-if="getdata.data.length > 0">
             <UCard
               class="w-full"
@@ -102,7 +102,7 @@
               </template>
               <UTable :ui="tableUI" v-model="selected" :rows="getdata.data" :columns="columns"  @select:all="onHandleSelectAll" @update:modelValue="onUpdateSelection">
                 <template #IMPORTE-data="{ row }">
-                  {{'$ ' + row.IMPORTE}}
+                  {{'$ ' + formatterNumber.format(row.IMPORTE)}}
                 </template>
                 <template #FECHA_DIFF-data="{ row }">
                   <UBadge size="lg" :label="row.FECHA_DIFF + ' días'" :color="row.FECHA_DIFF < 60 ? 'emerald' : 'orange'" variant="soft" />
@@ -111,28 +111,22 @@
                   <UBadge size="lg" :label="row.DTO_FINANCIERO + '%'" :color="row.DTO_FINANCIERO > 0 ? 'emerald' : 'orange'" variant="soft" />
                 </template>
                 <template #MONTO_COBRAR-data="{ row }">
-                  {{'$ ' + row.MONTO_COBRAR}}
+                  {{'$ ' + formatterNumber.format(row.MONTO_COBRAR)}}
                 </template>
                 <template #MONTO-data="{ row }">
-                  <UBadge size="lg" :label="row.DTO_FINANCIERO >= 0 ? 'Descuentos $ ' + row.MONTO : 'Débitos $ ' + row.MONTO" :color="row.DTO_FINANCIERO >= 0 ? 'emerald' : 'orange'" variant="soft" />
-                </template>
-                <template>
-                  <div class="flex flex-wrap justify-between items-center">
-                    <div></div>
-                    <div>
-                      Total: $ {{ monto }}
-                    </div>
-                  </div>
+                  <UBadge size="lg" :label="row.DTO_FINANCIERO >= 0 ? 'Descuentos $ ' + formatterNumber.format(row.MONTO) : 'Débitos $ ' + formatterNumber.format(row.MONTO)" :color="row.DTO_FINANCIERO >= 0 ? 'emerald' : 'orange'" variant="soft" />
                 </template>
               </UTable>
               <template #footer>
                 <div class="flex flex-wrap justify-between items-center">
                   <div>
-                    
+                    <span>Total facturas: $ {{ formatterNumber.format(Number(formData.montofactura)) }}</span>
                   </div>
-
                   <div>
-                    <span>Total monto: $ {{ formatterNumber.format(monto) }}</span>
+                    <!-- <span>Dto. financiero: {{ (Number(formData.dtofinanciero)) }}%</span> -->
+                  </div>
+                  <div>
+                    <span>Final «CONTADO EFECTIVO», antes considerar medios pago: $ {{ formatterNumber.format(monto) }}</span>
                   </div>
                 </div>
               </template>
@@ -140,7 +134,7 @@
           </template>
         </div>
         <div class="flex justify-center">
-          <template v-if="formData.mediospago?.map(item => item.calculable)[0] === '0.00'">
+          <template v-if="pagocerrado">
             <div class="flex flex-col w-full ">
               <UDivider label="¡¡PAGO CERRADO!!" type="dashed" :ui="{ label: 'text-sea-green-600 dark:text-sea-green-400 text-lg mb-2' }"/>
               <UTabs :items="itemsTabs">
@@ -190,7 +184,7 @@
         </div>
         <template v-if="formData.monto">
         
-          <UButton @click="addMore" icon="i-material-symbols-add-circle" size="md" square variant="soft" class="mb-4">Agregar</UButton>
+          <UButton @click="addMore" icon="i-material-symbols-add-circle" size="md" square variant="soft" class="my-4">Agregar</UButton>
   
         <div class="grid grid-rows-auto grid-flow-col gap-4">
       
@@ -210,43 +204,40 @@
               </template>
       
               <template v-if="data_mediosdepagos">
-      
                 <UFormGroup label="Medio de pago">
-      
-                  <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.map(data => data.nombre)" v-model="item.nombre"/>
-      
+                  <USelect color="white" variant="outline" placeholder="" :options="dataMediosPagos" option-attribute="name" v-model="item.nombre"/>
                 </UFormGroup>
               </template>
-            <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
-              <UFormGroup label="Nro. cuota">
-                <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map((data : any) => data.interes_base)[0].map((x:any) => x.nro_cuota)" v-model="item.cuota"/>
-              </UFormGroup>
-            </template>
-            <template v-if="item.nombre == 'CHEQUE'">
-              <UFormGroup label="Fecha">
-                <UInput v-model="item.fecha" variant="outline" placeholder="" type="date"></UInput>
-              </UFormGroup>
-            </template>
-            <template v-if="item.nombre == 'CHEQUE'">
-              <template v-if="item.fecha">
-              <UFormGroup label="">
-                <UBadge size="lg">{{  item.dias + ' días' }}</UBadge>
-              </UFormGroup>
+              <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
+                <UFormGroup label="Nro. cuota">
+                  <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map((data : any) => data.interes_base)[0].map((x:any) => x.nro_cuota)" v-model="item.cuota"/>
+                </UFormGroup>
               </template>
-              <template v-else>
-                <UFormGroup></UFormGroup>
+              <template v-if="item.nombre == 'CHEQUE'">
+                <UFormGroup label="Fecha">
+                  <UInput v-model="item.fecha" variant="outline" placeholder="" type="date"></UInput>
+                </UFormGroup>
               </template>
-            </template>
-            <template v-if="item.nombre">
-              <UFormGroup label="Dto.">
-                <template v-if="Number(item.dto) < 0">
-                  <UBadge size="lg" color="red">{{ item.dto +'%'}}</UBadge>
+              <template v-if="item.nombre == 'CHEQUE'">
+                <template v-if="item.fecha">
+                <UFormGroup label="">
+                  <UBadge size="lg">{{  item.dias + ' días' }}</UBadge>
+                </UFormGroup>
                 </template>
                 <template v-else>
-                  <UBadge size="lg">{{ item.dto +'%'}}</UBadge>
+                  <UFormGroup></UFormGroup>
                 </template>
-              </UFormGroup>
-            </template>
+              </template>
+              <template v-if="item.nombre">
+                <UFormGroup label="Dto.">
+                  <template v-if="Number(item.dto) < 0">
+                    <UBadge size="lg" color="red">{{ item.dto +'%'}}</UBadge>
+                  </template>
+                  <template v-else>
+                    <UBadge size="lg">{{ item.dto +'%'}}</UBadge>
+                  </template>
+                </UFormGroup>
+              </template>
             
             <UFormGroup label="Importe a pagar">
               <UInput v-model="item.importe" variant="outline" placeholder="" icon="clarity:dollar-line" v-maska="optionsMask"></UInput>
@@ -287,7 +278,7 @@
                 </template>
               </div>
               <div>
-                <template v-if="formData.mediospago?.map(item => item.calculable)[0] === '0.00'">
+                <template v-if="pagocerrado">
                   <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
                     <UButton class="flex-none" title="Copiar" @click="toast.add({ title: 'Copiado!' });copy(!item.importe ? item.nombre + '-' + item.cuota +' CUOTAS DE $ ' + formatterNumber.format(Number(formData.monto.replaceAll(',','')) / Number(item.cuota)) :  item.nombre + ' - Total $ ' + item.importe +  ' - Cada uno ' + item.cuota + ' CUOTAS DE $ ' + formatterNumber.format((Number(item.importe.replaceAll(',','')) / Number(item.cuota))))" icon="i-heroicons-clipboard-document" size="sm" square variant="soft"></UButton>
                   </template>
@@ -348,9 +339,11 @@ const toast = useToast()
 const isOpen = ref(false)
 const awesome = ref(false)
 const mostrarqr = ref(false)
+const pagocerrado = ref(false)
 const datainputcliente = ref('')
 const datainputfactura = ref('')
 const datainputqr = ref('')
+const diaHoy = ref(DateTime.now().weekday)
 const maxdtofinanciero = data_parametrosgrales.value ? data_parametrosgrales.value[0].max_dto_financiero : 0
 const interesdiario = data_parametrosgrales.value ? data_parametrosgrales.value[0].interes_diario : 0
 const tolerencia = data_parametrosgrales.value ? data_parametrosgrales.value[0].tolerncia_dif : 0
@@ -363,6 +356,19 @@ const getdata = reactive({
   data: []
 })
 
+const dataMediosPagos: any = status_mediosdepagos.value == 'success' ? data_mediosdepagos.value?.filter(element =>  element.estado == true).map((data : any) => {
+      
+      const esHoy = data.dias.some((dia: any) => dia.id == diaHoy.value)
+
+      //console.log(esHoy)
+      return {
+        name: data.nombre,
+        disabled: data.dias == 0 ? false : esHoy ? false : true ,
+        value: data.nombre
+      }
+      
+    }) : ''
+
 const selected = ref([])
 
 const onHandleSelectAll = (isSelected: boolean) => {
@@ -371,10 +377,10 @@ const onHandleSelectAll = (isSelected: boolean) => {
 
 const onUpdateSelection = (selectedRows: any[]) => {
   console.log('Currently selected rows:', selectedRows)
-  formData.value.montofactura = selectedRows.reduce((acc : any, row : any) => acc + Number(row.IMPORTE.replaceAll(',','')), 0)
-  formData.value.monto = selectedRows.reduce((acc : any, row : any) => acc + Number(row.MONTO_COBRAR.replaceAll(',','')), 0)
-  formData.value.descuento_debitos = selectedRows.reduce((acc : any, row : any) => acc + Number(row.MONTO.replaceAll(',','')), 0)
-  formData.value.dtofinanciero = (((Number(formData.value.descuento_debitos) / Number(formData.value.montofactura)) * 100)).toFixed(3)
+  formData.value.montofactura = Number(selectedRows.reduce((acc : any, row : any) => acc + row.IMPORTE, 0)).toFixed(2)
+  formData.value.monto = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO_COBRAR, 0)).toFixed(2)
+  formData.value.descuento_debitos = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO, 0)).toFixed(2)
+  formData.value.dtofinanciero = (((Number(formData.value.descuento_debitos) / Number(formData.value.montofactura)) * 100)).toFixed(2)
 }
 
 const resetSelection = () => {
@@ -414,7 +420,6 @@ defineShortcuts({
   }
 })
 const tableUI = {
-    divide: 'divide-y divide-sea-green-200 dark:divide-sea-green-800',
     th: {
         base: 'text-left',
         padding: 'px-4 py-3.5',
@@ -497,18 +502,21 @@ const consultaSaldosCliente = async () =>{
         CVCL_NUMERO_CVCL: data.CVCL_NUMERO_CVCL,
         CVCL_CLIENTE: data.CVCL_CLIENTE,
         CLIE_NOMBRE: data.CLIE_NOMBRE,
-        IMPORTE: formatterNumber.format(data.IMPORTE),
+        IMPORTE: data.IMPORTE,
         SALDO: data.SALDO,
         FECHA_DIFF: fechaDif,
         INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? (Number(interesdiario) * Number(fechaDif)).toFixed(2) : '',
         DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100).toFixed(2) : '',
-        MONTO_COBRAR: formatterNumber.format(((data.IMPORTE) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0) /100)))),
-        MONTO: formatterNumber.format(((data.IMPORTE) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0)/100)))
+        MONTO_COBRAR: ((data.IMPORTE) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0) /100))),
+        MONTO: ((data.IMPORTE) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0)/100))
       }
     })
     if(array.length == 0){
       toast.add({title: 'No encuentro cliente con saldo.', description: 'Por favor, ingrese otro nro. de cliente.', icon:'i-heroicons-exclamation-circle', color:"red"});
       return
+    }
+    if(array.length > 0){
+        gsap.to(".tab", {duration: 1.4, x: 0, y: 10})
     }
     return getdata.data = array
   }
@@ -583,13 +591,13 @@ const consultaSaldosFactura = async () =>{
         CVCL_NUMERO_CVCL: data.CVCL_NUMERO_CVCL,
         CVCL_CLIENTE: data.CVCL_CLIENTE,
         CLIE_NOMBRE: data.CLIE_NOMBRE,
-        IMPORTE: formatterNumber.format(data.IMPORTE),
+        IMPORTE: data.IMPORTE,
         SALDO: data.SALDO,
         FECHA_DIFF: fechaDif,
         INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? (Number(interesdiario) * Number(fechaDif)).toFixed(2) : '',
         DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100).toFixed(2) : '',
-        MONTO_COBRAR: formatterNumber.format(((data.IMPORTE) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0) /100)))),
-        MONTO: formatterNumber.format(Math.abs((data.IMPORTE) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0)/100)))
+        MONTO_COBRAR: ((data.IMPORTE) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0) /100))),
+        MONTO: ((data.IMPORTE) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0)/100))
       }
     })
     if(array.length == 0){
@@ -681,13 +689,13 @@ const consultaSaldosQR = async () =>{
         CVCL_NUMERO_CVCL: data.CVCL_NUMERO_CVCL,
         CVCL_CLIENTE: data.CVCL_CLIENTE,
         CLIE_NOMBRE: data.CLIE_NOMBRE,
-        IMPORTE: formatterNumber.format(data.IMPORTE),
+        IMPORTE: data.IMPORTE,
         SALDO: data.SALDO,
         FECHA_DIFF: fechaDif,
         INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? (Number(interesdiario) * Number(fechaDif)).toFixed(2) : '',
         DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100).toFixed(2) : '',
-        MONTO_COBRAR: formatterNumber.format(((data.IMPORTE) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0) /100)))),
-        MONTO: formatterNumber.format(Math.abs((data.IMPORTE) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0)/100)))
+        MONTO_COBRAR: (((data.IMPORTE) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0) /100)))),
+        MONTO: (((data.IMPORTE) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0)/100)))
       }
     })
     if(array.length == 0){
@@ -799,14 +807,14 @@ const copyItem = (i: number) => {
 }
 
 watch(formData.value, async (newVal, oldVal)=>{
-  let monto = formData.value.montofactura
-  //let montofactura = formData.value.montofactura
+  let monto = formData.value?.montofactura
   let totalImpacto = formData.value?.mediospago.reduce((acc, act)=> acc + Number(act.impacto), 0)
   let totalImporte = formData.value?.mediospago.reduce((acc, act)=> acc + Number(act.importe.replaceAll(",", "")), 0)
-
-  cabacera.value = totalImporte ? Number(totalImporte) >= Number(monto) ? 0.00 : ((Number(monto) - Number(totalImporte)) / Number(monto) * 100) : ''
+  let dtoFinanciero = Number(formData.value?.dtofinanciero).toFixed(2)
+  cabacera.value = totalImporte ? Number(totalImporte) >= Number(monto) ? 0.00 : ((Number(monto) - Number(totalImporte)) / Number(monto) * 100).toFixed(2) : ''
   totalimporte.value = totalImporte ? Number(totalImporte) : ''
-
+  pagocerrado.value = Number(monto) > 0 ? totalImpacto >= (Number(monto) * (1-Number(tolerencia)/100)) && totalImpacto <= (Number(monto) * (1+Number(tolerencia)/100)) ? true : false : false
+  
   formData.value.mediospago.forEach(item => { 
     const fechaHastaUltima = data_cheques.value?.findLast(data => data.hasta)?.hasta;
     const now = DateTime.now().toISODate()
@@ -831,19 +839,16 @@ watch(formData.value, async (newVal, oldVal)=>{
         
     item.dto = TC == 'TC' && item.cuota ? 
     data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map((data:any) => data.interes_base?.filter((x:any) => x?.nro_cuota == item.cuota)).map((data:any) => 
-    (100-((100 - (Number(formData.value?.dtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0]
-                //(100-(100-$F$3*100)*(1+D200))/100 -- (1-itemDto2?.dto)/(1-TOLERENCIA)-1
+    (100-((100 - (Number(dtoFinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0]
                : TC == 'CHEQ' ? 
-               //(itemDto2?.dto ? itemDto2?.dto : 0)
-               (100-((100 - (Number(formData.value?.dtofinanciero) / 100) * 100)*(1 + ((((1-(Number(itemDto2?.dto)/100))/(1-(Number(maxdtofinanciero)/100))-1)*100)) / 100))).toFixed(2)
-
+               (100-((100 - (Number(dtoFinanciero) / 100) * 100)*(1 + ((((1-(Number(itemDto2?.dto)/100))/(1-(Number(maxdtofinanciero)/100))-1)*100)) / 100))).toFixed(2)
                : data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.interes_base).map((data:any) =>           
-               (100-((100 - (Number(formData.value?.dtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0] as any
+               (100-((100 - (Number(dtoFinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0] as any
 
     item.impacto = item.importe ?  (Number(importe) / (1 - Number(item.dto) / 100)).toFixed(2)
                    : '' as any 
         
-    item.calculable = Number(monto) && item.dto ? ((Number(monto) - Number(totalImpacto))*(1 - (Number(item.dto) / 100))).toFixed(2) : '';
+    item.calculable = monto && item.dto ? ((Number(monto) - Number(totalImpacto))*(1 - (Number(item.dto) / 100))).toFixed(2) : '';
 
   })
 })

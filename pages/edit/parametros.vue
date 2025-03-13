@@ -66,6 +66,11 @@
                                             <UInput v-model="data[field]" fluid />
                                         </template>
                                     </Column>
+                                    <Column field="dolar" header="DÓLAR">
+                                        <template #editor="{ data, field }">
+                                            <UInput v-model="data[field]" fluid />
+                                        </template>
+                                    </Column>
                                     <Column :rowEditor="true" style="width: 5%; min-width: 8rem" bodyStyle="text-align:right"></Column>
                                     <Column style="width: 5%;" bodyStyle="text-align:left">
                                         <template #body="{ data }">
@@ -116,6 +121,10 @@
                                             <div class="col-span">
                                                 <label for="tasa_iva" class="block font-bold mb-3">INTERÉS DIARIO PARA ACTUALIZAR FACTURAS</label>
                                                 <UInput id="tasa_iva" v-model="agregarDatos.interes_diario" fluid />
+                                            </div>
+                                            <div class="col-span">
+                                                <label for="tasa_iva" class="block font-bold mb-3">DÓLAR</label>
+                                                <UInput id="tasa_iva" v-model="agregarDatos.dolar" fluid />
                                             </div>
                                         </div>
                                         <template #footer>
@@ -320,7 +329,8 @@ const agregarDatos = ref({
         abv_tarjetas_debito: '',
         tasa_iva: '',
         interes_diario: '',
-        fecha_alta: new Date()
+        fecha_alta: new Date(),
+        dolar: ''
 })
 
 const isOpenModal2 = ref(false)
@@ -360,7 +370,7 @@ const onRowEditSave1 = async (e: any) => {
     
     const Id = newData.id
     
-    const res = await $fetch('/api/parametrosgenerales/'+Id , {
+    const res = await $fetch('/api/parametrosgenerales/'+Id, {
         method: 'PUT',
         body: {
             max_dto_financiero: newData.max_dto_financiero,
@@ -370,11 +380,14 @@ const onRowEditSave1 = async (e: any) => {
             abv_tarjetas_credito: newData.abv_tarjetas_credito,
             abv_tarjetas_debito: newData.abv_tarjetas_debito,
             tasa_iva: newData.tasa_iva,
-            fecha_alta: newData.fecha_alta
+            fecha_alta: newData.fecha_alta,
+            interes_diario: newData.interes_diario,
+            dolar: newData.dolar
         }
     })
     toast.add({title: "Modificado correctamente"})
     refresh_parametros();
+    await preloadComponents('header')
 }
 
 const removeIdParametros = async (e: any) => {
@@ -396,7 +409,9 @@ const submitCreate1 = async () => {
             abv_tarjetas_credito: agregarDatos.value?.abv_tarjetas_credito,
             abv_tarjetas_debito: agregarDatos.value?.abv_tarjetas_debito,
             tasa_iva: agregarDatos.value?.tasa_iva,
-            fecha_alta: agregarDatos.value?.fecha_alta
+            fecha_alta: agregarDatos.value?.fecha_alta,
+            interes_diario: agregarDatos.value?.interes_diario,
+            dolar: agregarDatos.value?.dolar
         }
     })
     toast.add({title: "Agregado correctamente"})

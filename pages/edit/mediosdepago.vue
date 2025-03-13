@@ -43,6 +43,10 @@
                                         </template>
                                     </USelectMenu>
                             </div>
+                            <div>
+                                <label for="financiacion" class="block font-bold mb-3">Mostrar en Costo de financiación</label>
+                                <USelect v-model="agregarDatosMP.financiacion" :options="mostrar" option-attribute="label" value-attribute="value" />
+                            </div>
                         </div>
                         <template #footer>
                             <div class="float-end pb-4">
@@ -90,6 +94,18 @@
                                         </template>
                                         <template #body="slotProps">
                                             <Tag :value="slotProps.data.estado == true ? 'HABILITADO' : 'INHABILITADO'" :severity="getStatusLabel(slotProps.data.estado)" />
+                                        </template>
+                                    </Column>
+                                    <Column field="costo_financiacion" header="Mostrar en Costo de financiación?">
+                                        <template #editor="{ data, field }">
+                                            <Select v-model="data[field]" :options="mostrar" optionLabel="label" optionValue="value" placeholder="Seleccione un estado" fluid>
+                                                <template #option="slotProps">
+                                                    <Tag :value="slotProps.option.value == true ? 'SI' : 'NO'" :severity="getMostrarLabel(slotProps.option.value)" />
+                                                </template>
+                                            </Select>
+                                        </template>
+                                        <template #body="slotProps">
+                                            <Tag :value="slotProps.data.costo_financiacion == true ? 'SI' : 'NO'" :severity="getMostrarLabel(slotProps.data.costo_financiacion)" />
                                         </template>
                                     </Column>
                                     <Column field="dias" header="Días">
@@ -205,11 +221,14 @@ const tipopago = ref([
     { label: 'Contado Efectivo', value: 'CONTADO EFECTIVO' },
     { label: 'Cheque', value: 'CHEQ'}
 ])
-
 const statuses = ref([
     { label: 'HABILITADO', value: true },
     { label: 'INHABILITADO', value: false }
 ]);
+const mostrar = ref([
+    { label: 'SI', value: true },
+    { label: 'NO', value: false }
+])
 const dias = ref([
     { id: 1, label: 'Lunes', value: 'Lunes' },
     { id: 2, label: 'Martes', value: 'Martes' },
@@ -230,7 +249,8 @@ const agregarDatosMP = ref({
     tipodepago: '',
     medio_pago: '',
     estado: '',
-    dias: []
+    dias: [],
+    financiacion: ''
 })
 
 const maxdtofinanciero = data_parametrosgrales.value ? data_parametrosgrales.value[0].max_dto_financiero : 0
@@ -265,6 +285,19 @@ const getStatusLabel = (status : any) => {
     }
 };
 
+const getMostrarLabel = (status : any) => {
+    switch (status) {
+        case true:
+            return 'success';
+
+        case false:
+            return 'danger';
+
+        default:
+            return ;
+    }
+};
+
 const createMedioPago = async () => {
     const res = await $fetch('/api/mediosdepagos', {
         method: 'POST',
@@ -273,7 +306,8 @@ const createMedioPago = async () => {
             nombre: agregarDatosMP.value?.nombre,
             medio_pago: agregarDatosMP.value?.nombre.trim().replace(/\s/g, '').toLowerCase(),
             tipo_pago: agregarDatosMP.value?.tipodepago,
-            dias: agregarDatosMP.value?.dias
+            dias: agregarDatosMP.value?.dias,
+            costo_financiacion: agregarDatosMP.value?.financiacion
         }
     })
     toast.add({title: "Agregado correctamente"})
@@ -293,7 +327,8 @@ const onRowEditSave = async (e: any) => {
             nombre: newData.nombre,
             medio_pago: mediopago,
             tipo_pago: newData.tipo_pago,
-            dias: newData.dias
+            dias: newData.dias,
+            costo_financiacion: newData.costo_financiacion
         }
     })
     toast.add({title: "Modificado correctamente"})

@@ -19,7 +19,7 @@ useHead({
 
 <style>
 html {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .page-enter-active,
 .page-leave-active {

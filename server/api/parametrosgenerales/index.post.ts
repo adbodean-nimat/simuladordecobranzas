@@ -9,7 +9,8 @@ interface ParametrosGenerales {
   abv_tarjetas_debito: string,
   tasa_iva: string,
   fecha_alta: string,
-  interes_diario: string
+  interes_diario: string,
+  dolar: string
 }
 
 export default defineEventHandler(async (event) => {
@@ -25,7 +26,8 @@ export default defineEventHandler(async (event) => {
           abv_tarjetas_debito: body.abv_tarjetas_debito,
           tasa_iva: body.tasa_iva,
           fecha_alta: body.fecha_alta,
-          interes_diario: body.interes_diario
+          interes_diario: body.interes_diario,
+          dolar: body.dolar
         }
     })
     return data;

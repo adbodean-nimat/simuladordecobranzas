@@ -155,7 +155,7 @@ const parametros3 = [{
 }]
 const interesDiario = data_parametros.value?.map(data=> data.interes_diario)[0];
 const data_parametrosgrales_rtl = data_parametros.value ? data_parametros.value : {}
-const dataNameModify = ["MAXIMO DTO.FINANCIERO", "TOLERENCIA DIFERENCIA PARA CERRAR PAGOS", "UNIDAD DE TIEMPO PARA CHEQUES", "UNIDAD DE TIEMPO PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE DEBITO", "TASA IVA", "INTERÉS DIARIO PARA FACTURAS"]
+const dataNameModify = ["ID","MAXIMO DTO.FINANCIERO", "TOLERENCIA DIFERENCIA PARA CERRAR PAGOS", "UNIDAD DE TIEMPO PARA CHEQUES", "UNIDAD DE TIEMPO PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE DEBITO", "TASA IVA", "INTERÉS DIARIO PARA FACTURAS", "DÓLAR", "FECHA DÓLAR"]
 const parametrosNombre = data_parametros.value?.map(f => Object.keys(f))[0];
 
 const newData2 = dataNameModify?.map((v)=>{
@@ -181,12 +181,18 @@ const newData = parametrosNombre?.map((f) => {
 });
 
 const dataYes = []
+newData?.splice(0,1)
+newData2?.splice(0,1)
+newData?.splice(9,1)
+newData2?.splice(9,1)
 for(let i = 0; i < (newData ? newData.length : 0); i++){
+    
     dataYes.push({
         nombre: newData ? newData[i].nombre : '',
         nombre_modificado: newData2[i].nombre_modificado,
         datos: newData ? newData[i].datos : ''
     })
+    
 }
 const resultadosYes = dataYes
 

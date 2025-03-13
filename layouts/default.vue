@@ -1,6 +1,9 @@
 <template>
   <div>
     <div>
+      <LazyPromo />
+    </div>
+    <div>
       <Header />
     </div>
     <div class="min-h-screen">
@@ -11,3 +14,4 @@
     </div>
   </div>
 </template>
+

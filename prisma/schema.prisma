@@ -265,26 +265,29 @@ model simulador_cobranzas_dto_actualizar_facturas {
 }
 
 model simulador_cobranzas_medios_de_pagos {
-  id           Int      @id @default(autoincrement())
-  estado       Boolean?
-  nombre       String?
-  medio_pago   String?
-  tipo_pago    String?
-  interes_base Json?
-  dias         Json?    @default("[]")
+  id                 Int      @id @default(autoincrement())
+  estado             Boolean?
+  nombre             String?
+  medio_pago         String?
+  tipo_pago          String?
+  interes_base       Json?
+  dias               Json?    @default("[]")
+  costo_financiacion Boolean?
 }
 
 model simulador_cobranzas_parametros_generales {
-  id                   Int      @id @default(autoincrement())
-  max_dto_financiero   Decimal? @db.Decimal
-  tolerncia_dif        Decimal? @db.Decimal
-  unidad_tiempo_cheq   String?  @db.VarChar(30)
-  unidad_tiempo_tc     String?  @db.VarChar(30)
-  abv_tarjetas_credito String?  @db.VarChar(30)
-  abv_tarjetas_debito  String?  @db.VarChar(30)
-  tasa_iva             Decimal? @db.Decimal
-  fecha_alta           DateTime @default(dbgenerated("CURRENT_DATE")) @db.Date
-  interes_diario       Decimal? @db.Decimal
+  id                     Int       @id @default(autoincrement())
+  max_dto_financiero     Decimal?  @db.Decimal
+  tolerncia_dif          Decimal?  @db.Decimal
+  unidad_tiempo_cheq     String?   @db.VarChar(30)
+  unidad_tiempo_tc       String?   @db.VarChar(30)
+  abv_tarjetas_credito   String?   @db.VarChar(30)
+  abv_tarjetas_debito    String?   @db.VarChar(30)
+  tasa_iva               Decimal?  @db.Decimal
+  fecha_alta             DateTime  @default(dbgenerated("CURRENT_DATE")) @db.Date
+  interes_diario         Decimal?  @db.Decimal
+  dolar                  Decimal?  @db.Decimal
+  fecha_actualizar_dolar DateTime? @default(now()) @db.Timestamptz(6)
 }
 
 model simulador_cobranzas_roles {

@@ -18,6 +18,9 @@ useHead({
 </template>
 
 <style>
+html {
+  font-family: "Inter", sans-serif;
+}
 .page-enter-active,
 .page-leave-active {
   transition: all 0.4s;

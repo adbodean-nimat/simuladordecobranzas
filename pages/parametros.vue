@@ -1,14 +1,23 @@
 <template>
     <div>
         <UContainer :ui="{ constrained: 'max-w-screen-2xl' }">
-            <div class="text-center p-4 text-base">
+            <div class="flex justify-center gap-2 items-center text-center p-4 text-base">
                 <h2>PARAMETROS GENERALES</h2>
+                <div class="justify-items-end" v-if="authenticated">
+                    <UButton icon="i-heroicons-pencil-square"
+                            size="sm"
+                            variant="soft"
+                            square
+                            label="Editar"
+                            to="/edit/parametros"
+                            :trailing="false"></UButton>
+                </div>
             </div>
             <div class="grid grid-cols-3 gap-4">
                 <div>
-                    <UAccordion default-open multiple color="sea-green" variant="solid" size="xl" open-icon="i-heroicons-null" close-icon="i-heroicons-null" :items="parametros1">
+                    <UAccordion default-open multiple variant="soft" size="xl" :items="parametros1">
                         <template #datos1 v-if="data_parametros">
-                            <div class="text-sea-green-900 dark:text-white text-center">
+                            <div class="text-sea-green-800 dark:text-white text-center">
                                 <UTable 
                                     :ui="tableUI"
                                     :columns="columns1"
@@ -23,9 +32,9 @@
                     </UAccordion>
                 </div>
                 <div>
-                    <UAccordion default-open multiple color="sea-green" variant="solid" size="xl" open-icon="i-heroicons-null" close-icon="i-heroicons-null" :items="parametros2">
+                    <UAccordion default-open multiple variant="soft" size="xl" :items="parametros2">
                         <template #datos2 v-if="data_parametrosfacturas">
-                            <div class="text-sea-green-900 dark:text-white text-center">
+                            <div class="text-black dark:text-white text-center">
                                 <UTable 
                                     :ui="tableUI"
                                     :columns="columns2" 
@@ -35,18 +44,18 @@
                                     :progress="{ color: 'sea-green', animation: 'carousel' }"
                                     :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No items.' }"
                                     class="w-full" />
-                                    <div class="flex justify-around text-left px-3 py-3.5 border-t border-sea-green-300 dark:border-sea-green">
+                                    <div class="flex justify-around text-left px-3 py-3.5 border-t border-primary dark:border-sea-green-900">
                                         <span>INTERES DIARIO a aplicar sobre base CONTADO EFECTIVO, para actualizar facturas con 61 días o más</span>
-                                        <span>0.417000%</span>
+                                        <span>{{ interesDiario +'%'}}</span>
                                     </div>
                             </div>
                         </template>
                     </UAccordion>
                 </div>
                 <div>
-                    <UAccordion default-open multiple color="sea-green" variant="solid" size="xl" open-icon="i-heroicons-null" close-icon="i-heroicons-null" :items="parametros3">
+                    <UAccordion default-open multiple variant="soft" size="xl" :items="parametros3">
                         <template #datos3 v-if="data_parametroscheques">
-                            <div class="text-sea-green-900 dark:text-white text-center">
+                            <div class="text-sea-green-800 dark:text-white text-center">
                                 <UTable 
                                     :ui="tableUI"
                                     :columns="columns3" 
@@ -67,11 +76,14 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '~/store/auth'
+const { authenticated } = storeToRefs(useAuthStore());
 const {status: status_parametros, data: data_parametros} = await useFetch('/api/parametrosgenerales')
 const {status: status_facturas, data: data_parametrosfacturas} = await useFetch('/api/parametrosfacturas')
 const {status: status_cheques, data: data_parametroscheques } = await useFetch('/api/parametroscheques')
 const tableUI = {
-    divide: 'divide-y divide-sea-green-300 dark:divide-sea-green',
+    divide: 'divide-y divide-sea-green-600 dark:divide-sea-green-900',
     th: {
         base: 'text-left rtl:text-right',
         padding: 'px-4 py-3.5',
@@ -91,7 +103,6 @@ const columns1 = [
   {
     key: 'nombre_modificado',
     label: 'DESCRIPCIÓN',
-    
   },
   {
     key: 'datos',
@@ -142,9 +153,9 @@ const parametros3 = [{
     icon: "",
     slot: "datos3"
 }]
-
+const interesDiario = data_parametros.value?.map(data=> data.interes_diario)[0];
 const data_parametrosgrales_rtl = data_parametros.value ? data_parametros.value : {}
-const dataNameModify = ["ID","MAXIMO DTO.FINANCIERO", "TOLERENCIA DIFERENCIA PARA CERRAR PAGOS", "UNIDAD DE TIEMPO PARA CHEQUES", "UNIDAD DE TIEMPO PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE DEBITO", "TASA IVA", "FECHA DE ALTA"]
+const dataNameModify = ["ID","MAXIMO DTO.FINANCIERO", "TOLERENCIA DIFERENCIA PARA CERRAR PAGOS", "UNIDAD DE TIEMPO PARA CHEQUES", "UNIDAD DE TIEMPO PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE DEBITO", "TASA IVA", "INTERÉS DIARIO PARA FACTURAS", "DÓLAR", "FECHA DÓLAR"]
 const parametrosNombre = data_parametros.value?.map(f => Object.keys(f))[0];
 
 const newData2 = dataNameModify?.map((v)=>{
@@ -160,25 +171,30 @@ const newData = parametrosNombre?.map((f) => {
         nombre: '',
         datos: ''
     }
-
     dataName.nombre = f
     data_parametros.value?.forEach((d:any)=>{
-        const percent = f == "max_dto_financiero" || f == "tolerncia_dif" || f == "tasa_iva" ? '%' : ''
-        dataName.datos = d[f] + percent
+        const percent = f == "max_dto_financiero" || f == "tolerncia_dif" || f == "tasa_iva" || f == "interes_diario" ? '%' : ''
+        dataName.datos = d[f] + percent 
     });
-
+    
     return dataName
 });
 
 const dataYes = []
+newData?.splice(0,1)
+newData2?.splice(0,1)
+newData?.splice(9,1)
+newData2?.splice(9,1)
 for(let i = 0; i < (newData ? newData.length : 0); i++){
+    
     dataYes.push({
         nombre: newData ? newData[i].nombre : '',
         nombre_modificado: newData2[i].nombre_modificado,
         datos: newData ? newData[i].datos : ''
     })
+    
 }
-const resultadosYes = dataYes.slice(1,8)
+const resultadosYes = dataYes
 
 const dataYes2: any[] = []
 data_parametrosfacturas.value?.forEach(item => dataYes2.push({

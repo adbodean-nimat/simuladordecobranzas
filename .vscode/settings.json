@@ -6,6 +6,8 @@
     },
     "editor.quickSuggestions": {
         "strings": true
-    }
+    },
+    "editor.minimap.enabled": true,
+    "editor.inlineSuggest.showToolbar": "onHover"
   }
   

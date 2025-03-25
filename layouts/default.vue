@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <LazyPromo />
+      <Promo />
     </div>
     <div>
       <Header />

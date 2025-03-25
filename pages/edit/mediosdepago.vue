@@ -147,8 +147,8 @@
                                                     </template>
                                                 </Column>
                                                 <Column field="interes_base" header="Interés sobre base c/ máx. dto. financ.">
-                                                    <template #body="{ data, field }">
-                                                        {{ formatter_percent(data[field]) }}
+                                                    <template #body="{data, field}">
+                                                        <Tag :value="formatter_percent(data.interes_base)" :severity="'info'" />  
                                                     </template>
                                                     <template #editor="{ data, field}">
                                                         <UInput v-model="data[field]" fluid />

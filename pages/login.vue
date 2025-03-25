@@ -110,11 +110,12 @@ const login = async (event: FormSubmitEvent<Schema>) => {
                 username: state.username, 
                 avatar: info.avatar, 
                 fullname: info.fullname, 
-                rol: isRol}
-            );
+                rol: isRol
+            });
 
             if (authenticated) {
                 router.push('/');
+                await nextTick();
             }
         }
 };

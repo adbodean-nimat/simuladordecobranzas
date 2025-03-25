@@ -387,7 +387,9 @@ const onRowEditSave1 = async (e: any) => {
     })
     toast.add({title: "Modificado correctamente"})
     refresh_parametros();
-    await preloadComponents('header')
+    onMounted(()=>{
+        nextTick()
+    })
 }
 
 const removeIdParametros = async (e: any) => {

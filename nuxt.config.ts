@@ -21,14 +21,15 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     '@nuxt/ui',
-    '@nuxtjs/i18n',
     '@nuxt/fonts',
     'nuxt-security',
     '@prisma/nuxt',
     '@primevue/nuxt-module',
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
-    'nuxt-file-storage'
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/color-mode',
+    '@nuxt/icon'
   ],
   experimental: {
     cookieStore: true
@@ -50,20 +51,12 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' }
   },
-  i18n: {
-    locales: [{code: 'es', iso: 'es-es'}],
-    defaultLocale: 'es',
-    lazy: true
-  },
   webpack: {
     loaders: {
       vue: {
         hotReload: true,
       }
     }
-  },
-  build: {
-    transpile: ['fs', 'gsap']
   },
   prisma:{
     autoSetupPrisma: true

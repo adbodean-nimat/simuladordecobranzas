@@ -3,6 +3,9 @@ import defaultTheme from 'tailwindcss/defaultTheme'
 
 export default <Partial<Config>>{
     theme: {
+        fontFamily:{
+            sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        },
         container: {
             center: true,
         },

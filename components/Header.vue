@@ -176,7 +176,7 @@ const links = [
     to: '/'
   },
   {
-    label: 'Parametros generales',
+    label: '',
     icon: 'i-heroicons-adjustments-horizontal-solid',
     to: '/parametros'
   },

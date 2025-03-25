@@ -10,18 +10,25 @@
             <template #text>
               <span class="italic">Buscar por QR</span>
             </template>
-            <UButton size="xl" icon="heroicons:qr-code" variant="link" @click="mostrarqr = true"/>
+            <UButton size="xl" icon="heroicons:qr-code" variant="link" @click="mostrarqr = true" />
           </UTooltip>
-          <UTooltip name="cambiarinput" :shortcuts="['W']">
-            <template #text v-if="awesome">
-                <span class="italic">Buscar por nro. de cliente</span>
-            </template>
-            <template #text v-else>
-                <span class="italic">Buscar por nro. de factura</span>
-            </template>
-            <UButton size="xl" class="mr-2.5" icon="heroicons:arrow-path-20-solid" variant="link" @click="awesome = !awesome"/>
+          <UTooltip name="buscarnombre" text="Buscar por nombre" :shortcuts="['S']">
+            <UButton size="xl" icon="material-symbols:person-search-rounded" variant="link" @click="isOpen2 = true" />
+            <UModal v-model="isOpen2">
+              <UCommandPalette
+                placeholder=""
+                :autoselect="false"
+                v-model="selected2"
+                @update:model-value="onSelect"
+                :groups="groups"
+                :empty-state="{ icon: 'i-heroicons-magnifying-glass-20-solid', label: 'No pudimos encontrar ningún clientes.', queryLabel: 'No pudimos encontrar ningún cliente con ese término. Por favor inténtalo de nuevo.' }"
+              />
+            </UModal>
           </UTooltip>
-          <template v-if="awesome">
+          
+              <USelectMenu icon="i-heroicons-funnel-solid" trailingIcon="i-heroicons-arrows-up-down-20-solid" color="primary" size="xl" variant="none" :options="['Cliente', 'Factura', 'Remito']" v-model="cambiarinput"></USelectMenu>
+          
+          <template v-if="cambiarinput == 'Factura'">
             <UButtonGroup size="xl" orientation="horizontal" :ui="{base: 'appearance-none', rounded: 'rounded-lg', form: 'form-input'}">
               <UInput 
                 :ui="{base: 'w-64'}"
@@ -34,7 +41,21 @@
               <UButton icon="heroicons:play-solid" color="gray" @click="consultaSaldosFactura" />
             </UButtonGroup>
           </template>
-          <template v-else>
+          <template v-if="cambiarinput == 'Remito'">
+            <UButtonGroup size="xl" orientation="horizontal" :ui="{base: 'appearance-none', rounded: 'rounded-lg', form: 'form-input'}">
+              <UInput 
+                :ui="{base: 'w-64'}"
+                size="xl"
+                padded
+                type="number" 
+                icon="octicon:number-24"
+                placeholder="Ingrese el nro. de remito"
+                v-model="datainputremito" 
+              />
+              <UButton padded icon="heroicons:play-solid" color="gray" @click="consultaSaldosRemito" />
+            </UButtonGroup>
+          </template>
+          <template v-if="cambiarinput == 'Cliente'">
             <UButtonGroup size="xl" orientation="horizontal" :ui="{base: 'appearance-none', rounded: 'rounded-lg', form: 'form-input'}">
               <UInput 
                 :ui="{base: 'w-64'}"
@@ -101,20 +122,26 @@
                 </div>
               </template>
               <UTable :ui="tableUI" v-model="selected" :rows="getdata.data" :columns="columns"  @select:all="onHandleSelectAll" @update:modelValue="onUpdateSelection">
+                <template #caption>
+                  <caption class="my-3">FACTURAS</caption>
+                </template>
                 <template #IMPORTE-data="{ row }">
                   {{'$ ' + formatterNumber.format(row.IMPORTE)}}
                 </template>
+                <template #SALDO-data="{ row }">
+                  {{'$ ' + formatterNumber.format(row.SALDO)}}
+                </template>
                 <template #FECHA_DIFF-data="{ row }">
-                  <UBadge size="lg" :label="row.FECHA_DIFF + ' días'" :color="row.FECHA_DIFF < 60 ? 'emerald' : 'orange'" variant="soft" />
+                  <UBadge size="lg" :label="row.FECHA_DIFF" :color="'gray'" variant="soft" />
                 </template>
                 <template #DTO_FINANCIERO-data="{ row }">
-                  <UBadge size="lg" :label="row.DTO_FINANCIERO + '%'" :color="row.DTO_FINANCIERO > 0 ? 'emerald' : 'orange'" variant="soft" />
+                    <UBadge size="lg" :label="row.DTO_FINANCIERO + '%'" :color="row.DTO_FINANCIERO >= 0 ? 'emerald' : 'orange'" variant="soft" />
                 </template>
                 <template #MONTO_COBRAR-data="{ row }">
-                  {{'$ ' + formatterNumber.format(row.MONTO_COBRAR)}}
+                    {{ '$ ' + formatterNumber.format(row.MONTO_COBRAR)}}
                 </template>
                 <template #MONTO-data="{ row }">
-                  <UBadge size="lg" :label="row.DTO_FINANCIERO >= 0 ? 'Descuentos $ ' + formatterNumber.format(row.MONTO) : 'Débitos $ ' + formatterNumber.format(row.MONTO)" :color="row.DTO_FINANCIERO >= 0 ? 'emerald' : 'orange'" variant="soft" />
+                    <UBadge size="lg" :label="row.MONTO == 0 ? '$ '+ row.MONTO : row.MONTO > 0 ? 'Descuentos $ ' + formatterNumber.format(row.MONTO) : 'Débitos $ ' + formatterNumber.format(row.MONTO)" :color="row.MONTO == 0 ? 'gray' : row.MONTO > 0 ? 'emerald' : 'orange'" variant="soft" />
                 </template>
               </UTable>
               <template #footer>
@@ -123,10 +150,46 @@
                     <span>Total facturas: $ {{ formatterNumber.format(Number(formData.montofactura)) }}</span>
                   </div>
                   <div>
-                    <!-- <span>Dto. financiero: {{ (Number(formData.dtofinanciero)) }}%</span> -->
+                    <span>Dto. financiero: {{ formatterNumber.format(Number(formData.dtofinanciero)) }}%</span>
                   </div>
                   <div>
                     <span>Final «CONTADO EFECTIVO», antes considerar medios pago: $ {{ formatterNumber.format(monto) }}</span>
+                  </div>
+                </div>
+              </template>
+            </UCard>
+          </template>
+          <template v-if="getdata.dataNC.length > 0">
+            <UCard
+              class="w-full"
+              :ui="{
+                base: 'mt-5',
+                ring: '',
+                divide: 'divide-y divide-gray-200 dark:divide-gray-700',
+                header: { padding: 'px-4 py-5' },
+                body: { padding: '', base: 'divide-y divide-gray-200 dark:divide-gray-700' },
+                footer: { padding: 'p-4' }
+              }"
+            >
+            
+              <UTable :ui="tableUI" v-model="selectedNC" :rows="getdata.dataNC" :columns="columns2"  @select:all="onHandleSelectAll2" @update:modelValue="onUpdateSelection2">
+                <template #caption>
+                  <caption class="my-3">NOTA DE CRÉDITO</caption>
+                </template>
+                <template #IMPORTE-data="{ row }">
+                  {{'$ ' + formatterNumber.format(row.IMPORTE)}}
+                </template>
+                <template #SALDO-data="{ row }">
+                  {{'$ ' + formatterNumber.format(row.SALDO)}}
+                </template>
+                <template #FECHA_DIFF-data="{ row }">
+                  <UBadge size="lg" :label="row.FECHA_DIFF" :color="'gray'" variant="soft" />
+                </template>
+              </UTable>
+              <template #footer>
+                <div class="flex flex-wrap justify-end items-center">
+                  <div>
+                    <span>Total NC: $ {{ formatterNumber.format(Number(formData.montoNC)) }}</span>
                   </div>
                 </div>
               </template>
@@ -183,26 +246,15 @@
             </template> 
         </div>
         <template v-if="formData.monto">
-        
           <UButton @click="addMore" icon="i-material-symbols-add-circle" size="md" square variant="soft" class="my-4">Agregar</UButton>
-  
         <div class="grid grid-rows-auto grid-flow-col gap-4">
-      
           <div class="row-span-3">
-          
-      
             <div class="grid grid-flow-col auto-rows-auto auto-cols-max gap-4 mb-2 p-2 items-end" v-for="(item, i) in formData.mediospago" :key="i">
-      
               <template v-if="data_mediosdepagos">
-      
                 <UFormGroup>
-      
                   <UBadge size="lg" variant="soft">{{ i + 1 }}</UBadge>
-      
                 </UFormGroup>
-      
               </template>
-      
               <template v-if="data_mediosdepagos">
                 <UFormGroup label="Medio de pago">
                   <USelect color="white" variant="outline" placeholder="" :options="dataMediosPagos" option-attribute="name" v-model="item.nombre"/>
@@ -238,11 +290,9 @@
                   </template>
                 </UFormGroup>
               </template>
-            
             <UFormGroup label="Importe a pagar">
               <UInput v-model="item.importe" variant="outline" placeholder="" icon="clarity:dollar-line" v-maska="optionsMask"></UInput>
             </UFormGroup>
-            
             <UButton class="flex-none" title="Borrar item" @click="remove(i)" icon="i-heroicons-trash" size="sm" square variant="soft"></UButton>
             <UButton class="flex-none" title="Duplicar item" @click="copyItem(i)" icon="i-heroicons-clipboard" size="sm" square variant="soft"></UButton>  
           </div>
@@ -326,7 +376,58 @@
 <script setup lang="ts">
 import type { MaskInputOptions} from 'maska'
 import { useClipboard } from '@vueuse/core'
+import { formatDistanceStrict, differenceInCalendarDays } from "date-fns";
+import { es } from "date-fns/locale";
 import { DateTime } from 'luxon'
+import dayjs from 'dayjs'
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime)
+const localeObject = {
+  name: 'es', // name String
+  weekdays: 'Domingo_Lunes ...'.split('_'), // weekdays Array
+  weekdaysShort: 'Sun_M'.split('_'), // OPTIONAL, short weekdays Array, use first three letters if not provided
+  weekdaysMin: 'Su_Mo'.split('_'), // OPTIONAL, min weekdays Array, use first two letters if not provided
+  weekStart: 1, // OPTIONAL, set the start of a week. If the value is 1, Monday will be the start of week instead of Sunday。
+  yearStart: 4, // OPTIONAL, the week that contains Jan 4th is the first week of the year.
+  months: 'Enero_Febrero ... '.split('_'), // months Array
+  monthsShort: 'Jan_F'.split('_'), // OPTIONAL, short months Array, use first three letters if not provided
+  ordinal: (n:any) => `${n}º`, // ordinal Function (number) => return number + output
+  formats: {
+    // abbreviated format options allowing localization
+    LTS: 'h:mm:ss A',
+    LT: 'h:mm A',
+    L: 'MM/DD/YYYY',
+    LL: 'MMMM D, YYYY',
+    LLL: 'MMMM D, YYYY h:mm A',
+    LLLL: 'dddd, MMMM D, YYYY h:mm A',
+    // lowercase/short, optional formats for localization
+    l: 'D/M/YYYY',
+    ll: 'D MMM, YYYY',
+    lll: 'D MMM, YYYY h:mm A',
+    llll: 'ddd, MMM D, YYYY h:mm A'
+  },
+  relativeTime: {
+    // relative time format strings, keep %s %d as the same
+    future: 'en %s', // e.g. in 2 hours, %s been replaced with 2hours
+    past: 'hace %s',
+    s: 'unos segundos',
+    m: '1 minuto',
+    mm: '%d minutos',
+    h: '1 hora',
+    hh: '%d horas', // e.g. 2 hours, %d been replaced with 2
+    d: '1 día',
+    dd: '%d días',
+    M: '1 mes',
+    MM: '%d meses',
+    y: '1 año',
+    yy: '%d años'
+  },
+  meridiem: (hour:any, minute:any, isLowercase:any) => {
+    // OPTIONAL, AM/PM
+    return hour > 12 ? 'PM' : 'AM'
+  }
+}
+dayjs.locale('es-my-settings', localeObject);
 import gsap from 'gsap'
 const {data: data_parametrosgrales} = await useFetch('/api/parametrosgenerales')
 const {status: status_mediosdepagos, data: data_mediosdepagos} = await useFetch('/api/mediosdepagos')
@@ -337,13 +438,17 @@ const formatterNumber = new Intl.NumberFormat("es-US",{minimumFractionDigits: 2,
 const config = useRuntimeConfig()
 const toast = useToast()
 const isOpen = ref(false)
+const isOpen2 = ref(false)
 const awesome = ref(false)
 const mostrarqr = ref(false)
 const pagocerrado = ref(false)
+const cambiarinput = ref('Cliente')
 const datainputcliente = ref('')
 const datainputfactura = ref('')
+const datainputremito = ref('')
 const datainputqr = ref('')
 const diaHoy = ref(DateTime.now().weekday)
+var now = dayjs()
 const maxdtofinanciero = data_parametrosgrales.value ? data_parametrosgrales.value[0].max_dto_financiero : 0
 const interesdiario = data_parametrosgrales.value ? data_parametrosgrales.value[0].interes_diario : 0
 const tolerencia = data_parametrosgrales.value ? data_parametrosgrales.value[0].tolerncia_dif : 0
@@ -353,7 +458,8 @@ const itemsTabs = [{
   slot: 'pago-cerrado'
 }]
 const getdata = reactive({
-  data: []
+  data: [],
+  dataNC: []
 })
 
 const dataMediosPagos: any = status_mediosdepagos.value == 'success' ? data_mediosdepagos.value?.filter(element =>  element.estado == true).map((data : any) => {
@@ -370,25 +476,36 @@ const dataMediosPagos: any = status_mediosdepagos.value == 'success' ? data_medi
     }) : ''
 
 const selected = ref([])
-
+const selected2 = ref([])
+const selectedNC = ref([])
 const onHandleSelectAll = (isSelected: boolean) => {
   console.log('All rows selected:', isSelected)
 }
-
+const onHandleSelectAll2 = (isSelected: boolean) => {
+  console.log('All rows selected:', isSelected)
+}
 const onUpdateSelection = (selectedRows: any[]) => {
   console.log('Currently selected rows:', selectedRows)
-  formData.value.montofactura = Number(selectedRows.reduce((acc : any, row : any) => acc + row.IMPORTE, 0)).toFixed(2)
+  formData.value.montofactura = Number(selectedRows.reduce((acc : any, row : any) => acc + row.SALDO, 0)).toFixed(2)
   formData.value.monto = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO_COBRAR, 0)).toFixed(2)
   formData.value.descuento_debitos = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO, 0)).toFixed(2)
   formData.value.dtofinanciero = (((Number(formData.value.descuento_debitos) / Number(formData.value.montofactura)) * 100)).toFixed(2)
 }
+const onUpdateSelection2 = (selectedRows: any[]) => {
+  console.log('Currently selected rows:', selectedRows)
+  formData.value.montoNC = Number(selectedRows.reduce((acc : any, row : any) => acc + row.SALDO, 0)).toFixed(2)
+  formData.value.monto2 = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO_COBRAR, 0)).toFixed(2)
+}
 
 const resetSelection = () => {
   selected.value = []
+  selected2.value = []
   formData.value.montofactura = ''
   formData.value.monto = ''
   formData.value.descuento_debitos = ''
   formData.value.dtofinanciero = ''
+  formData.value.montoNC = ''
+  formData.value.monto2 = ''
 }
 
 const optionsMask = reactive<MaskInputOptions>({
@@ -400,13 +517,13 @@ definePageMeta({
 })
 defineShortcuts({
   Q: {
-    usingInput: true,
+    usingInput: false,
     handler: () => {
       mostrarqr.value = true
     }
   },
   W: {
-    usingInput: true,
+    usingInput: false,
     handler: () => {
       awesome.value = !awesome.value
     }
@@ -414,7 +531,7 @@ defineShortcuts({
   enter: { 
     usingInput: true,
     handler: () => {
-      awesome.value ? consultaSaldosFactura() : consultaSaldosCliente()
+      cambiarinput.value == 'Cliente' ? consultaSaldosCliente() : cambiarinput.value == 'Factura' ? consultaSaldosFactura() : consultaSaldosRemito()
     }
 
   }
@@ -440,9 +557,12 @@ const consultaSaldosCliente = async () =>{
     resetSelection()
     Object.assign(selected, [])
     Object.assign(getdata.data, {data: []})
+    Object.assign(getdata.dataNC, {dataNC: []})
     Object.assign(formData.value, {
       montofactura: '',
+      montoNC: '',
       monto: '', 
+      monto2: '',
       cabacera: '',
       totalimporte: '',
       dtofinanciero: '',
@@ -481,38 +601,229 @@ const consultaSaldosCliente = async () =>{
         );
       },
     });
-    const array = response.map((data: any) => {
+    const array = response.filter((data: any) => data.CVCL_TIPO_VAR == 'FCA' || data.CVCL_TIPO_VAR == 'FCB').map((data: any) => {
+      const toNow = formatDistanceStrict(new Date(), data.FECHA_EMI, {
+        unit: 'day',
+        locale: es
+      })
+      const toNowNum = differenceInCalendarDays(
+        new Date(),
+        data.FECHA_EMI
+      )
       const now = DateTime.now().toISODate()
       let ffactura = DateTime.fromISO(data.FECHA_EMI.replace('Z',''))
       let fnow = DateTime.fromISO(now)
       let diff = fnow.diff(ffactura,['days']).toObject()
-      const fechaDif = diff?.days ? Number(diff.days) : 0
+      const fechaDif = diff?.days ? Number(diff.days).toFixed(2) : ''
+      //const toNow = dayjs(data.FECHA_EMI).fromNow(true)
       const dtoFacturas : any = data_facturas.value?.filter((data:any) => {
         const itemDesde = Number(data?.desde)
         const itemHasta = Number(data?.hasta)
-        const itemDia = Number(diff.days)
+        const itemDia = toNowNum
         const S = itemDia >= itemDesde && itemDia <= itemHasta ? data?.dto : ''
         return S
       })
       const fechaHastaUltima = data_facturas.value?.findLast(data => data.hasta)?.hasta;
-      return {
-        FECHA_EMI: DateTime.fromISO(data.FECHA_EMI.replace('Z','')).toLocaleString(DateTime.DATE_SHORT),
-        FACTURA: data.CVCL_TIPO_VAR + '-' + data.CVCL_NUMERO_CVCL,
-        CVCL_TIPO_VAR: data.CVCL_TIPO_VAR,
-        CVCL_NUMERO_CVCL: data.CVCL_NUMERO_CVCL,
-        CVCL_CLIENTE: data.CVCL_CLIENTE,
-        CLIE_NOMBRE: data.CLIE_NOMBRE,
-        IMPORTE: data.IMPORTE,
-        SALDO: data.SALDO,
-        FECHA_DIFF: fechaDif,
-        INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? (Number(interesdiario) * Number(fechaDif)).toFixed(2) : '',
-        DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100).toFixed(2) : '',
-        MONTO_COBRAR: ((data.IMPORTE) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0) /100))),
-        MONTO: ((data.IMPORTE) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0)/100))
-      }
+        return {
+          FECHA_EMI: DateTime.fromISO(data.FECHA_EMI).toLocaleString(DateTime.DATE_SHORT),
+          FACTURA: data.CVCL_TIPO_VAR + '-' + data.CVCL_NUMERO_CVCL,
+          REMITO: data.MSMV_TIPO_MSVA + '-' + data.MSMV_NUMERO_MSVA,
+          CVCL_TIPO_VAR: data.CVCL_TIPO_VAR,
+          CVCL_NUMERO_CVCL: data.CVCL_NUMERO_CVCL,
+          CVCL_CLIENTE: data.CVCL_CLIENTE,
+          CLIE_NOMBRE: data.CLIE_NOMBRE,
+          IMPORTE: data.IMPORTE,
+          SALDO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : data.SALDO,
+          FECHA_DIFF: toNow,
+          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? (Number(interesdiario) * toNowNum).toFixed(2) : '',
+          DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100).toFixed(2) : 0,
+          MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0) /100))),
+          MONTO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0)/100))
+        }
+    })
+    getdata.dataNC = response.filter((data: any) => data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ).map((data: any) => {
+      const toNow = formatDistanceStrict(new Date(), data.FECHA_EMI, {
+        unit: 'day',
+        locale: es
+      })
+      const toNowNum = differenceInCalendarDays(
+        new Date(),
+        data.FECHA_EMI
+      )
+      const now = DateTime.now().toISODate()
+      let ffactura = DateTime.fromISO(data.FECHA_EMI.replace('Z',''))
+      let fnow = DateTime.fromISO(now)
+      let diff = fnow.diff(ffactura,['days']).toObject()
+      const fechaDif = diff?.days ? Number(diff.days).toFixed(2) : ''
+      //const toNow = dayjs(data.FECHA_EMI).fromNow(true)
+      const dtoFacturas : any = data_facturas.value?.filter((data:any) => {
+        const itemDesde = Number(data?.desde)
+        const itemHasta = Number(data?.hasta)
+        const itemDia = toNowNum
+        const S = itemDia >= itemDesde && itemDia <= itemHasta ? data?.dto : ''
+        return S
+      })
+      const fechaHastaUltima = data_facturas.value?.findLast(data => data.hasta)?.hasta;
+        return {
+          FECHA_EMI: DateTime.fromISO(data.FECHA_EMI).toLocaleString(DateTime.DATE_SHORT),
+          FACTURA: data.CVCL_TIPO_VAR + '-' + data.CVCL_NUMERO_CVCL,
+          CVCL_TIPO_VAR: data.CVCL_TIPO_VAR,
+          CVCL_NUMERO_CVCL: data.CVCL_NUMERO_CVCL,
+          CVCL_CLIENTE: data.CVCL_CLIENTE,
+          CLIE_NOMBRE: data.CLIE_NOMBRE,
+          IMPORTE: data.IMPORTE,
+          SALDO: data.SALDO,
+          FECHA_DIFF: toNow,
+          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? (Number(interesdiario) * toNowNum).toFixed(2) : '',
+          DTO_FINANCIERO: 0,
+          MONTO_COBRAR: -data.SALDO ,
+          MONTO: 0
+        }
     })
     if(array.length == 0){
       toast.add({title: 'No encuentro cliente con saldo.', description: 'Por favor, ingrese otro nro. de cliente.', icon:'i-heroicons-exclamation-circle', color:"red"});
+      return
+    }
+    if(array.length > 0){
+        gsap.to(".tab", {duration: 1.4, x: 0, y: 10})
+    }
+    return getdata.data = array
+  }
+  catch (error) {
+    console.error('Error:', error);
+  }
+} 
+
+const consultaSaldosRemito = async () =>{
+  try {
+    resetSelection()
+    Object.assign(selected, [])
+    Object.assign(getdata.data, {data: []})
+    Object.assign(getdata.dataNC, {dataNC: []})
+    Object.assign(formData.value, {
+      montofactura: '',
+      montoNC: '',
+      monto: '', 
+      monto2: '',
+      cabacera: '',
+      totalimporte: '',
+      dtofinanciero: '',
+      descuento_debitos: '',
+      mediospago: [{
+        nombre: '',
+        cuota: '',
+        importe: '',
+        dto: '',
+        impacto: '',
+        calculable: '',
+        fecha: '',
+        dias: ''
+      }]
+    })
+    
+    if(datainputremito.value == ''){
+      toast.add({title: 'Nro. de cliente vacío', description: 'Por favor, ingrese un nro. de cliente.', icon:'i-heroicons-exclamation-circle', color:"red"});
+      return
+    }
+    const response : any = await $fetch(config.public.apiBase +'/consultasaldosctacte', {
+      method: 'GET',
+      headers: {
+        Accept: "application/json",
+        'Authorization': 'Bearer ' + config.public.apiToken
+      },
+      query: {
+        'remito': datainputremito.value
+      },
+      async onResponseError({ request, response, options }) {
+      // Log error
+        console.log("[fetch response error]",
+          request,
+          response.status,
+          response.body
+        );
+      },
+    });
+    const array = response.filter((data: any) => data.CVCL_TIPO_VAR == 'FCA' || data.CVCL_TIPO_VAR == 'FCB').map((data: any) => {
+      const toNow = formatDistanceStrict(new Date(), data.FECHA_EMI, {
+        unit: 'day',
+        locale: es
+      })
+      const toNowNum = differenceInCalendarDays(
+        new Date(),
+        data.FECHA_EMI
+      )
+      const now = DateTime.now().toISODate()
+      let ffactura = DateTime.fromISO(data.FECHA_EMI.replace('Z',''))
+      let fnow = DateTime.fromISO(now)
+      let diff = fnow.diff(ffactura,['days']).toObject()
+      const fechaDif = diff?.days ? Number(diff.days).toFixed(2) : ''
+      //const toNow = dayjs(data.FECHA_EMI).fromNow(true)
+      const dtoFacturas : any = data_facturas.value?.filter((data:any) => {
+        const itemDesde = Number(data?.desde)
+        const itemHasta = Number(data?.hasta)
+        const itemDia = toNowNum
+        const S = itemDia >= itemDesde && itemDia <= itemHasta ? data?.dto : ''
+        return S
+      })
+      const fechaHastaUltima = data_facturas.value?.findLast(data => data.hasta)?.hasta;
+        return {
+          FECHA_EMI: DateTime.fromISO(data.FECHA_EMI).toLocaleString(DateTime.DATE_SHORT),
+          FACTURA: data.CVCL_TIPO_VAR + '-' + data.CVCL_NUMERO_CVCL,
+          REMITO: data.MSMV_TIPO_MSVA + '-' + data.MSMV_NUMERO_MSVA,
+          CVCL_TIPO_VAR: data.CVCL_TIPO_VAR,
+          CVCL_NUMERO_CVCL: data.CVCL_NUMERO_CVCL,
+          CVCL_CLIENTE: data.CVCL_CLIENTE,
+          CLIE_NOMBRE: data.CLIE_NOMBRE,
+          IMPORTE: data.IMPORTE,
+          SALDO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : data.SALDO,
+          FECHA_DIFF: toNow,
+          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? (Number(interesdiario) * toNowNum).toFixed(2) : '',
+          DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100).toFixed(2) : 0,
+          MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0) /100))),
+          MONTO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0)/100))
+        }
+    })
+    getdata.dataNC = response.filter((data: any) => data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ).map((data: any) => {
+      const toNow = formatDistanceStrict(new Date(), data.FECHA_EMI, {
+        unit: 'day',
+        locale: es
+      })
+      const toNowNum = differenceInCalendarDays(
+        new Date(),
+        data.FECHA_EMI
+      )
+      const now = DateTime.now().toISODate()
+      let ffactura = DateTime.fromISO(data.FECHA_EMI.replace('Z',''))
+      let fnow = DateTime.fromISO(now)
+      let diff = fnow.diff(ffactura,['days']).toObject()
+      const fechaDif = diff?.days ? Number(diff.days).toFixed(2) : ''
+      //const toNow = dayjs(data.FECHA_EMI).fromNow(true)
+      const dtoFacturas : any = data_facturas.value?.filter((data:any) => {
+        const itemDesde = Number(data?.desde)
+        const itemHasta = Number(data?.hasta)
+        const itemDia = toNowNum
+        const S = itemDia >= itemDesde && itemDia <= itemHasta ? data?.dto : ''
+        return S
+      })
+      const fechaHastaUltima = data_facturas.value?.findLast(data => data.hasta)?.hasta;
+        return {
+          FECHA_EMI: DateTime.fromISO(data.FECHA_EMI).toLocaleString(DateTime.DATE_SHORT),
+          FACTURA: data.CVCL_TIPO_VAR + '-' + data.CVCL_NUMERO_CVCL,
+          CVCL_TIPO_VAR: data.CVCL_TIPO_VAR,
+          CVCL_NUMERO_CVCL: data.CVCL_NUMERO_CVCL,
+          CVCL_CLIENTE: data.CVCL_CLIENTE,
+          CLIE_NOMBRE: data.CLIE_NOMBRE,
+          IMPORTE: data.IMPORTE,
+          SALDO: data.SALDO,
+          FECHA_DIFF: toNow,
+          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? (Number(interesdiario) * toNowNum).toFixed(2) : '',
+          DTO_FINANCIERO: 0,
+          MONTO_COBRAR: -data.SALDO ,
+          MONTO: 0
+        }
+    })
+    if(array.length == 0){
+      toast.add({title: 'No encuentro remito con saldo.', description: 'Por favor, ingrese otro nro. de cliente.', icon:'i-heroicons-exclamation-circle', color:"red"});
       return
     }
     if(array.length > 0){
@@ -571,15 +882,24 @@ const consultaSaldosFactura = async () =>{
       },
     });
     const array = response.map((data: any) => {
+      const toNow = formatDistanceStrict(new Date(), data.FECHA_EMI, {
+        unit: 'day',
+        locale: es
+      })
+      const toNowNum = differenceInCalendarDays(
+        new Date(),
+        data.FECHA_EMI
+      )
       const now = DateTime.now().toISODate()
       let ffactura = DateTime.fromISO(data.FECHA_EMI.replace('Z',''))
       let fnow = DateTime.fromISO(now)
       let diff = fnow.diff(ffactura,['days']).toObject()
-      const fechaDif = diff?.days ? Number(diff.days) : ''
+      const fechaDif = diff?.days ? Number(diff.days).toFixed(2) : ''
+      //const toNow = dayjs(data.FECHA_EMI).fromNow(true)
       const dtoFacturas : any = data_facturas.value?.filter((data:any) => {
         const itemDesde = Number(data?.desde)
         const itemHasta = Number(data?.hasta)
-        const itemDia = Number(diff.days)
+        const itemDia = toNowNum
         const S = itemDia >= itemDesde && itemDia <= itemHasta ? data?.dto : ''
         return S
       })
@@ -592,12 +912,12 @@ const consultaSaldosFactura = async () =>{
         CVCL_CLIENTE: data.CVCL_CLIENTE,
         CLIE_NOMBRE: data.CLIE_NOMBRE,
         IMPORTE: data.IMPORTE,
-        SALDO: data.SALDO,
-        FECHA_DIFF: fechaDif,
-        INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? (Number(interesdiario) * Number(fechaDif)).toFixed(2) : '',
-        DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100).toFixed(2) : '',
-        MONTO_COBRAR: ((data.IMPORTE) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0) /100))),
-        MONTO: ((data.IMPORTE) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0)/100))
+        SALDO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : data.SALDO,
+        FECHA_DIFF: toNow,
+        INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? (Number(interesdiario) * toNowNum).toFixed(2) : '',
+        DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100).toFixed(2) : 0,
+        MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0) /100))),
+        MONTO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0)/100))
       }
     })
     if(array.length == 0){
@@ -669,15 +989,24 @@ const consultaSaldosQR = async () =>{
       },
     });
     const array = response.map((data: any) => {
+      const toNow = formatDistanceStrict(new Date(), data.FECHA_EMI, {
+        unit: 'day',
+        locale: es
+      })
+      const toNowNum = differenceInCalendarDays(
+        new Date(),
+        data.FECHA_EMI
+      )
       const now = DateTime.now().toISODate()
       let ffactura = DateTime.fromISO(data.FECHA_EMI.replace('Z',''))
       let fnow = DateTime.fromISO(now)
       let diff = fnow.diff(ffactura,['days']).toObject()
       const fechaDif = diff?.days ? Number(diff.days) : ''
+      //const toNow = dayjs(data.FECHA_EMI).fromNow(true)
       const dtoFacturas : any = data_facturas.value?.filter((data:any) => {
         const itemDesde = Number(data?.desde)
         const itemHasta = Number(data?.hasta)
-        const itemDia = Number(diff.days)
+        const itemDia = toNowNum
         const S = itemDia >= itemDesde && itemDia <= itemHasta ? data?.dto : ''
         return S
       })
@@ -690,12 +1019,12 @@ const consultaSaldosQR = async () =>{
         CVCL_CLIENTE: data.CVCL_CLIENTE,
         CLIE_NOMBRE: data.CLIE_NOMBRE,
         IMPORTE: data.IMPORTE,
-        SALDO: data.SALDO,
-        FECHA_DIFF: fechaDif,
-        INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? (Number(interesdiario) * Number(fechaDif)).toFixed(2) : '',
-        DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100).toFixed(2) : '',
-        MONTO_COBRAR: (((data.IMPORTE) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0) /100)))),
-        MONTO: (((data.IMPORTE) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : Number(fechaDif) >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * Number(fechaDif))))*100) : 0)/100)))
+        SALDO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : data.SALDO,
+        FECHA_DIFF: toNow,
+        INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? (Number(interesdiario) * toNowNum).toFixed(2) : 0,
+        DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100).toFixed(2) : 0,
+        MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0) /100))),
+        MONTO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0)/100))
       }
     })
     if(array.length == 0){
@@ -718,6 +1047,10 @@ const columns = [
     key: 'FACTURA',
     label: 'Nro. factura'
   },
+  {
+    key: 'REMITO',
+    label: 'Nro. remito'
+  },
   /* {
     key: 'CVCL_CLIENTE', 
     label: 'Nro. de cliente'
@@ -729,6 +1062,10 @@ const columns = [
   {
     key: 'IMPORTE', 
     label: 'Importe'
+  },
+  {
+    key: 'SALDO', 
+    label: 'Saldo'
   },
   {
     key: 'FECHA_DIFF', 
@@ -751,6 +1088,28 @@ const columns = [
     label: ''
   }
 ]    
+const columns2 = [
+  {
+    key: 'FECHA_EMI', 
+    label: 'Fecha de emisión'
+  },
+  {
+    key: 'FACTURA',
+    label: 'Nro. nota de crédito'
+  },
+  {
+    key: 'IMPORTE', 
+    label: 'Importe'
+  },
+  {
+    key: 'SALDO', 
+    label: 'Saldo'
+  },
+  {
+    key: 'FECHA_DIFF', 
+    label: 'Dif. fecha cobro'
+  }
+]    
 
 const monto = ref()
 const cabacera = ref()
@@ -758,7 +1117,9 @@ const totalimporte = ref()
 const nrocuotas = ref()
 const formData = ref({
   montofactura: '',
-  monto: monto, 
+  montoNC: '',
+  monto: monto,
+  monto2: '', 
   cabacera: cabacera,
   totalimporte: totalimporte,
   dtofinanciero: '',
@@ -854,6 +1215,51 @@ watch(formData.value, async (newVal, oldVal)=>{
 })
 const source = ref()
 const { text, copy, copied, isSupported } = useClipboard({ source })
+/* const clientePlataforma: any = await $fetch(config.public.apiBase + '/listaclientesplataforma', {
+  method: 'GET',
+  headers: {
+    Accept: "application/json",
+    'Authorization': 'Bearer ' + config.public.apiToken
+  }
+});
+people.value = clientePlataforma.map((data:any)=> {
+  return {
+    id: data.CLIE_CLIENTE,
+    label: data.CLIE_NOMBRE
+  }
+}) */
+const groups = [{
+  key: 'users',
+  label: (q: any) => q && `Clientes encontrados “${q}”...`,
+  search: async (q: any) => {
+    if (!q) {
+      return []
+    }
+
+    const users: any = await $fetch(config.public.apiBase +'/consultaclientes/'+q, { 
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Authorization': 'Bearer ' + config.public.apiToken
+      }
+    });
+    
+
+    const result: any[] = users.map((user: any) => { 
+      return { id: user.CVCL_CLIENTE, label: user.CLIE_NOMBRE, suffix: user.CVCL_CLIENTE }
+    })
+    
+    return result
+  }
+}]
+function onSelect(option:any) {
+  console.log(option)
+  if (option.id) {
+    datainputcliente.value = option.id
+    consultaSaldosCliente()
+  }
+  isOpen2.value = false
+}
 </script>
 <style>
 </style>

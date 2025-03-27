@@ -132,7 +132,7 @@
                   {{'$ ' + formatterNumber.format(row.SALDO)}}
                 </template>
                 <template #FECHA_DIFF-data="{ row }">
-                  <UBadge size="lg" :label="row.FECHA_DIFF" :color="'gray'" variant="soft" />
+                  <UBadge size="lg" :label="row.FECHA_DIFF + ' días'" :color="'gray'" variant="soft" />
                 </template>
                 <template #DTO_FINANCIERO-data="{ row }">
                     <UBadge size="lg" :label="row.DTO_FINANCIERO + '%'" :color="row.DTO_FINANCIERO >= 0 ? 'emerald' : 'orange'" variant="soft" />
@@ -614,18 +614,17 @@ const consultaSaldosCliente = async () =>{
       let ffactura = DateTime.fromISO(data.FECHA_EMI.replace('Z',''))
       let fnow = DateTime.fromISO(now)
       let diff = fnow.diff(ffactura,['days']).toObject()
-      const fechaDif = diff?.days ? Number(diff.days).toFixed(2) : ''
-      //const toNow = dayjs(data.FECHA_EMI).fromNow(true)
+      const fechaDif = diff?.days ? Number(diff.days) : 0
       const dtoFacturas : any = data_facturas.value?.filter((data:any) => {
         const itemDesde = Number(data?.desde)
         const itemHasta = Number(data?.hasta)
-        const itemDia = toNowNum
+        const itemDia = fechaDif
         const S = itemDia >= itemDesde && itemDia <= itemHasta ? data?.dto : ''
         return S
       })
       const fechaHastaUltima = data_facturas.value?.findLast(data => data.hasta)?.hasta;
         return {
-          FECHA_EMI: DateTime.fromISO(data.FECHA_EMI).toLocaleString(DateTime.DATE_SHORT),
+          FECHA_EMI: DateTime.fromISO(data.FECHA_EMI.replace('Z','')).toLocaleString(DateTime.DATE_SHORT),
           FACTURA: data.CVCL_TIPO_VAR + '-' + data.CVCL_NUMERO_CVCL,
           REMITO: data.MSMV_TIPO_MSVA + '-' + data.MSMV_NUMERO_MSVA,
           CVCL_TIPO_VAR: data.CVCL_TIPO_VAR,
@@ -634,11 +633,11 @@ const consultaSaldosCliente = async () =>{
           CLIE_NOMBRE: data.CLIE_NOMBRE,
           IMPORTE: data.IMPORTE,
           SALDO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : data.SALDO,
-          FECHA_DIFF: toNow,
-          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? (Number(interesdiario) * toNowNum).toFixed(2) : '',
-          DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100).toFixed(2) : 0,
-          MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0) /100))),
-          MONTO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0)/100))
+          FECHA_DIFF: fechaDif,
+          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toFixed(2) : '',
+          DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100).toFixed(2) : 0,
+          MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0) /100))),
+          MONTO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0)/100))
         }
     })
     getdata.dataNC = response.filter((data: any) => data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ).map((data: any) => {
@@ -654,18 +653,17 @@ const consultaSaldosCliente = async () =>{
       let ffactura = DateTime.fromISO(data.FECHA_EMI.replace('Z',''))
       let fnow = DateTime.fromISO(now)
       let diff = fnow.diff(ffactura,['days']).toObject()
-      const fechaDif = diff?.days ? Number(diff.days).toFixed(2) : ''
-      //const toNow = dayjs(data.FECHA_EMI).fromNow(true)
+      const fechaDif = diff?.days ? Number(diff.days) : 0
       const dtoFacturas : any = data_facturas.value?.filter((data:any) => {
         const itemDesde = Number(data?.desde)
         const itemHasta = Number(data?.hasta)
-        const itemDia = toNowNum
+        const itemDia = fechaDif
         const S = itemDia >= itemDesde && itemDia <= itemHasta ? data?.dto : ''
         return S
       })
       const fechaHastaUltima = data_facturas.value?.findLast(data => data.hasta)?.hasta;
         return {
-          FECHA_EMI: DateTime.fromISO(data.FECHA_EMI).toLocaleString(DateTime.DATE_SHORT),
+          FECHA_EMI: DateTime.fromISO(data.FECHA_EMI.replace('Z','')).toLocaleString(DateTime.DATE_SHORT),
           FACTURA: data.CVCL_TIPO_VAR + '-' + data.CVCL_NUMERO_CVCL,
           CVCL_TIPO_VAR: data.CVCL_TIPO_VAR,
           CVCL_NUMERO_CVCL: data.CVCL_NUMERO_CVCL,
@@ -673,8 +671,8 @@ const consultaSaldosCliente = async () =>{
           CLIE_NOMBRE: data.CLIE_NOMBRE,
           IMPORTE: data.IMPORTE,
           SALDO: data.SALDO,
-          FECHA_DIFF: toNow,
-          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? (Number(interesdiario) * toNowNum).toFixed(2) : '',
+          FECHA_DIFF: fechaDif,
+          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toFixed(2) : '',
           DTO_FINANCIERO: 0,
           MONTO_COBRAR: -data.SALDO ,
           MONTO: 0
@@ -694,7 +692,7 @@ const consultaSaldosCliente = async () =>{
   }
 } 
 
-const consultaSaldosRemito = async () =>{
+const consultaSaldosRemito = async () => {
   try {
     resetSelection()
     Object.assign(selected, [])
@@ -756,18 +754,17 @@ const consultaSaldosRemito = async () =>{
       let ffactura = DateTime.fromISO(data.FECHA_EMI.replace('Z',''))
       let fnow = DateTime.fromISO(now)
       let diff = fnow.diff(ffactura,['days']).toObject()
-      const fechaDif = diff?.days ? Number(diff.days).toFixed(2) : ''
-      //const toNow = dayjs(data.FECHA_EMI).fromNow(true)
+      const fechaDif = diff?.days ? Number(diff.days) : 0
       const dtoFacturas : any = data_facturas.value?.filter((data:any) => {
         const itemDesde = Number(data?.desde)
         const itemHasta = Number(data?.hasta)
-        const itemDia = toNowNum
+        const itemDia = fechaDif
         const S = itemDia >= itemDesde && itemDia <= itemHasta ? data?.dto : ''
         return S
       })
       const fechaHastaUltima = data_facturas.value?.findLast(data => data.hasta)?.hasta;
         return {
-          FECHA_EMI: DateTime.fromISO(data.FECHA_EMI).toLocaleString(DateTime.DATE_SHORT),
+          FECHA_EMI: DateTime.fromISO(data.FECHA_EMI.replace('Z','')).toLocaleString(DateTime.DATE_SHORT),
           FACTURA: data.CVCL_TIPO_VAR + '-' + data.CVCL_NUMERO_CVCL,
           REMITO: data.MSMV_TIPO_MSVA + '-' + data.MSMV_NUMERO_MSVA,
           CVCL_TIPO_VAR: data.CVCL_TIPO_VAR,
@@ -776,11 +773,11 @@ const consultaSaldosRemito = async () =>{
           CLIE_NOMBRE: data.CLIE_NOMBRE,
           IMPORTE: data.IMPORTE,
           SALDO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : data.SALDO,
-          FECHA_DIFF: toNow,
-          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? (Number(interesdiario) * toNowNum).toFixed(2) : '',
-          DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100).toFixed(2) : 0,
-          MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0) /100))),
-          MONTO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0)/100))
+          FECHA_DIFF: fechaDif,
+          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toFixed(2) : '',
+          DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100).toFixed(2) : 0,
+          MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0) /100))),
+          MONTO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0)/100))
         }
     })
     getdata.dataNC = response.filter((data: any) => data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ).map((data: any) => {
@@ -796,18 +793,17 @@ const consultaSaldosRemito = async () =>{
       let ffactura = DateTime.fromISO(data.FECHA_EMI.replace('Z',''))
       let fnow = DateTime.fromISO(now)
       let diff = fnow.diff(ffactura,['days']).toObject()
-      const fechaDif = diff?.days ? Number(diff.days).toFixed(2) : ''
-      //const toNow = dayjs(data.FECHA_EMI).fromNow(true)
+      const fechaDif = diff?.days ? Number(diff.days) : 0
       const dtoFacturas : any = data_facturas.value?.filter((data:any) => {
         const itemDesde = Number(data?.desde)
         const itemHasta = Number(data?.hasta)
-        const itemDia = toNowNum
+        const itemDia = fechaDif
         const S = itemDia >= itemDesde && itemDia <= itemHasta ? data?.dto : ''
         return S
       })
       const fechaHastaUltima = data_facturas.value?.findLast(data => data.hasta)?.hasta;
         return {
-          FECHA_EMI: DateTime.fromISO(data.FECHA_EMI).toLocaleString(DateTime.DATE_SHORT),
+          FECHA_EMI:DateTime.fromISO(data.FECHA_EMI.replace('Z','')).toLocaleString(DateTime.DATE_SHORT),
           FACTURA: data.CVCL_TIPO_VAR + '-' + data.CVCL_NUMERO_CVCL,
           CVCL_TIPO_VAR: data.CVCL_TIPO_VAR,
           CVCL_NUMERO_CVCL: data.CVCL_NUMERO_CVCL,
@@ -815,8 +811,8 @@ const consultaSaldosRemito = async () =>{
           CLIE_NOMBRE: data.CLIE_NOMBRE,
           IMPORTE: data.IMPORTE,
           SALDO: data.SALDO,
-          FECHA_DIFF: toNow,
-          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? (Number(interesdiario) * toNowNum).toFixed(2) : '',
+          FECHA_DIFF: fechaDif,
+          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toFixed(2) : '',
           DTO_FINANCIERO: 0,
           MONTO_COBRAR: -data.SALDO ,
           MONTO: 0
@@ -894,30 +890,30 @@ const consultaSaldosFactura = async () =>{
       let ffactura = DateTime.fromISO(data.FECHA_EMI.replace('Z',''))
       let fnow = DateTime.fromISO(now)
       let diff = fnow.diff(ffactura,['days']).toObject()
-      const fechaDif = diff?.days ? Number(diff.days).toFixed(2) : ''
-      //const toNow = dayjs(data.FECHA_EMI).fromNow(true)
+      const fechaDif = diff?.days ? Number(diff.days) : 0
       const dtoFacturas : any = data_facturas.value?.filter((data:any) => {
         const itemDesde = Number(data?.desde)
         const itemHasta = Number(data?.hasta)
-        const itemDia = toNowNum
+        const itemDia = fechaDif
         const S = itemDia >= itemDesde && itemDia <= itemHasta ? data?.dto : ''
         return S
       })
       const fechaHastaUltima = data_facturas.value?.findLast(data => data.hasta)?.hasta;
       return {
-        FECHA_EMI: DateTime.fromISO(data.FECHA_EMI).toLocaleString(DateTime.DATE_SHORT),
+        FECHA_EMI: DateTime.fromISO(data.FECHA_EMI.replace('Z','')).toLocaleString(DateTime.DATE_SHORT),
         FACTURA: data.CVCL_TIPO_VAR + '-' + data.CVCL_NUMERO_CVCL,
+        REMITO: data.MSMV_TIPO_MSVA + '-' + data.MSMV_NUMERO_MSVA,
         CVCL_TIPO_VAR: data.CVCL_TIPO_VAR,
         CVCL_NUMERO_CVCL: data.CVCL_NUMERO_CVCL,
         CVCL_CLIENTE: data.CVCL_CLIENTE,
         CLIE_NOMBRE: data.CLIE_NOMBRE,
         IMPORTE: data.IMPORTE,
         SALDO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : data.SALDO,
-        FECHA_DIFF: toNow,
-        INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? (Number(interesdiario) * toNowNum).toFixed(2) : '',
-        DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100).toFixed(2) : 0,
-        MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0) /100))),
-        MONTO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0)/100))
+        FECHA_DIFF: fechaDif,
+        INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toFixed(2) : '',
+        DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100).toFixed(2) : 0,
+        MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0) /100))),
+        MONTO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0)/100))
       }
     })
     if(array.length == 0){
@@ -1001,30 +997,30 @@ const consultaSaldosQR = async () =>{
       let ffactura = DateTime.fromISO(data.FECHA_EMI.replace('Z',''))
       let fnow = DateTime.fromISO(now)
       let diff = fnow.diff(ffactura,['days']).toObject()
-      const fechaDif = diff?.days ? Number(diff.days) : ''
-      //const toNow = dayjs(data.FECHA_EMI).fromNow(true)
+      const fechaDif = diff?.days ? Number(diff.days) : 0
       const dtoFacturas : any = data_facturas.value?.filter((data:any) => {
         const itemDesde = Number(data?.desde)
         const itemHasta = Number(data?.hasta)
-        const itemDia = toNowNum
+        const itemDia = fechaDif
         const S = itemDia >= itemDesde && itemDia <= itemHasta ? data?.dto : ''
         return S
       })
       const fechaHastaUltima = data_facturas.value?.findLast(data => data.hasta)?.hasta;
       return {
-        FECHA_EMI: DateTime.fromISO(data.FECHA_EMI).toLocaleString(DateTime.DATE_SHORT),
+        FECHA_EMI: DateTime.fromISO(data.FECHA_EMI.replace('Z','')).toLocaleString(DateTime.DATE_SHORT),
         FACTURA: data.CVCL_TIPO_VAR + '-' + data.CVCL_NUMERO_CVCL,
+        REMITO: data.MSMV_TIPO_MSVA + '-' + data.MSMV_NUMERO_MSVA,
         CVCL_TIPO_VAR: data.CVCL_TIPO_VAR,
         CVCL_NUMERO_CVCL: data.CVCL_NUMERO_CVCL,
         CVCL_CLIENTE: data.CVCL_CLIENTE,
         CLIE_NOMBRE: data.CLIE_NOMBRE,
         IMPORTE: data.IMPORTE,
         SALDO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : data.SALDO,
-        FECHA_DIFF: toNow,
-        INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? (Number(interesdiario) * toNowNum).toFixed(2) : 0,
-        DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100).toFixed(2) : 0,
-        MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0) /100))),
-        MONTO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : toNowNum >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * toNowNum)))*100) : 0)/100))
+        FECHA_DIFF: fechaDif,
+        INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toFixed(2) : 0,
+        DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100).toFixed(2) : 0,
+        MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0) /100))),
+        MONTO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0)/100))
       }
     })
     if(array.length == 0){

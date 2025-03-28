@@ -183,7 +183,7 @@
                   {{'$ ' + formatterNumber.format(row.SALDO)}}
                 </template>
                 <template #FECHA_DIFF-data="{ row }">
-                  <UBadge size="lg" :label="row.FECHA_DIFF" :color="'gray'" variant="soft" />
+                  <UBadge size="lg" :label="row.FECHA_DIFF + ' días'" :color="'gray'" variant="soft" />
                 </template>
               </UTable>
               <template #footer>

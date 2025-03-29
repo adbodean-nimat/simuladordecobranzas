@@ -3,7 +3,6 @@
       <UContainer :ui="{ constrained: 'max-w-screen-2xl' }">
         <div class="flex justify-center gap-2 items-center text-center p-4 text-base">
           <h2>COSTO DE FINANCIACIÓN</h2>
-          <p>Recargos financieros</p>
           <div class="justify-items-end" v-if="authenticated">
                     <UButton icon="i-heroicons-pencil-square"
                             size="sm"
@@ -14,7 +13,9 @@
                             :trailing="false"></UButton>
           </div>
         </div>
-        
+        <div class="text-center p-4 text-base">
+          <p>Recargos financieros</p>
+        </div>
         <div class="tab">
           <template v-if="data_tarjetas">
                 <UAccordion variant="soft" multiple size="xl" :items="data_tarjetas" class="grid grid-cols-3 gap-4">

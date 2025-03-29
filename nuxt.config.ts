@@ -2,7 +2,6 @@
 import Aura from '@primevue/themes/aura';
 export default defineNuxtConfig({
   runtimeConfig: {
-    
     public: {
       apiToken: 'adadsadsasdfada',
       apiBase: 'adadsadsasd',
@@ -11,11 +10,7 @@ export default defineNuxtConfig({
   },
   devServer: {
     host: '0.0.0.0',
-    port: 3000,
-    https: {
-      key: './_.nimat.com.ar.key',
-      cert: './_.nimat.com.ar.crt'
-    }
+    port: 3000
   },
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },

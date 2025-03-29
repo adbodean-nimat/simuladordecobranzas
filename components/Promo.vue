@@ -37,16 +37,20 @@ const {status: status_mediosdepagos, data: data_mediosdepagos} = await useFetch(
 const diaHoy = ref(DateTime.now().weekday)
 const promoDia = ref(false)
 const data_promodia = ref()
-const alert = status_mediosdepagos.value == 'success' ? data_mediosdepagos.value?.filter((element: any) => element.estado && element.dias.find((data : any)=> data.id == diaHoy.value)).map((data : any) => {
-  const dias = new Array(data.dias)
-  const esHoy = dias.map((dia : any) => dia.filter((data : any) => data.id == diaHoy.value))
+const alert = data_mediosdepagos.value?.filter((element: any) => element.estado && element.dias.find((data : any)=> data.id == diaHoy.value)).map((data : any) => {
+  /* const dias = new Array(data.dias)
+  const esHoy = dias.map((dia : any) => dia.filter((data : any) => data.id == diaHoy.value)) */
+  const esHoy = data.dias.some((dia: any) => dia.id == diaHoy.value)
   if(esHoy){
     promoDia.value = true
     data_promodia.value = data.nombre
     return data.nombre
+  } else {
+    return ''
   }
-}).toString() : ''
-if(import.meta.client) {  
+}).toString()
+
+if(import.meta.browser) {  
   gsap.to(".marquee_part", {xPercent: -100, repeat: -1, duration: 20, ease: "none"}).totalProgress(0.5);
   gsap.set(".marquee_inner", {xPercent: -20});
 }

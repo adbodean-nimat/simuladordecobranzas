@@ -479,20 +479,20 @@ const selected = ref([])
 const selected2 = ref([])
 const selectedNC = ref([])
 const onHandleSelectAll = (isSelected: boolean) => {
-  console.log('All rows selected:', isSelected)
+  //console.log('All rows selected:', isSelected)
 }
 const onHandleSelectAll2 = (isSelected: boolean) => {
-  console.log('All rows selected:', isSelected)
+  //console.log('All rows selected:', isSelected)
 }
 const onUpdateSelection = (selectedRows: any[]) => {
-  console.log('Currently selected rows:', selectedRows)
+  //console.log('Currently selected rows:', selectedRows)
   formData.value.montofactura = Number(selectedRows.reduce((acc : any, row : any) => acc + row.SALDO, 0)).toFixed(2)
   formData.value.monto = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO_COBRAR, 0)).toFixed(2)
   formData.value.descuento_debitos = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO, 0)).toFixed(2)
   formData.value.dtofinanciero = (((Number(formData.value.descuento_debitos) / Number(formData.value.montofactura)) * 100)).toFixed(2)
 }
 const onUpdateSelection2 = (selectedRows: any[]) => {
-  console.log('Currently selected rows:', selectedRows)
+  //console.log('Currently selected rows:', selectedRows)
   formData.value.montoNC = Number(selectedRows.reduce((acc : any, row : any) => acc + row.SALDO, 0)).toFixed(2)
   formData.value.monto2 = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO_COBRAR, 0)).toFixed(2)
 }
@@ -594,11 +594,7 @@ const consultaSaldosCliente = async () =>{
       },
       async onResponseError({ request, response, options }) {
       // Log error
-        console.log("[fetch response error]",
-          request,
-          response.status,
-          response.body
-        );
+        console.log("[fetch response error]", request, response.status, response.body);
       },
     });
     const array = response.filter((data: any) => data.CVCL_TIPO_VAR == 'FCA' || data.CVCL_TIPO_VAR == 'FCB').map((data: any) => {
@@ -734,11 +730,7 @@ const consultaSaldosRemito = async () => {
       },
       async onResponseError({ request, response, options }) {
       // Log error
-        console.log("[fetch response error]",
-          request,
-          response.status,
-          response.body
-        );
+        console.log("[fetch response error]", request, response.status, response.body);
       },
     });
     const array = response.filter((data: any) => data.CVCL_TIPO_VAR == 'FCA' || data.CVCL_TIPO_VAR == 'FCB').map((data: any) => {
@@ -870,11 +862,7 @@ const consultaSaldosFactura = async () =>{
       },
       async onResponseError({ request, response, options }) {
       // Log error
-        console.log("[fetch response error]",
-          request,
-          response.status,
-          response.body
-        );
+        console.log("[fetch response error]", request, response.status, response.body);
       },
     });
     const array = response.map((data: any) => {
@@ -977,11 +965,7 @@ const consultaSaldosQR = async () =>{
       },
       async onResponseError({ request, response, options }) {
       // Log error
-        console.log("[fetch response error]",
-          request,
-          response.status,
-          response.body
-        );
+        console.log("[fetch response error]", request, response.status, response.body);
       },
     });
     const array = response.map((data: any) => {
@@ -1249,7 +1233,7 @@ const groups = [{
   }
 }]
 function onSelect(option:any) {
-  console.log(option)
+  //console.log(option)
   if (option.id) {
     datainputcliente.value = option.id
     consultaSaldosCliente()

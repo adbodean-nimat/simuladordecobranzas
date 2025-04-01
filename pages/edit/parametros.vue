@@ -309,14 +309,15 @@
         </UContainer>
     </div>
 </template>
-
 <script setup lang="ts">
 definePageMeta({
     middleware: ['auth']
 })
+import { useDolarStore } from '~/store/dolar'
 const {status: status_parametros, data: data_parametros, refresh: refresh_parametros} = await useFetch('/api/parametrosgenerales')
 const {status: status_facturas, data: data_parametrosfacturas, refresh: refresh_parametrosfacturas} = await useFetch('/api/parametrosfacturas')
 const {status: status_cheques, data: data_parametroscheques, refresh: refresh_parametroscheques} = await useFetch('/api/parametroscheques')
+const { getDolar } = useDolarStore()
 const toast = useToast()
 const isOpenModal = ref(false)
 const editingRows = ref([]);
@@ -387,9 +388,7 @@ const onRowEditSave1 = async (e: any) => {
     })
     toast.add({title: "Modificado correctamente"})
     refresh_parametros();
-    onMounted(()=>{
-        nextTick()
-    })
+    getDolar();
 }
 
 const removeIdParametros = async (e: any) => {

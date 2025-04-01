@@ -99,7 +99,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'; 
 import { useAuthStore } from '~/store/auth';
-const formatter = new Intl.NumberFormat("en-US",{style: "currency", currency: "USD", currencyDisplay: "narrowSymbol", minimumFractionDigits: 2})
 const router = useRouter();
 const { logUserOut } = useAuthStore();
 const authStore = useAuthStore()

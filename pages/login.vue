@@ -34,7 +34,6 @@ definePageMeta({
 const toast = useToast()
 const { authenticateUser } = useAuthStore();
 const { authenticated, roles} = storeToRefs(useAuthStore());
-const router = useRouter();
 
 const state = reactive({
     username: '',
@@ -53,14 +52,6 @@ const form = ref<Form<Schema>>()
     password: z.string()
 })
 const login = async (event: FormSubmitEvent<Schema>) => {
-        /* const { data: data_auth, status: status_auth, error: error_auth } = await useFetch(runtimeConfig.public.apiBase, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
-            body: {
-            username: state.username,
-            password: state.password
-            },
-        }); */
         const response : any = await $fetch(runtimeConfig.public.apiLogin, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -69,7 +60,6 @@ const login = async (event: FormSubmitEvent<Schema>) => {
                 password: state.password
             },
             async onResponse({ request, response, options }) {
-                //console.log("[fetch response]", request, response.status, response.body);
                 if(response.status === 400){
                     toast.add({title: 'Usuario o contraseña incorrectos', description: 'Por favor, verifique sus credenciales.', icon:'i-heroicons-exclamation-circle', color:"red"});           
                 }
@@ -81,8 +71,7 @@ const login = async (event: FormSubmitEvent<Schema>) => {
         }).then((response : any) => {
             return response
         }).catch((err)=> console.log(err));
-        //const {data: data_roles, status: status_roles} = await useFetch('/api/roles');
-        //const {data: data_usuarios, status: status_usuarios} = await useFetch('/api/usuarios');
+
         const response_roles = await $fetch('/api/roles');
         const response_usuarios = await $fetch('/api/usuarios');
 
@@ -98,9 +87,7 @@ const login = async (event: FormSubmitEvent<Schema>) => {
             const isRol = roles.value.filter((user: any) => user.usuario_ad === state.username).map((user: any) => user.rol)[0]
             
             info.fullname = response.user.name
-            //(data_auth.value as any).user.name
             info.avatar = response.avatar
-            //(data_auth.value as any).avatar            
 
             if (isRol === undefined){
                 throw toast.add({title:'Acceso denegado', description: 'No tienes permisos para acceder a esta aplicación.', icon:'i-heroicons-exclamation-circle', color:"red"});
@@ -114,8 +101,7 @@ const login = async (event: FormSubmitEvent<Schema>) => {
             });
 
             if (authenticated) {
-                router.push('/');
-                await nextTick();
+                await navigateTo('/')
             }
         }
 };

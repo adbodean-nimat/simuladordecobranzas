@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <Promo />
+      <LazyPromo />
     </div>
     <div>
       <Header />
@@ -14,4 +14,5 @@
     </div>
   </div>
 </template>
-
+<script setup lang="ts">
+</script>

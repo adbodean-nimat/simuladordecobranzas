@@ -207,11 +207,12 @@
 definePageMeta({
     middleware: ['auth']
 })
+import { usePromoStore } from '~/store/promo'
+const { getPromoDia } = usePromoStore()
 const toast = useToast()
 const {data: data_parametrosgrales} = await useFetch('/api/parametrosgenerales')
 const {data: data_mediosdepagos, refresh: refresh_mediosdepagos} = await useFetch('/api/mediosdepagos')
 const dataDias = data_mediosdepagos.value ? data_mediosdepagos.value.map(item => item.dias) : ''
-console.log(dataDias)
 const editingRows = ref()
 const expandedRows = ref([])
 const editingRowsGroup = ref([])
@@ -313,13 +314,14 @@ const createMedioPago = async () => {
     toast.add({title: "Agregado correctamente"})
     isOpenModalGeneral.value = false
     refresh_mediosdepagos();
+    getPromoDia();
 }
 
 const onRowEditSave = async (e: any) => {
     let { newData, index} = e;
     const Id = newData.id
     const mediopago = newData.nombre.trim().replace(/\s/g, '').toLowerCase()
-    console.log(newData.dias)
+    // console.log(newData.dias)
     const res = await $fetch('/api/mediosdepagos/'+Id , {
         method: 'PUT',
         body: {
@@ -333,6 +335,7 @@ const onRowEditSave = async (e: any) => {
     })
     toast.add({title: "Modificado correctamente"})
     refresh_mediosdepagos();
+    getPromoDia();
 }
 const removeId = async (e: any) => {
     const res = await $fetch('/api/mediosdepagos/'+e, {
@@ -349,10 +352,10 @@ const onExpandedRows = (newValue: any) => {
 const onCellEditComplete = async (e: any) => {
     let { data, newValue, field, index } = e;
     const datatoJson = JSON.stringify(field) + ': '+ newValue
-    console.log(JSON.parse(JSON.stringify(datatoJson)))
-    console.log(data.uuid)
-    console.log(newValue)
-    console.log(field)
+    // console.log(JSON.parse(JSON.stringify(datatoJson)))
+    // console.log(data.uuid)
+    // console.log(newValue)
+    // console.log(field)
 
     const res = await $fetch('/api/mediosdepagos/interesbase/'+data.uuid, {
         method: 'PUT',
@@ -376,7 +379,7 @@ const removeIdInteresBase = async (e: string) => {
 }
 
 const createInteresBase = async (id: any) => {
-    console.log(id)
+    // console.log(id)
     const res = await $fetch('/api/mediosdepagos/interesbase/', {
         method: 'POST',
         body: {

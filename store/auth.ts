@@ -52,7 +52,6 @@ export const useAuthStore = defineStore('auth', {
       if(rol.includes('Administrador') && rol.includes('Editor')){
         return this.authenticated = true;
       }
-      console.log(this.dropitems)
     },
     async getAvatar(){
       if(this.authenticated){

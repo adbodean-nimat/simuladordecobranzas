@@ -236,8 +236,8 @@
       
       data_tarjetas.value = data_items
       data_tarjetas2.value = data_items2
-      console.log(data_tarjetas.value)
-      console.log(data_tarjetas2.value)
+      //console.log(data_tarjetas.value)
+      //console.log(data_tarjetas2.value)
     }
   )
   

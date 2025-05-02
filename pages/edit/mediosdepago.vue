@@ -5,7 +5,7 @@
                 <h2>EDITAR LOS MEDIOS DE PAGO</h2>
             </div>
             <div class="grid gap-4">
-                <Toolbar class="mb-1">
+                <Toolbar class="mb-1 border-none">
                     <template #start>
                         <UButton @click="isOpenModalGeneral = true" icon="i-material-symbols-add-circle" size="md" square variant="soft">Agregar medio de pago</UButton>
                     </template>
@@ -135,7 +135,7 @@
                                     </Column>
                                     <template #expansion="slotProps">
                                         <div class="p-4">
-                                            <Toolbar class="mb-1">
+                                            <Toolbar class="mb-1 border-none">
                                                 <template #start>
                                                     <UButton @click="isOpenModal = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
                                                 </template>
@@ -205,7 +205,7 @@
 
 <script setup lang="ts">
 definePageMeta({
-    middleware: ['auth']
+    middleware: ['auth', '3-editor']
 })
 import { usePromoStore } from '~/store/promo'
 const { getPromoDia } = usePromoStore()
@@ -308,7 +308,7 @@ const createMedioPago = async () => {
             medio_pago: agregarDatosMP.value?.nombre.trim().replace(/\s/g, '').toLowerCase(),
             tipo_pago: agregarDatosMP.value?.tipodepago,
             dias: agregarDatosMP.value?.dias,
-            costo_financiacion: agregarDatosMP.value?.financiacion
+            costo_financiacion: JSON.parse(agregarDatosMP.value?.financiacion)
         }
     })
     toast.add({title: "Agregado correctamente"})
@@ -399,3 +399,5 @@ const onRowExpand = (event: any) => {
     //console.log(event.data)
 }
 </script>
+<style scoped>
+</style>

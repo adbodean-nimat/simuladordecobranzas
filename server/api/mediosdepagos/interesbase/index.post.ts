@@ -1,5 +1,5 @@
 import prisma from "~/lib/prisma";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "~/prisma/app/generated/prisma/client";
 import { v1 as uuidv1} from "uuid";
 
 interface InteresBase {

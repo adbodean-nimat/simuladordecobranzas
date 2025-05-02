@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-
 interface State {
   dropitems: any[],
   roles: any[],
@@ -7,8 +6,7 @@ interface State {
   authenticated: boolean,
   admin : boolean,
   editor: boolean,
-  disabled: boolean,
-  avatar: string
+  disabled: boolean
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -20,23 +18,23 @@ export const useAuthStore = defineStore('auth', {
       authenticated: false,
       admin: false,
       editor: false,
-      disabled: false,
-      avatar: ''
+      disabled: false
     }
   },
   actions: {
     async authenticateUser({fullname, username, avatar, rol}: any) {
       const userName = useCookie('username');
       const fullName = useCookie('fullname');
-      const getAvatar = useCookie('avatar');
+      const isavatar = useCookie('avatar');
       const isRol = useCookie('rol');
       fullName.value = fullname
-      this.avatar = avatar
+      isavatar.value = avatar
       userName.value = username
       isRol.value = rol
       this.rol = rol
       rol.includes('Administrador') ? this.disabled = false : this.disabled 
       rol.includes('Editor') ? this.disabled = true : this.disabled
+      rol.includes('Editor dólar') ? this.disabled = true : this.disabled
       rol.includes('Administrador') ? this.dropitems = [{
           label: 'Configuración',
           icon: 'i-heroicons-cog-solid',
@@ -48,16 +46,15 @@ export const useAuthStore = defineStore('auth', {
         icon: 'i-heroicons-cog-solid',
         disabled: true,
         to: '/config'
+      }] : rol.includes('Editor dólar') ? this.dropitems = [{
+        label: 'Configuración',
+        icon: 'i-heroicons-cog-solid',
+        disabled: true,
+        to: '/config'
       }] : this.dropitems = [] 
-      if(rol.includes('Administrador') && rol.includes('Editor')){
+      if(rol.includes('Administrador') && rol.includes('Editor') && rol.includes('Editor dólar')){
         return this.authenticated = true;
       }
-    },
-    async getAvatar(){
-      if(this.authenticated){
-        return this.avatar
-      }
-      return ''
     },
     async logUserOut() {
       this.authenticated = false;
@@ -67,14 +64,13 @@ export const useAuthStore = defineStore('auth', {
       this.rol = '';
       this.roles = [];
       this.dropitems = [];
-      this.avatar = '';
       const fullName = useCookie('fullname');
       const userName = useCookie('username');
-      const getAvatar = useCookie('avatar');
+      const isavatar = useCookie('avatar');
       const isRol = useCookie('rol');
       fullName.value = '';
       userName.value = '';
-      getAvatar.value = '';
+      isavatar.value = '';
       isRol.value = '';
     }
   },

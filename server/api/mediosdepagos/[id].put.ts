@@ -1,6 +1,5 @@
 import prisma from "~/lib/prisma";
 
-
 interface MediosDePago {
     estado: boolean,
     nombre: string,

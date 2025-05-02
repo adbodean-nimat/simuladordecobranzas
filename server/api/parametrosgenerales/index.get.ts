@@ -14,7 +14,8 @@ export default defineEventHandler(async (event) => {
         'tasa_iva': true,
         'interes_diario': true,
         'dolar': true,
-        'fecha_actualizar_dolar': true
+        'fecha_actualizar_dolar': true,
+        'usuario_dolar': true,
       }
     })
     return data;

@@ -1,6 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import Aura from '@primevue/themes/aura';
+import Aura from '@primeuix/themes/aura';
 export default defineNuxtConfig({
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
+    layoutTransition: { name: 'layout', mode: 'out-in' },
+  },
+  routeRules:{
+    '/': { prerender: true },
+    '/login': { prerender: true }
+  },
   runtimeConfig: {
     public: {
       apiToken: 'adadsadsasdfada',
@@ -24,27 +32,28 @@ export default defineNuxtConfig({
     'pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
-    '@nuxt/icon'
+    '@nuxt/icon',
+    'v-gsap-nuxt'
   ],
   experimental: {
     cookieStore: true
   },
   primevue: {
+    autoImport: false,
     composables: {
-      exclude: ['useToast'],
+      exclude: ['useToast']
+    },
+    components: {
+      include: ['Select', 'DataTable', 'Tag', 'Column', 'Toolbar', 'Badge']
     },
     options: {
       theme: {
-          preset: Aura,
-          options: {
-            cssLayer: 'tailwind-base, primevue, tailwind-utilities',
-            darkModeSelector: '.dark',
+        preset: Aura,
+        options: {
+          darkModeSelector: '.dark',
         }
       }
   }
-  },
-  app: {
-    pageTransition: { name: 'page', mode: 'out-in' }
   },
   webpack: {
     loaders: {
@@ -55,6 +64,9 @@ export default defineNuxtConfig({
   },
   prisma:{
     autoSetupPrisma: true
+  },
+  build: {
+    transpile: ['gsap'],
   },
   vite: {
     resolve: {

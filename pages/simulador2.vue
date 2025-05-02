@@ -150,10 +150,13 @@
                     <span>Total facturas: $ {{ formatterNumber.format(Number(formData.montofactura)) }}</span>
                   </div>
                   <div>
+                    <span>Total descuentos: $ {{ formatterNumber.format(Number(formData.descuento_debitos)) }}</span>
+                  </div>
+                  <div>
                     <span>Dto. financiero: {{ formatterNumber.format(Number(formData.dtofinanciero)) }}%</span>
                   </div>
                   <div>
-                    <span>Final «CONTADO EFECTIVO», antes considerar medios pago: $ {{ formatterNumber.format(monto) }}</span>
+                    <span>Final «CONTADO EFECTIVO», antes considerar medios pago: $ {{ formatterNumber.format(formData.monto) }}</span>
                   </div>
                 </div>
               </template>
@@ -195,6 +198,15 @@
               </template>
             </UCard>
           </template>
+          <template v-if="formData.montoNC">
+            <Toolbar class="my-4 border-none dark:bg-transparent">
+              <template #end>
+                <div class="flex items-center">
+                  <UBadge size="lg" variant="solid">Total FACTURA - NOTA DE CRÉDITO: $ {{ formatterNumber.format(Number(formData.monto)-Number(formData.montoNC)) }} </UBadge>
+                </div>
+              </template>
+            </Toolbar>
+          </template>
         </div>
         <div class="flex justify-center">
           <template v-if="pagocerrado">
@@ -223,6 +235,14 @@
                       <div class="rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
                         $ {{ formatterNumber.format(Number(formData.montofactura)+(formData.totalimporte - Number(formData.montofactura))) }}
                       </div>
+                      <template v-if="formData.montoNC">
+                        <UDivider type="dashed" :ui="{wrapper: {base: 'm-2'}}"/>
+                        <UDivider type="dashed" :ui="{wrapper: {base: 'm-2'}}"/>
+                        <div><span>FACTURAR + DÉBITO + NOTA DE CRÉDITO</span></div>
+                        <div class="rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
+                          $ {{ formatterNumber.format(Number(formData.montofactura)+(formData.totalimporte - Number(formData.montofactura))-Number(formData.montoNC)) }}
+                        </div>
+                      </template>                      
                     </template>
                     <template v-else>
                       <div><span>Hacer Nota de CRÉDITO por...</span></div>
@@ -237,6 +257,14 @@
                       <div class="rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
                         $ {{ formatterNumber.format(Number(formData.montofactura)+(formData.totalimporte - Number(formData.montofactura))) }}
                       </div>
+                      <template v-if="formData.montoNC">
+                        <UDivider type="dashed" :ui="{wrapper: {base: 'm-2'}}"/>
+                        <UDivider type="dashed" :ui="{wrapper: {base: 'm-2'}}"/>
+                        <div><span>FACTURAR + CRÉDITO + NOTA DE CRÉDITO</span></div>
+                        <div class="rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
+                          $ {{ formatterNumber.format(Number(formData.montofactura)+(formData.totalimporte - Number(formData.montofactura))-Number(formData.montoNC)) }}
+                        </div>
+                      </template>
                     </template>
                   </div>
                 </template>
@@ -301,7 +329,7 @@
           <div class="grid grid-flow-col auto-rows-auto auto-cols-max gap-4 mb-2 p-2 items-end" v-for="(item, y) in formData.mediospago" :key="y">
               <div class="col-start-1 col-end-4">
                 <template v-if="item.impacto">
-                  <UFormGroup label="Impacto sobre el neto de facturas, antes de descuento financiero">
+                  <UFormGroup label="Impacto sobre el neto de fra., antes de dto. financiero">
                     <UBadge size="lg" variant="solid">
                       {{ '$ '+ formatterNumber.format(Number(item.impacto)) }}
                     </UBadge>
@@ -486,15 +514,15 @@ const onHandleSelectAll2 = (isSelected: boolean) => {
 }
 const onUpdateSelection = (selectedRows: any[]) => {
   //console.log('Currently selected rows:', selectedRows)
-  formData.value.montofactura = Number(selectedRows.reduce((acc : any, row : any) => acc + row.SALDO, 0)).toFixed(2)
-  formData.value.monto = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO_COBRAR, 0)).toFixed(2)
-  formData.value.descuento_debitos = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO, 0)).toFixed(2)
-  formData.value.dtofinanciero = (((Number(formData.value.descuento_debitos) / Number(formData.value.montofactura)) * 100)).toFixed(2)
+  formData.value.montofactura = Number(selectedRows.reduce((acc : any, row : any) => acc + row.SALDO, 0)).toString()
+  formData.value.monto = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO_COBRAR, 0)).toString()
+  formData.value.descuento_debitos = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO, 0)).toString()
+  formData.value.dtofinanciero = (((Number(formData.value.descuento_debitos) / Number(formData.value.montofactura)) * 100)).toString()
 }
 const onUpdateSelection2 = (selectedRows: any[]) => {
-  //console.log('Currently selected rows:', selectedRows)
-  formData.value.montoNC = Number(selectedRows.reduce((acc : any, row : any) => acc + row.SALDO, 0)).toFixed(2)
-  formData.value.monto2 = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO_COBRAR, 0)).toFixed(2)
+  console.log('Currently selected rows:', selectedRows)
+  formData.value.montoNC = selectedRows.reduce((acc : any, row : any) => acc + row.SALDO, 0)
+  formData.value.monto2 = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO_COBRAR, 0)).toString()
 }
 
 const resetSelection = () => {
@@ -628,12 +656,12 @@ const consultaSaldosCliente = async () =>{
           CVCL_CLIENTE: data.CVCL_CLIENTE,
           CLIE_NOMBRE: data.CLIE_NOMBRE,
           IMPORTE: data.IMPORTE,
-          SALDO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : data.SALDO,
+          SALDO: data.SALDO,
           FECHA_DIFF: fechaDif,
-          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toFixed(2) : '',
-          DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100).toFixed(2) : 0,
-          MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0) /100))),
-          MONTO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0)/100))
+          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toString() : '',
+          DTO_FINANCIERO:  dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100).toString() : 0,
+          MONTO_COBRAR: ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0) /100))),
+          MONTO: ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0)/100))
         }
     })
     getdata.dataNC = response.filter((data: any) => data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ).map((data: any) => {
@@ -764,12 +792,12 @@ const consultaSaldosRemito = async () => {
           CVCL_CLIENTE: data.CVCL_CLIENTE,
           CLIE_NOMBRE: data.CLIE_NOMBRE,
           IMPORTE: data.IMPORTE,
-          SALDO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : data.SALDO,
+          SALDO: data.SALDO,
           FECHA_DIFF: fechaDif,
-          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toFixed(2) : '',
-          DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100).toFixed(2) : 0,
-          MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0) /100))),
-          MONTO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0)/100))
+          INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toString() : '',
+          DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100).toString() : 0,
+          MONTO_COBRAR: ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0) /100))),
+          MONTO: ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0)/100))
         }
     })
     getdata.dataNC = response.filter((data: any) => data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ).map((data: any) => {
@@ -896,12 +924,12 @@ const consultaSaldosFactura = async () =>{
         CVCL_CLIENTE: data.CVCL_CLIENTE,
         CLIE_NOMBRE: data.CLIE_NOMBRE,
         IMPORTE: data.IMPORTE,
-        SALDO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : data.SALDO,
+        SALDO: data.SALDO,
         FECHA_DIFF: fechaDif,
-        INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toFixed(2) : '',
-        DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100).toFixed(2) : 0,
-        MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0) /100))),
-        MONTO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0)/100))
+        INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toString() : '',
+        DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100).toString() : 0,
+        MONTO_COBRAR:  ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0) /100))),
+        MONTO:  ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0)/100))
       }
     })
     if(array.length == 0){
@@ -999,12 +1027,12 @@ const consultaSaldosQR = async () =>{
         CVCL_CLIENTE: data.CVCL_CLIENTE,
         CLIE_NOMBRE: data.CLIE_NOMBRE,
         IMPORTE: data.IMPORTE,
-        SALDO: data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : data.SALDO,
+        SALDO: data.SALDO,
         FECHA_DIFF: fechaDif,
         INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toFixed(2) : 0,
-        DTO_FINANCIERO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100).toFixed(2) : 0,
-        MONTO_COBRAR:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? -data.SALDO : ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0) /100))),
-        MONTO:  data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB' ? 0 : ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0)/100))
+        DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100).toFixed(2) : 0,
+        MONTO_COBRAR: ((data.SALDO) * (1- ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0) /100))),
+        MONTO: ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1-((1-(Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif)))*100) : 0)/100))
       }
     })
     if(array.length == 0){
@@ -1092,6 +1120,7 @@ const columns2 = [
 ]    
 
 const monto = ref()
+const montofactura_nc = ref()
 const cabacera = ref()
 const totalimporte = ref()
 const nrocuotas = ref()
@@ -1099,6 +1128,7 @@ const formData = ref({
   montofactura: '',
   montoNC: '',
   monto: monto,
+  montofactura_NC: montofactura_nc,
   monto2: '', 
   cabacera: cabacera,
   totalimporte: totalimporte,
@@ -1146,6 +1176,7 @@ const copyItem = (i: number) => {
     },
   ]
 }
+ 
 
 watch(formData.value, async (newVal, oldVal)=>{
   let monto = formData.value?.montofactura
@@ -1155,7 +1186,7 @@ watch(formData.value, async (newVal, oldVal)=>{
   cabacera.value = totalImporte ? Number(totalImporte) >= Number(monto) ? 0.00 : ((Number(monto) - Number(totalImporte)) / Number(monto) * 100).toFixed(2) : ''
   totalimporte.value = totalImporte ? Number(totalImporte) : ''
   pagocerrado.value = Number(monto) > 0 ? totalImpacto >= (Number(monto) * (1-Number(tolerencia)/100)) && totalImpacto <= (Number(monto) * (1+Number(tolerencia)/100)) ? true : false : false
-  
+  montofactura_nc.value = Number(formData.value?.monto)-Number(formData.value?.montoNC)
   formData.value.mediospago.forEach(item => { 
     const fechaHastaUltima = data_cheques.value?.findLast(data => data.hasta)?.hasta;
     const now = DateTime.now().toISODate()
@@ -1186,11 +1217,10 @@ watch(formData.value, async (newVal, oldVal)=>{
                : data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.interes_base).map((data:any) =>           
                (100-((100 - (Number(dtoFinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0] as any
 
-    item.impacto = item.importe ?  (Number(importe) / (1 - Number(item.dto) / 100)).toFixed(2)
-                   : '' as any 
+    item.impacto = item.importe ? (Number(importe) / (1 - Number(item.dto) / 100)).toString() : '' as any 
         
-    item.calculable = monto && item.dto ? ((Number(monto) - Number(totalImpacto))*(1 - (Number(item.dto) / 100))).toFixed(2) : '';
-
+    item.calculable = monto && item.dto && totalImpacto ? ((Number(monto) - Number(totalImpacto))*(1 - (Number(item.dto) / 100))).toString() 
+    : monto && item.dto ? ((Number(monto))*(1 - (Number(item.dto) / 100))).toString() : '';
   })
 })
 const source = ref()

@@ -9,7 +9,7 @@
                     <UAccordion default-open multiple variant="soft" size="xl" :items="financiero1">
                         <template #visa-master-nativa v-if="data_visamasternativa">
                             <div class="text-sea-green-900 dark:text-white text-center">
-                                <Toolbar class="mb-1">
+                                <Toolbar class="mb-1 border-none">
                                     <template #start>
                                         <UButton @click="isOpenModal = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
                                     </template>
@@ -81,7 +81,7 @@
                     <UAccordion default-open multiple variant="soft" size="xl" :items="financiero2">
                         <template #naranja v-if="data_naranja">
                             <div class="text-sea-green-900 dark:text-white">
-                                <Toolbar class="mb-1">
+                                <Toolbar class="mb-1 border-none">
                                     <template #start>
                                         <UButton @click="isOpenModal2 = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
                                     </template>
@@ -153,7 +153,7 @@
                     <UAccordion default-open multiple variant="soft" size="xl" :items="financiero3">
                         <template #cuota-simple v-if="data_cuotasimple">
                             <div class="text-sea-green-900 dark:text-white text-center">
-                                <Toolbar class="mb-1">
+                                <Toolbar class="mb-1 border-none">
                                     <template #start>
                                         <UButton @click="isOpenModal3 = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
                                     </template>
@@ -229,7 +229,7 @@
 <script setup lang="ts">
 definePageMeta({
     title: 'Editar el costo de financiación',
-    middleware: ['auth']
+    middleware: ['auth', '3-editor']
 })
 const {status: status_visamasternativa, data: data_visamasternativa, refresh: refresh_visamasternativa} = await useFetch('/api/visamasternativa')
 const {status: status_naranja, data: data_naranja, refresh: refresh_naranja} = await useFetch('/api/naranja')

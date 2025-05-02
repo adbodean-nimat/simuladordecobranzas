@@ -3,7 +3,7 @@
         <UContainer :ui="{ constrained: 'max-w-screen-2xl' }">
             <div class="flex justify-center gap-2 items-center text-center p-4 text-base">
                 <h2>PARAMETROS GENERALES</h2>
-                <div class="justify-items-end" v-if="authenticated">
+                <div class="justify-items-end" v-if="authenticated && rol.includes('Administrador') || authenticated && rol.includes('Editor')">
                     <UButton icon="i-heroicons-pencil-square"
                             size="sm"
                             variant="soft"
@@ -78,7 +78,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '~/store/auth'
-const { authenticated } = storeToRefs(useAuthStore());
+const { authenticated, rol } = storeToRefs(useAuthStore());
 const {status: status_parametros, data: data_parametros} = await useFetch('/api/parametrosgenerales')
 const {status: status_facturas, data: data_parametrosfacturas} = await useFetch('/api/parametrosfacturas')
 const {status: status_cheques, data: data_parametroscheques } = await useFetch('/api/parametroscheques')
@@ -155,7 +155,7 @@ const parametros3 = [{
 }]
 const interesDiario = data_parametros.value?.map(data=> data.interes_diario)[0];
 const data_parametrosgrales_rtl = data_parametros.value ? data_parametros.value : {}
-const dataNameModify = ["ID","MAXIMO DTO.FINANCIERO", "TOLERENCIA DIFERENCIA PARA CERRAR PAGOS", "UNIDAD DE TIEMPO PARA CHEQUES", "UNIDAD DE TIEMPO PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE DEBITO", "TASA IVA", "INTERÉS DIARIO PARA FACTURAS", "DÓLAR", "FECHA DÓLAR"]
+const dataNameModify = ["ID","MAXIMO DTO.FINANCIERO", "TOLERENCIA DIFERENCIA PARA CERRAR PAGOS", "UNIDAD DE TIEMPO PARA CHEQUES", "UNIDAD DE TIEMPO PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE CREDITO", "ABREVIATURA PARA TARJETAS DE DEBITO", "TASA IVA", "INTERÉS DIARIO PARA FACTURAS", "DÓLAR", "FECHA DÓLAR", "USUARIO DÓLAR"]
 const parametrosNombre = data_parametros.value?.map(f => Object.keys(f))[0];
 
 const newData2 = dataNameModify?.map((v)=>{
@@ -183,8 +183,8 @@ const newData = parametrosNombre?.map((f) => {
 const dataYes = []
 newData?.splice(0,1)
 newData2?.splice(0,1)
-newData?.splice(9,1)
-newData2?.splice(9,1)
+newData?.splice(9,2)
+newData2?.splice(9,2)
 for(let i = 0; i < (newData ? newData.length : 0); i++){
     
     dataYes.push({

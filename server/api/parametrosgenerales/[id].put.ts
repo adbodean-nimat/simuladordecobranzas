@@ -2,16 +2,17 @@ import prisma from "~/lib/prisma";
 import { DateTime } from "luxon";
 
 interface ParametrosGenerales {
-    max_dto_financiero: string,
-    tolerncia_dif: string,
-    unidad_tiempo_cheq: string,
-    unidad_tiempo_tc: string,
-    abv_tarjetas_credito: string,
-    abv_tarjetas_debito: string,
-    tasa_iva: string,
-    fecha_alta: string,
-    interes_diario: string,
-    dolar: string,
+    max_dto_financiero: string
+    tolerncia_dif: string
+    unidad_tiempo_cheq: string
+    unidad_tiempo_tc: string
+    abv_tarjetas_credito: string
+    abv_tarjetas_debito: string
+    tasa_iva: string
+    fecha_alta: string
+    interes_diario: string
+    dolar: string
+    usuario_dolar: string
     fecha_actualizar_dolar: string
 }
 
@@ -32,6 +33,7 @@ export default defineEventHandler(async (event) => {
             fecha_alta: body.fecha_alta,
             interes_diario: body.interes_diario,
             dolar: body.dolar,
+            usuario_dolar: body.usuario_dolar,
             fecha_actualizar_dolar: DateTime.now().toISO()
         }
     })

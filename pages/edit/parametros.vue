@@ -9,7 +9,7 @@
                     <UAccordion default-open multiple variant="soft" size="xl" :items="parametros1">
                         <template #datos1 v-if="data_parametros">
                             <div class="text-sea-green-900 dark:text-white text-center">
-                                <Toolbar class="mb-1">
+                                <Toolbar class="mb-1 border-none">
                                     <template #start>
                                         <UButton @click="isOpenModal = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
                                     </template>
@@ -143,7 +143,7 @@
                     <UAccordion default-open multiple variant="soft" size="xl" :items="parametros2">
                         <template #datos2 v-if="data_parametrosfacturas">
                             <div class="text-sea-green-900 dark:text-white text-center">
-                                <Toolbar class="mb-1">
+                                <Toolbar class="mb-1 border-none">
                                     <template #start>
                                         <UButton @click="isOpenModal2 = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
                                     </template>
@@ -228,7 +228,7 @@
                     <UAccordion default-open multiple variant="soft" size="xl" :items="parametros3">
                         <template #datos3 v-if="data_parametroscheques">
                             <div class="text-sea-green-900 dark:text-white text-center">
-                                <Toolbar class="mb-1">
+                                <Toolbar class="mb-1 border-none">
                                     <template #start>
                                         <UButton @click="isOpenModal3 = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
                                     </template>
@@ -311,7 +311,7 @@
 </template>
 <script setup lang="ts">
 definePageMeta({
-    middleware: ['auth']
+    middleware: ['auth', '3-editor']
 })
 import { useDolarStore } from '~/store/dolar'
 const {status: status_parametros, data: data_parametros, refresh: refresh_parametros} = await useFetch('/api/parametrosgenerales')

@@ -25,8 +25,8 @@
                 </template>
                 <template v-if="authenticated" style="float: right">
                     <UDropdown :items="dropItems" :popper="{ placement: 'bottom-start' }">
-                      <template v-if="authStore.avatar">
-                        <UAvatar :src="'data:image/png;base64,'+ authStore.avatar" alt="Avatar" icon="i-material-symbols-account-circle" size="sm" color="gray" variant="ghost" :label="fullName" aria-label="Theme" />
+                      <template v-if="avatar">
+                        <UAvatar :src="'data:image/png;base64,'+ avatar" alt="Avatar" icon="i-material-symbols-account-circle" size="sm" color="gray" variant="ghost" :label="fullName" aria-label="Theme" />
                       </template>
                       <template v-else>
                         <UButton :icon="'i-material-symbols-account-circle'" color="gray" variant="ghost" size="md" aria-label="Theme" />
@@ -98,22 +98,23 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'; 
-import { useAuthStore } from '~/store/auth';
-const router = useRouter();
-const { logUserOut } = useAuthStore();
+import { useAuthStore } from '~/store/auth'
 const authStore = useAuthStore()
 const { authenticated } = storeToRefs(authStore);
+const { logUserOut } = useAuthStore();
+
+const router = useRouter();
 const isOpenModal = ref(false)
+
 const logout = () => {
   logUserOut();
   dropItems.push()
-  router.push('/login');
+  router.push('/');
 };
 
-await callOnce(authStore.getAvatar);
-const avatar = ref(authStore.avatar)
 const fullName : any = authenticated ? useCookie('fullname') : ''
 const userName : any = authenticated ? useCookie('username') : ''
+const avatar : any = authenticated ? useCookie('avatar') : ''
 const isRol : any = authenticated ? useCookie('rol') : ''
 
 const colorMode = useColorMode()

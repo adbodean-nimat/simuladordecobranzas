@@ -22,7 +22,7 @@
           </UInput>
         </div>
         <div class="flex justify-center">
-          <template v-if="formData.mediospago?.map(item => item.calculable)[0] === '0.00'">
+          <template v-if="pagocerrado">
             <div class="flex flex-col w-full ">
               <UDivider label="¡¡PAGO CERRADO!!" type="dashed" :ui="{ label: 'text-sea-green-600 dark:text-sea-green-400 text-lg mb-2' }"/>
               <UTabs :items="itemsTabs">
@@ -228,6 +228,7 @@ import { useClipboard } from '@vueuse/core'
 import { DateTime } from 'luxon'
 import gsap from 'gsap'
 const toast = useToast()
+const pagocerrado = ref(false)
 const isOpen = ref(false)
 const diaHoy = ref(DateTime.now().weekday)
 const optionsMask = reactive<MaskInputOptions>({
@@ -248,6 +249,7 @@ const itemsTabs = [{
     const {status: status_mediosdepagos, data: data_mediosdepagos} = await useFetch('/api/mediosdepagos')
     const {status: status_cheques, data: data_cheques} = await useFetch('/api/parametroscheques')
     const maxdtofinanciero = data_parametrosgrales.value ? data_parametrosgrales.value[0].max_dto_financiero : 0
+    const tolerencia = data_parametrosgrales.value ? data_parametrosgrales.value[0].tolerncia_dif : 0
     const monto = ref()
     const cabacera = ref()
     const totalimporte = ref()
@@ -328,7 +330,7 @@ const itemsTabs = [{
       
       cabacera.value = totalImporte ? Number(totalImporte) >= Number(monto) ? 0.00 : ((Number(monto) - Number(totalImporte)) / Number(monto) * 100) : ''
       totalimporte.value = totalImporte ? Number(totalImporte) : ''
-
+      pagocerrado.value = Number(monto) > 0 ? totalImpacto >= (Number(monto) * (1-Number(tolerencia)/100)) && totalImpacto <= (Number(monto) * (1+Number(tolerencia)/100)) ? true : false : false
       formData.value.mediospago.forEach(item =>
        { 
         

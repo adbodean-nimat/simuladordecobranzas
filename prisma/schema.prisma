@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "app/generated/prisma/client"
 }
 
 datasource db {
@@ -288,6 +289,7 @@ model simulador_cobranzas_parametros_generales {
   interes_diario         Decimal?  @db.Decimal
   dolar                  Decimal?  @db.Decimal
   fecha_actualizar_dolar DateTime? @default(now()) @db.Timestamptz(6)
+  usuario_dolar          String?
 }
 
 model simulador_cobranzas_roles {

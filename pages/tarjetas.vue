@@ -3,7 +3,7 @@
       <UContainer :ui="{ constrained: 'max-w-screen-2xl' }">
         <div class="flex justify-center gap-2 items-center text-center p-4 text-base">
           <h2>TARJETAS VISTA GENERAL</h2>
-          <div class="justify-items-end" v-if="authenticated">
+          <div class="justify-items-end" v-if="authenticated && rol.includes('Administrador') || authenticated && rol.includes('Editor')">
                     <UButton icon="i-heroicons-pencil-square"
                             size="sm"
                             variant="soft"
@@ -66,7 +66,7 @@
   <script setup lang="ts">
   import { storeToRefs } from 'pinia';
   import { useAuthStore } from '~/store/auth';
-  const { authenticated } = storeToRefs(useAuthStore());
+  const { authenticated, rol } = storeToRefs(useAuthStore());
   import type { JsonValue } from '@prisma/client/runtime/library';
   import type { MaskInputOptions} from 'maska'
   import type { SerializeObject } from 'nitropack';

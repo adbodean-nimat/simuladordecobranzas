@@ -6,7 +6,7 @@
             </div>
 
             <div class="grid gap-4">
-                <Toolbar class="mb-1">
+                <Toolbar class="mb-1 border-none">
                     <template #start>
                         <UButton @click="isOpenModal = true" icon="i-material-symbols-add-circle" size="md" square variant="soft">Agregar usuario</UButton>
                     </template>
@@ -112,7 +112,8 @@ const {data: data_roles, status: status_roles, refresh: refresh_roles} = await u
 const {data: data_usuarios, status: status_usuarios, refresh: refresh_usuarios} = await useFetch('/api/usuarios');
 const roles = ref([
     { label: 'Administrador', value: 1 },
-    { label: 'Editor', value: 2 }
+    { label: 'Editor', value: 2 },
+    { label: 'Editor Dólar', value: 3 },
 ]);
 const isOpenModal = ref(false)
 const agregarUsuario = ref({
@@ -155,6 +156,11 @@ const createUsuario = async () => {
     })
     toast.add({title: "Agregado correctamente"})
     isOpenModal.value = false
+    agregarUsuario.value = {
+        nombre: '',
+        usuario_ad: '',
+        roles: ''
+    }
     refresh_usuarios();
 }
 </script>

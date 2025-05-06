@@ -1,4 +1,4 @@
-import { Prisma } from "~/prisma/app/generated/prisma/client";
+import { Prisma } from "@prisma/client";
 import prisma from "~/lib/prisma";
 
 interface InteresBase {

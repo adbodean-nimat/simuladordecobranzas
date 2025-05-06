@@ -26,7 +26,6 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxt/fonts',
     'nuxt-security',
-    '@prisma/nuxt',
     '@primevue/nuxt-module',
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
@@ -62,13 +61,13 @@ export default defineNuxtConfig({
       }
     }
   },
-  prisma:{
-    autoSetupPrisma: true
-  },
   build: {
     transpile: ['gsap'],
   },
   vite: {
+    ssr: {
+      external: ["@prisma/client"]
+    },
     resolve: {
       alias: {
         '.prisma/client/index-browser': './node_modules/.prisma/client/index-browser.js',

@@ -16,6 +16,7 @@ export default <Partial<Config>>{
             colors: {
                 'sea-green': {
 <<<<<<< HEAD
+<<<<<<< HEAD
                     '50': '#ecfff5',
                     '100': '#d3ffe8',
                     '200': '#aaffd3',
@@ -42,6 +43,20 @@ export default <Partial<Config>>{
                     '950': '#003620',
                 },
 >>>>>>> df1469f0 (Initial commit)
+=======
+                    '50': '#ecfff5',
+                    '100': '#d3ffe9',
+                    '200': '#aaffd5',
+                    '300': '#69ffb5',
+                    '400': '#21ff8f',
+                    '500': '#00f26e',
+                    '600': '#00ca57',
+                    '700': '#009e47',
+                    '800': '#007f3f',
+                    '900': '#026535',
+                    '950': '#00391b',
+                },    
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
             }
         }
     }

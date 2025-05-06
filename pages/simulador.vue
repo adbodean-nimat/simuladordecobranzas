@@ -14,18 +14,25 @@
             class="mb-8 max-w-2xl" 
             placeholder="Ingresar monto c/IVA" 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             color="sea-green" 
 >>>>>>> df1469f0 (Initial commit)
+=======
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
             v-model="monto" 
             v-maska="optionsMask"
           >
             <template #trailing>
 <<<<<<< HEAD
+<<<<<<< HEAD
               <span class="text-xs">ARS</span>
 =======
               <span class="text-sea-green-500 sea-green:text-gray-400 text-xs">ARS</span>
 >>>>>>> df1469f0 (Initial commit)
+=======
+              <span class="text-xs">ARS</span>
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
             </template>
           </UInput>
         </div>
@@ -37,8 +44,12 @@
 =======
           <template v-if="formData.mediospago?.map(item => item.calculable)[0] === '0.00'">
             <div class="flex flex-col w-full ">
+<<<<<<< HEAD
               <UDivider label="¡¡PAGO CERRADO!!" type="dashed" :ui="{ label: 'text-sea-green-500 dark:text-sea-green-400 text-lg mb-2' }"/>
 >>>>>>> df1469f0 (Initial commit)
+=======
+              <UDivider label="¡¡PAGO CERRADO!!" type="dashed" :ui="{ label: 'text-sea-green-600 dark:text-sea-green-400 text-lg mb-2' }"/>
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
               <UTabs :items="itemsTabs">
                 <template #npc-npg="{ item }">
                   <div class="grid grid-cols-2 w-auto h-auto rounded-md gap-4 items-center">
@@ -66,10 +77,14 @@
                     </template>
                     <div><span>FINAL A FACTURAR y A COBRAR</span></div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <div class="rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
 =======
                     <div class=" rounded-md p-2 text-xl text-center bg-sea-green-500 dark:bg-sea-green-600">
 >>>>>>> df1469f0 (Initial commit)
+=======
+                    <div class="rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                       $ {{ formatterNumber.format(formData.totalimporte) }}
                     </div>
                   </div>
@@ -104,10 +119,14 @@
                     </template>
                     <div><span>FINAL A FACTURAR y A COBRAR</span></div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <div class=" rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
 =======
                     <div class=" rounded-md p-2 text-xl text-center bg-sea-green-500 dark:bg-sea-green-600">
 >>>>>>> df1469f0 (Initial commit)
+=======
+                    <div class=" rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                       $ {{ formatterNumber.format(formData.totalimporte) }}
                     </div>
                   </div>
@@ -168,7 +187,7 @@
               </template>
               <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
                 <UFormGroup label="Nro. cuota">
-                  <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(data => data.interes_base)[0].map((x:any) => x.nro_cuota)" v-model="item.cuota"/>
+                  <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map((data : any) => data.interes_base)[0].map((x:any) => x.nro_cuota)" v-model="item.cuota"/>
                 </UFormGroup>
               </template>
               <template v-if="item.nombre == 'CHEQUE'">
@@ -346,6 +365,29 @@
             </pre> -->
           </div>
         </div>
+        <UModal v-model="isOpen" prevent-close>
+          <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+            <template #header>
+              <div class="flex items-center justify-between">
+                <h3 class="text-base flex justify-center font-semibold leading-6 text-gray-900 dark:text-white">
+                  <UIcon :name="'i-heroicons-exclamation-circle'" size="md" class="h-6 w-6 mr-2 text-red-400 dark:text-red-500"  />
+                  Advertencia
+                </h3>
+                <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpen = false" />
+              </div>
+            </template>
+
+            <div>
+              <span> No aceptamos más de 60 días.</span>
+            </div>
+
+            <template #footer>
+              <div class="float-end pb-4">
+                <UButton label="Ok" icon="" @click="isOpen = false" variant="soft" />
+              </div>
+            </template>
+          </UCard>
+        </UModal>
         </template>
 >>>>>>> df1469f0 (Initial commit)
       </UContainer>
@@ -372,6 +414,7 @@ import { useClipboard } from '@vueuse/core'
 import { DateTime } from 'luxon'
 
 const toast = useToast()
+const isOpen = ref(false)
 
 >>>>>>> df1469f0 (Initial commit)
 const optionsMask = reactive<MaskInputOptions>({
@@ -501,11 +544,19 @@ const itemsTabs = [{
 
       formData.value.mediospago.forEach(item =>
        { 
+<<<<<<< HEAD
 >>>>>>> df1469f0 (Initial commit)
+=======
+        
+        const fechaHastaUltima = data_cheques.value?.findLast(data => data.hasta)?.hasta;
+        console.log(fechaHastaUltima)
+        
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
         const now = DateTime.now().toISODate()
         let fcheque = DateTime.fromISO(item.fecha)
         let fnow = DateTime.fromISO(now)
         let diff = fcheque.diff(fnow,['days']).toObject()
+<<<<<<< HEAD
 <<<<<<< HEAD
         //console.log(diff?.days ?? '')
         item.dias = diff?.days ? Number(diff.days).toString() : ''
@@ -514,6 +565,11 @@ const itemsTabs = [{
         item.dias = diff?.days ? Number(diff.days).toString() : ''
         
 >>>>>>> df1469f0 (Initial commit)
+=======
+        console.log(diff?.days ?? '')
+        item.dias = diff?.days ? Number(diff.days).toString() : ''
+        const aviso = Number(item.dias) >= Number(fechaHastaUltima) ? isOpen.value = true : false
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
         let importe = item.importe.replaceAll(",", "");
         const TC = data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.tipo_pago)[0]
         nrocuotas.value = ''
@@ -531,6 +587,7 @@ const itemsTabs = [{
         
         item.dto = 
 <<<<<<< HEAD
+<<<<<<< HEAD
                 TC == 'TC' && item.cuota ? data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map((data: any) => data.interes_base?.filter((x:any) => x?.nro_cuota == item.cuota)).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0]
                 : TC == 'CHEQ' ? (itemDto2?.dto ? itemDto2?.dto : 0)
                 : data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.interes_base).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0] as any
@@ -542,6 +599,13 @@ const itemsTabs = [{
                 : data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.interes_base).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0] as any
 
 >>>>>>> df1469f0 (Initial commit)
+=======
+                TC == 'TC' && item.cuota ? data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map((data: any) => data.interes_base?.filter((x:any) => x?.nro_cuota == item.cuota)).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0]
+                : TC == 'CHEQ' ? (itemDto2?.dto ? itemDto2?.dto : 0)
+                : data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.interes_base).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0] as any
+
+
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
         item.impacto = 
                 item.importe ?  (Number(importe) / (1 - Number(item.dto) / 100)).toFixed(2)
                 : '' as any 

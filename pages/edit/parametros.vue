@@ -9,7 +9,11 @@
                     <UAccordion default-open multiple variant="soft" size="xl" :items="parametros1">
                         <template #datos1 v-if="data_parametros">
                             <div class="text-sea-green-900 dark:text-white text-center">
+<<<<<<< HEAD
                                 <Toolbar class="mb-1 border-none">
+=======
+                                <Toolbar class="mb-1">
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                                     <template #start>
                                         <UButton @click="isOpenModal = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
                                     </template>
@@ -61,6 +65,7 @@
                                             <UInput v-model="data[field]" fluid />
                                         </template>
                                     </Column>
+<<<<<<< HEAD
                                     <Column field="interes_diario" header="INTERÉS DIARIO PARA ACTUALIZAR FACTURAS">
                                         <template #editor="{ data, field }">
                                             <UInput v-model="data[field]" fluid />
@@ -71,6 +76,8 @@
                                             <UInput v-model="data[field]" fluid />
                                         </template>
                                     </Column>
+=======
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                                     <Column :rowEditor="true" style="width: 5%; min-width: 8rem" bodyStyle="text-align:right"></Column>
                                     <Column style="width: 5%;" bodyStyle="text-align:left">
                                         <template #body="{ data }">
@@ -118,6 +125,7 @@
                                                 <label for="tasa_iva" class="block font-bold mb-3">TASA IVA</label>
                                                 <UInput id="tasa_iva" v-model="agregarDatos.tasa_iva" fluid />
                                             </div>
+<<<<<<< HEAD
                                             <div class="col-span">
                                                 <label for="tasa_iva" class="block font-bold mb-3">INTERÉS DIARIO PARA ACTUALIZAR FACTURAS</label>
                                                 <UInput id="tasa_iva" v-model="agregarDatos.interes_diario" fluid />
@@ -126,6 +134,8 @@
                                                 <label for="tasa_iva" class="block font-bold mb-3">DÓLAR</label>
                                                 <UInput id="tasa_iva" v-model="agregarDatos.dolar" fluid />
                                             </div>
+=======
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                                         </div>
                                         <template #footer>
                                             <div class="float-end pb-4">
@@ -143,7 +153,11 @@
                     <UAccordion default-open multiple variant="soft" size="xl" :items="parametros2">
                         <template #datos2 v-if="data_parametrosfacturas">
                             <div class="text-sea-green-900 dark:text-white text-center">
+<<<<<<< HEAD
                                 <Toolbar class="mb-1 border-none">
+=======
+                                <Toolbar class="mb-1">
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                                     <template #start>
                                         <UButton @click="isOpenModal2 = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
                                     </template>
@@ -228,7 +242,11 @@
                     <UAccordion default-open multiple variant="soft" size="xl" :items="parametros3">
                         <template #datos3 v-if="data_parametroscheques">
                             <div class="text-sea-green-900 dark:text-white text-center">
+<<<<<<< HEAD
                                 <Toolbar class="mb-1 border-none">
+=======
+                                <Toolbar class="mb-1">
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                                     <template #start>
                                         <UButton @click="isOpenModal3 = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
                                     </template>
@@ -309,6 +327,7 @@
         </UContainer>
     </div>
 </template>
+<<<<<<< HEAD
 <script setup lang="ts">
 definePageMeta({
     middleware: ['auth', '3-editor']
@@ -318,6 +337,16 @@ const {status: status_parametros, data: data_parametros, refresh: refresh_parame
 const {status: status_facturas, data: data_parametrosfacturas, refresh: refresh_parametrosfacturas} = await useFetch('/api/parametrosfacturas')
 const {status: status_cheques, data: data_parametroscheques, refresh: refresh_parametroscheques} = await useFetch('/api/parametroscheques')
 const { getDolar } = useDolarStore()
+=======
+
+<script setup lang="ts">
+definePageMeta({
+    middleware: ['auth']
+})
+const {status: status_parametros, data: data_parametros, refresh: refresh_parametros} = await useFetch('/api/parametrosgenerales')
+const {status: status_facturas, data: data_parametrosfacturas, refresh: refresh_parametrosfacturas} = await useFetch('/api/parametrosfacturas')
+const {status: status_cheques, data: data_parametroscheques, refresh: refresh_parametroscheques} = await useFetch('/api/parametroscheques')
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
 const toast = useToast()
 const isOpenModal = ref(false)
 const editingRows = ref([]);
@@ -329,9 +358,13 @@ const agregarDatos = ref({
         abv_tarjetas_credito: '',
         abv_tarjetas_debito: '',
         tasa_iva: '',
+<<<<<<< HEAD
         interes_diario: '',
         fecha_alta: new Date(),
         dolar: ''
+=======
+        fecha_alta: new Date()
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
 })
 
 const isOpenModal2 = ref(false)
@@ -371,7 +404,11 @@ const onRowEditSave1 = async (e: any) => {
     
     const Id = newData.id
     
+<<<<<<< HEAD
     const res = await $fetch('/api/parametrosgenerales/'+Id, {
+=======
+    const res = await $fetch('/api/parametrosgenerales/'+Id , {
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
         method: 'PUT',
         body: {
             max_dto_financiero: newData.max_dto_financiero,
@@ -381,14 +418,21 @@ const onRowEditSave1 = async (e: any) => {
             abv_tarjetas_credito: newData.abv_tarjetas_credito,
             abv_tarjetas_debito: newData.abv_tarjetas_debito,
             tasa_iva: newData.tasa_iva,
+<<<<<<< HEAD
             fecha_alta: newData.fecha_alta,
             interes_diario: newData.interes_diario,
             dolar: newData.dolar
+=======
+            fecha_alta: newData.fecha_alta
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
         }
     })
     toast.add({title: "Modificado correctamente"})
     refresh_parametros();
+<<<<<<< HEAD
     getDolar();
+=======
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
 }
 
 const removeIdParametros = async (e: any) => {
@@ -410,9 +454,13 @@ const submitCreate1 = async () => {
             abv_tarjetas_credito: agregarDatos.value?.abv_tarjetas_credito,
             abv_tarjetas_debito: agregarDatos.value?.abv_tarjetas_debito,
             tasa_iva: agregarDatos.value?.tasa_iva,
+<<<<<<< HEAD
             fecha_alta: agregarDatos.value?.fecha_alta,
             interes_diario: agregarDatos.value?.interes_diario,
             dolar: agregarDatos.value?.dolar
+=======
+            fecha_alta: agregarDatos.value?.fecha_alta
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
         }
     })
     toast.add({title: "Agregado correctamente"})
@@ -503,4 +551,8 @@ const submitCreate3 = async () => {
     isOpenModal3.value = false
     refresh_parametroscheques();
 }
+<<<<<<< HEAD
 </script>
+=======
+</script>
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)

@@ -7,11 +7,17 @@
     "editor.quickSuggestions": {
         "strings": true
 <<<<<<< HEAD
+<<<<<<< HEAD
     },
     "editor.minimap.enabled": true,
     "editor.inlineSuggest.showToolbar": "onHover"
 =======
     }
 >>>>>>> df1469f0 (Initial commit)
+=======
+    },
+    "editor.minimap.enabled": true,
+    "editor.inlineSuggest.showToolbar": "onHover"
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
   }
   

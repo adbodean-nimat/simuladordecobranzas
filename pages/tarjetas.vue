@@ -2,6 +2,7 @@
     <div>
       <UContainer :ui="{ constrained: 'max-w-screen-2xl' }">
 <<<<<<< HEAD
+<<<<<<< HEAD
         <div class="flex justify-center gap-2 items-center text-center p-4 text-base">
           <h2>TARJETAS VISTA GENERAL</h2>
           <div class="justify-items-end" v-if="authenticated && rol.includes('Administrador') || authenticated && rol.includes('Editor')">
@@ -22,15 +23,31 @@
               <span class="text-xs">ARS</span>
 =======
         <div class="text-center p-4 text-base">
+=======
+        <div class="flex justify-center gap-2 items-center text-center p-4 text-base">
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
           <h2>TARJETAS VISTA GENERAL</h2>
+          <div class="justify-items-end" v-if="authenticated">
+                    <UButton icon="i-heroicons-pencil-square"
+                            size="sm"
+                            variant="soft"
+                            square
+                            label="Editar"
+                            to="/edit/mediosdepago"
+                            :trailing="false"></UButton>
+          </div>
         </div>
 
         <div class="flex justify-center">
-          <UInput :ui="{rounded: 'rounded-lg'}" size="xl" icon="clarity:dollar-line" class="mb-8 max-w-2xl " placeholder="Ingresar monto" color="sea-green" v-model="monto"
+          <UInput :ui="{rounded: 'rounded-lg'}" size="xl" icon="clarity:dollar-line" class="mb-8 max-w-2xl " placeholder="Ingresar monto" v-model="monto"
           v-maska="optionsMask">
             <template #trailing>
+<<<<<<< HEAD
               <span class="text-sea-green-500 sea-green:text-gray-400 text-xs">ARS</span>
 >>>>>>> df1469f0 (Initial commit)
+=======
+              <span class="text-xs">ARS</span>
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
             </template>
           </UInput>
         </div>
@@ -75,8 +92,7 @@
         <div class="flex flex-nowrap flex-row gap-4">
           <UAccordion
             multiple
-            color="sea-green"
-            variant="solid"
+            variant="soft"
             size="xl"
             :items="items"
           >
@@ -84,10 +100,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_visa" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -96,10 +112,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_mastercard" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -108,10 +124,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_americanexpress" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb >= 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb >= 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb >= 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb >= 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -120,10 +136,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_cuotasimple" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -132,10 +148,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_hipotecario" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -143,8 +159,7 @@
         </UAccordion>
         <UAccordion
             multiple
-            color="sea-green"
-            variant="solid"
+            variant="soft"
             size="xl"
             :items="items2"
           >
@@ -152,10 +167,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_cabalcredito" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -164,10 +179,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_botonprisma" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -176,10 +191,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_clubdeleste" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -188,10 +203,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_creditoargentino" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -200,10 +215,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_consumaxplanmax" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                    <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                    <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -211,8 +226,7 @@
         </UAccordion>
         <UAccordion
             multiple
-            color="sea-green"
-            variant="solid"
+            variant="soft"
             size="xl"
             :items="items3"
           >
@@ -220,10 +234,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_creditasso" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                    <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                    <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -232,10 +246,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_naranjaplanz" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -244,10 +258,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_naranjaplan" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -256,10 +270,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_nativa" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                    <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                    <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -268,10 +282,10 @@
             <div class="text-sea-green-900 dark:text-white text-center">
               <UTable :columns="selectedColumns" :rows="data_pymes" class="w-full">
                 <template #porc_dto_deb-data="{ row }">
-                    <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'sea-green' : 'red'" />
+                    <UBadge :label="row.porc_dto_deb + '%'" variant="soft" :color="row.porc_dto_deb > 0 ? 'green' : 'red'" />
                 </template>
                 <template #dto_deb-data="{ row }">
-                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'sea-green' : 'red'" />
+                  <UBadge :label="'$ ' + formatter_decimal.format(row.dto_deb)" variant="soft" :color="row.dto_deb > 0 ? 'green' : 'red'" />
                 </template>
               </UTable>
             </div>
@@ -285,6 +299,7 @@
   
   <script setup lang="ts">
 <<<<<<< HEAD
+<<<<<<< HEAD
   import { storeToRefs } from 'pinia';
   import { useAuthStore } from '~/store/auth';
   const { authenticated, rol } = storeToRefs(useAuthStore());
@@ -297,6 +312,11 @@
     number: {locale: 'es-US', fraction: 2}
   })
 =======
+=======
+  import { storeToRefs } from 'pinia'
+  import { useAuthStore } from '~/store/auth'
+  const { authenticated } = storeToRefs(useAuthStore());
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
   import type { JsonValue } from '@prisma/client/runtime/library';
   import type { MaskInputOptions} from 'maska'
   import type { SerializeObject } from 'nitropack';
@@ -548,13 +568,17 @@
       }[] = [];
       data_mediosdepagos.value?.forEach(element => {
         if(element.estado == true && element.tipo_pago == "TC"){
-          const cuotas = element.interes_base
+          const cuotas = element.interes_base as any
           const maxdtofinanciero = data_parametrosgrales.value ? data_parametrosgrales.value[0].max_dto_financiero : 0
-          cuotas.forEach((itemCuotas:any) => {
+          cuotas?.forEach((itemCuotas:any) => {
             resultados2.push({
               nombre_slot: element.medio_pago,
+<<<<<<< HEAD
               data: element,
 >>>>>>> df1469f0 (Initial commit)
+=======
+              data: itemCuotas,
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
               nro_cuotas: itemCuotas.nro_cuota,
               cuota: '$ ' + formatter_decimal.format(((monto.value.replaceAll(",","") * (1-Number((100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + itemCuotas.interes_base / 100)*100)/100)).toFixed(2))/100)) / itemCuotas.nro_cuota)),
               total: '$ ' + formatter_decimal.format((monto.value.replaceAll(",","") * (1-Number((100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + itemCuotas.interes_base / 100)*100)/100)).toFixed(2))/100))),
@@ -602,7 +626,7 @@
 =======
         }
       });
-
+      console.log(resultados2)
       /* for(let i = 0; i < datos_medios_de_pagos.length; i++){
         if(datos_medios_de_pagos[i].estado == true && datos_medios_de_pagos[i].tipo_pago == "TC"){
           const cuotas = datos_medios_de_pagos[i].interes_base
@@ -634,8 +658,12 @@
       data_naranjaplan.value = resultados2.filter(item => item.nombre_slot == "NARANJA PLAN").map(data => data)
       data_nativa.value = resultados2.filter(item => item.nombre_slot == "NATIVA").map(data => data)
       data_pymes.value = resultados2.filter(item => item.nombre_slot == "PYMES").map(data => data)
+<<<<<<< HEAD
       data_hipotecario.value = resultados2.filter(item => item.nombre_slot == "HIPOTECARIO").map(data => data)
 >>>>>>> df1469f0 (Initial commit)
+=======
+      data_hipotecario.value = resultados2?.filter(item => item.nombre_slot == "HIPOTECARIO").map(data => data)
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
     }
   )
   

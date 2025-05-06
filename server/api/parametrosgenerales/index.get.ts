@@ -3,6 +3,7 @@ import prisma from "~/lib/prisma";
 export default defineEventHandler(async (event) => {
   try{
     const data = await prisma.simulador_cobranzas_parametros_generales.findMany({
+<<<<<<< HEAD
       select: {
         'id': true,
         'max_dto_financiero': true,
@@ -17,6 +18,13 @@ export default defineEventHandler(async (event) => {
         'fecha_actualizar_dolar': true,
         'usuario_dolar': true,
       }
+=======
+      orderBy: [
+        {
+          id: 'asc',
+        }
+      ]
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
     })
     return data;
   }

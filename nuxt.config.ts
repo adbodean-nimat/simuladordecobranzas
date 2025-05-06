@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Aura from '@primeuix/themes/aura';
 export default defineNuxtConfig({
   app: {
@@ -16,14 +17,23 @@ export default defineNuxtConfig({
       apiBase: 'adadsadsasd',
       apiLogin: 'adadsadsasdada',
     }
+=======
+import Aura from '@primevue/themes/aura';
+export default defineNuxtConfig({
+  runtimeConfig: {
+    urlMount: ''
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
   },
   devServer: {
     host: '0.0.0.0',
     port: 3000
   },
+<<<<<<< HEAD
 =======
 export default defineNuxtConfig({
 >>>>>>> df1469f0 (Initial commit)
+=======
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   modules: [
@@ -63,8 +73,29 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     'nuxt-security',
     '@prisma/nuxt',
-    '@vueuse/nuxt'
+    '@vueuse/nuxt',
+    '@primevue/nuxt-module',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
+    'nuxt-file-storage'
   ],
+  experimental: {
+    cookieStore: true
+  },
+  primevue: {
+    composables: {
+      exclude: ['useToast'],
+    },
+    options: {
+      theme: {
+          preset: Aura,
+          options: {
+            cssLayer: 'tailwind-base, primevue, tailwind-utilities',
+            darkModeSelector:  '.dark',
+        }
+      }
+  }
+  },
   app: {
     pageTransition: { name: 'page', mode: 'out-in' }
   },
@@ -81,6 +112,7 @@ export default defineNuxtConfig({
       }
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
   },
   prisma:{
     autoSetupPrisma: true
@@ -96,5 +128,10 @@ export default defineNuxtConfig({
     }
 =======
 >>>>>>> df1469f0 (Initial commit)
+=======
+  },
+  build: {
+    transpile: ['fs']
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
   }
 })

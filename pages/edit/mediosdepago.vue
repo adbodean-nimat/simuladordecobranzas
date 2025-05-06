@@ -5,7 +5,11 @@
                 <h2>EDITAR LOS MEDIOS DE PAGO</h2>
             </div>
             <div class="grid gap-4">
+<<<<<<< HEAD
                 <Toolbar class="mb-1 border-none">
+=======
+                <Toolbar class="mb-1">
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                     <template #start>
                         <UButton @click="isOpenModalGeneral = true" icon="i-material-symbols-add-circle" size="md" square variant="soft">Agregar medio de pago</UButton>
                     </template>
@@ -26,14 +30,20 @@
                                 <UInput id="nombre" v-model="agregarDatosMP.nombre" fluid />
                             </div>
                             <div>
+<<<<<<< HEAD
                                 <label for="tipodepago" class="block font-bold mb-3">Tipo de pago</label>
                                 <!-- <UInput id="tipodepago" v-model="agregarDatosMP.tipodepago" fluid /> -->
                                 <USelect v-model="agregarDatosMP.tipodepago" :options="tipopago" option-attribute="label" value-attribute="value" fluid></USelect>
+=======
+                                <label for="tasas_interes" class="block font-bold mb-3">Tipo de pago</label>
+                                <UInput id="tasas_interes" v-model="agregarDatosMP.tipodepago" fluid />
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                             </div>
                             <div>
                                 <label for="estado" class="block font-bold mb-3">Estado</label>
                                 <USelect v-model="agregarDatosMP.estado" :options="statuses" option-attribute="label" value-attribute="value" />
                             </div>
+<<<<<<< HEAD
                             <div>
                                 <label for="dias" class="block font-bold mb-3">Días de la semana</label>
                                     <USelectMenu v-model="agregarDatosMP.dias" :options="dias" option-attribute="label" multiple by="id">
@@ -47,6 +57,8 @@
                                 <label for="financiacion" class="block font-bold mb-3">Mostrar en Costo de financiación</label>
                                 <USelect v-model="agregarDatosMP.financiacion" :options="mostrar" option-attribute="label" value-attribute="value" />
                             </div>
+=======
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                         </div>
                         <template #footer>
                             <div class="float-end pb-4">
@@ -74,6 +86,7 @@
                                             <UInput v-model="data[field]" fluid />
                                         </template>
                                     </Column>
+<<<<<<< HEAD
                                    <!--  <Column field="medio_pago" header="Medio de pago">
                                         <template #editor="{ data, field}">
                                             <UInput v-model="data[field]" fluid />
@@ -82,6 +95,11 @@
                                     <Column field="tipo_pago" header="Tipo de pago" sortable>
                                         <template #editor="{ data, field}">
                                              <USelect v-model="data[field]" :options="tipopago" option-attribute="label" value-attribute="value" placeholder="Seleccione un tipo de pago" fluid /> 
+=======
+                                    <Column field="tipo_pago" header="Tipo de pago" sortable>
+                                        <template #editor="{ data, field}">
+                                            <UInput v-model="data[field]" fluid />
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                                         </template>
                                     </Column>
                                     <Column field="estado" header="Estado">
@@ -96,6 +114,7 @@
                                             <Tag :value="slotProps.data.estado == true ? 'HABILITADO' : 'INHABILITADO'" :severity="getStatusLabel(slotProps.data.estado)" />
                                         </template>
                                     </Column>
+<<<<<<< HEAD
                                     <Column field="costo_financiacion" header="Mostrar en Costo de financiación?">
                                         <template #editor="{ data, field }">
                                             <Select v-model="data[field]" :options="mostrar" optionLabel="label" optionValue="value" placeholder="Seleccione un estado" fluid>
@@ -127,6 +146,8 @@
                                             <span v-else></span>
                                         </template>
                                     </Column>
+=======
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                                     <Column :rowEditor="true" style="width: 5%; min-width: 8rem" bodyStyle="text-align:right"></Column>
                                     <Column style="width: 5%;" bodyStyle="text-align:left">
                                         <template #body="{ data }">
@@ -135,7 +156,11 @@
                                     </Column>
                                     <template #expansion="slotProps">
                                         <div class="p-4">
+<<<<<<< HEAD
                                             <Toolbar class="mb-1 border-none">
+=======
+                                            <Toolbar class="mb-1">
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                                                 <template #start>
                                                     <UButton @click="isOpenModal = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
                                                 </template>
@@ -147,8 +172,13 @@
                                                     </template>
                                                 </Column>
                                                 <Column field="interes_base" header="Interés sobre base c/ máx. dto. financ.">
+<<<<<<< HEAD
                                                     <template #body="{data, field}">
                                                         <Tag :value="formatter_percent(data.interes_base)" :severity="'info'" />  
+=======
+                                                    <template #body="{ data, field }">
+                                                        {{ formatter_percent(data[field]) }}
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                                                     </template>
                                                     <template #editor="{ data, field}">
                                                         <UInput v-model="data[field]" fluid />
@@ -205,6 +235,7 @@
 
 <script setup lang="ts">
 definePageMeta({
+<<<<<<< HEAD
     middleware: ['auth', '3-editor']
 })
 import { usePromoStore } from '~/store/promo'
@@ -222,10 +253,21 @@ const tipopago = ref([
     { label: 'Contado Efectivo', value: 'CONTADO EFECTIVO' },
     { label: 'Cheque', value: 'CHEQ'}
 ])
+=======
+    middleware: ['auth']
+})
+const toast = useToast()
+const {data: data_parametrosgrales} = await useFetch('/api/parametrosgenerales')
+const {data: data_mediosdepagos, refresh: refresh_mediosdepagos} = await useFetch('/api/mediosdepagos')
+const editingRows = ref()
+const expandedRows = ref([])
+const editingRowsGroup = ref([])
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
 const statuses = ref([
     { label: 'HABILITADO', value: true },
     { label: 'INHABILITADO', value: false }
 ]);
+<<<<<<< HEAD
 const mostrar = ref([
     { label: 'SI', value: true },
     { label: 'NO', value: false }
@@ -239,6 +281,8 @@ const dias = ref([
     { id: 6, label: 'Sábado', value: 'Sábado' },
     { id: 0, label: 'Domingo', value: 'Domingo' }
 ])
+=======
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
 const isOpenModal = ref(false)
 const isOpenModalGeneral = ref(false)
 const agregarDatos = ref({
@@ -248,12 +292,17 @@ const agregarDatos = ref({
 const agregarDatosMP = ref({
     nombre: '',
     tipodepago: '',
+<<<<<<< HEAD
     medio_pago: '',
     estado: '',
     dias: [],
     financiacion: ''
 })
 
+=======
+    estado: ''
+})
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
 const maxdtofinanciero = data_parametrosgrales.value ? data_parametrosgrales.value[0].max_dto_financiero : 0
 
 const geUnaFactVariosMP = (e : number) => {
@@ -286,6 +335,7 @@ const getStatusLabel = (status : any) => {
     }
 };
 
+<<<<<<< HEAD
 const getMostrarLabel = (status : any) => {
     switch (status) {
         case true:
@@ -300,42 +350,66 @@ const getMostrarLabel = (status : any) => {
 };
 
 const createMedioPago = async () => {
+=======
+const createMedioPago = async () => {
+    console.log(agregarDatosMP)
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
     const res = await $fetch('/api/mediosdepagos', {
         method: 'POST',
         body: {
             estado: JSON.parse(agregarDatosMP.value?.estado),
             nombre: agregarDatosMP.value?.nombre,
+<<<<<<< HEAD
             medio_pago: agregarDatosMP.value?.nombre.trim().replace(/\s/g, '').toLowerCase(),
             tipo_pago: agregarDatosMP.value?.tipodepago,
             dias: agregarDatosMP.value?.dias,
             costo_financiacion: JSON.parse(agregarDatosMP.value?.financiacion)
+=======
+            medio_pago: agregarDatosMP.value?.nombre,
+            tipo_pago: agregarDatosMP.value?.tipodepago,
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
         }
     })
     toast.add({title: "Agregado correctamente"})
     isOpenModalGeneral.value = false
     refresh_mediosdepagos();
+<<<<<<< HEAD
     getPromoDia();
+=======
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
 }
 
 const onRowEditSave = async (e: any) => {
     let { newData, index} = e;
     const Id = newData.id
+<<<<<<< HEAD
     const mediopago = newData.nombre.trim().replace(/\s/g, '').toLowerCase()
     // console.log(newData.dias)
+=======
+
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
     const res = await $fetch('/api/mediosdepagos/'+Id , {
         method: 'PUT',
         body: {
             estado: newData.estado,
             nombre: newData.nombre,
+<<<<<<< HEAD
             medio_pago: mediopago,
             tipo_pago: newData.tipo_pago,
             dias: newData.dias,
             costo_financiacion: newData.costo_financiacion
+=======
+            medio_pago: newData.medio_pago,
+            tipo_pago: newData.tipo_pago
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
         }
     })
     toast.add({title: "Modificado correctamente"})
     refresh_mediosdepagos();
+<<<<<<< HEAD
     getPromoDia();
+=======
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
 }
 const removeId = async (e: any) => {
     const res = await $fetch('/api/mediosdepagos/'+e, {
@@ -352,10 +426,17 @@ const onExpandedRows = (newValue: any) => {
 const onCellEditComplete = async (e: any) => {
     let { data, newValue, field, index } = e;
     const datatoJson = JSON.stringify(field) + ': '+ newValue
+<<<<<<< HEAD
     // console.log(JSON.parse(JSON.stringify(datatoJson)))
     // console.log(data.uuid)
     // console.log(newValue)
     // console.log(field)
+=======
+    console.log(JSON.parse(JSON.stringify(datatoJson)))
+    console.log(data.uuid)
+    console.log(newValue)
+    console.log(field)
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
 
     const res = await $fetch('/api/mediosdepagos/interesbase/'+data.uuid, {
         method: 'PUT',
@@ -379,7 +460,11 @@ const removeIdInteresBase = async (e: string) => {
 }
 
 const createInteresBase = async (id: any) => {
+<<<<<<< HEAD
     // console.log(id)
+=======
+    console.log(id)
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
     const res = await $fetch('/api/mediosdepagos/interesbase/', {
         method: 'POST',
         body: {
@@ -398,6 +483,10 @@ const createInteresBase = async (id: any) => {
 const onRowExpand = (event: any) => {
     //console.log(event.data)
 }
+<<<<<<< HEAD
 </script>
 <style scoped>
 </style>
+=======
+</script>
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)

@@ -1,4 +1,5 @@
 import prisma from "~/lib/prisma";
+<<<<<<< HEAD
 import { DateTime } from "luxon";
 
 interface ParametrosGenerales {
@@ -14,10 +15,26 @@ interface ParametrosGenerales {
     dolar: string
     usuario_dolar: string
     fecha_actualizar_dolar: string
+=======
+
+interface ParametrosGenerales {
+    max_dto_financiero: string,
+    tolerncia_dif: string,
+    unidad_tiempo_cheq: string,
+    unidad_tiempo_tc: string,
+    abv_tarjetas_credito: string,
+    abv_tarjetas_debito: string,
+    tasa_iva: string,
+    fecha_alta: string
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
 }
 
 export default defineEventHandler(async (event) => {
   try{
+<<<<<<< HEAD
+=======
+
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
     const id = Number(event.context.params?.id)
     const body = await readBody<ParametrosGenerales>(event)
     const data = await prisma.simulador_cobranzas_parametros_generales.update({
@@ -30,11 +47,15 @@ export default defineEventHandler(async (event) => {
             abv_tarjetas_credito: body.abv_tarjetas_credito,
             abv_tarjetas_debito: body.abv_tarjetas_debito,
             tasa_iva: body.tasa_iva,
+<<<<<<< HEAD
             fecha_alta: body.fecha_alta,
             interes_diario: body.interes_diario,
             dolar: body.dolar,
             usuario_dolar: body.usuario_dolar,
             fecha_actualizar_dolar: DateTime.now().toISO()
+=======
+            fecha_alta: body.fecha_alta
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
         }
     })
     return data;

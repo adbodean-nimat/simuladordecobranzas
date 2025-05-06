@@ -2,6 +2,7 @@
     <div>
         <UContainer :ui="{ constrained: 'max-w-screen-2xl' }">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <div class="flex justify-center gap-2 items-center text-center p-4 text-base">
                 <h2>PARAMETROS GENERALES</h2>
                 <div class="justify-items-end" v-if="authenticated && rol.includes('Administrador') || authenticated && rol.includes('Editor')">
@@ -21,14 +22,30 @@
                             <div class="text-sea-green-800 dark:text-white text-center">
 =======
             <div class="text-center p-4 text-base">
+=======
+            <div class="flex justify-center gap-2 items-center text-center p-4 text-base">
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                 <h2>PARAMETROS GENERALES</h2>
+                <div class="justify-items-end" v-if="authenticated">
+                    <UButton icon="i-heroicons-pencil-square"
+                            size="sm"
+                            variant="soft"
+                            square
+                            label="Editar"
+                            to="/edit/parametros"
+                            :trailing="false"></UButton>
+                </div>
             </div>
             <div class="grid grid-cols-3 gap-4">
                 <div>
-                    <UAccordion default-open multiple color="sea-green" variant="solid" size="xl" open-icon="i-heroicons-null" close-icon="i-heroicons-null" :items="parametros1">
+                    <UAccordion default-open multiple variant="soft" size="xl" :items="parametros1">
                         <template #datos1 v-if="data_parametros">
+<<<<<<< HEAD
                             <div class="text-sea-green-900 dark:text-white text-center">
 >>>>>>> df1469f0 (Initial commit)
+=======
+                            <div class="text-sea-green-800 dark:text-white text-center">
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                                 <UTable 
                                     :ui="tableUI"
                                     :columns="columns1"
@@ -44,6 +61,7 @@
                 </div>
                 <div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <UAccordion default-open multiple variant="soft" size="xl" :items="parametros2">
                         <template #datos2 v-if="data_parametrosfacturas">
                             <div class="text-black dark:text-white text-center">
@@ -52,6 +70,11 @@
                         <template #datos2 v-if="data_parametrosfacturas">
                             <div class="text-sea-green-900 dark:text-white text-center">
 >>>>>>> df1469f0 (Initial commit)
+=======
+                    <UAccordion default-open multiple variant="soft" size="xl" :items="parametros2">
+                        <template #datos2 v-if="data_parametrosfacturas">
+                            <div class="text-black dark:text-white text-center">
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                                 <UTable 
                                     :ui="tableUI"
                                     :columns="columns2" 
@@ -62,11 +85,15 @@
                                     :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No items.' }"
                                     class="w-full" />
 <<<<<<< HEAD
+<<<<<<< HEAD
                                     <div class="flex justify-around text-left px-3 py-3.5 border-t border-primary dark:border-sea-green-900">
                                         <span>INTERES DIARIO a aplicar sobre base CONTADO EFECTIVO, para actualizar facturas con 61 días o más</span>
                                         <span>{{ interesDiario +'%'}}</span>
 =======
                                     <div class="flex justify-around text-left px-3 py-3.5 border-t border-sea-green-300 dark:border-sea-green">
+=======
+                                    <div class="flex justify-around text-left px-3 py-3.5 border-t border-primary dark:border-sea-green-900">
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                                         <span>INTERES DIARIO a aplicar sobre base CONTADO EFECTIVO, para actualizar facturas con 61 días o más</span>
                                         <span>0.417000%</span>
 >>>>>>> df1469f0 (Initial commit)
@@ -77,6 +104,7 @@
                 </div>
                 <div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <UAccordion default-open multiple variant="soft" size="xl" :items="parametros3">
                         <template #datos3 v-if="data_parametroscheques">
                             <div class="text-sea-green-800 dark:text-white text-center">
@@ -85,6 +113,11 @@
                         <template #datos3 v-if="data_parametroscheques">
                             <div class="text-sea-green-900 dark:text-white text-center">
 >>>>>>> df1469f0 (Initial commit)
+=======
+                    <UAccordion default-open multiple variant="soft" size="xl" :items="parametros3">
+                        <template #datos3 v-if="data_parametroscheques">
+                            <div class="text-sea-green-800 dark:text-white text-center">
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
                                 <UTable 
                                     :ui="tableUI"
                                     :columns="columns3" 
@@ -106,20 +139,30 @@
 
 <script setup lang="ts">
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '~/store/auth'
 const { authenticated, rol } = storeToRefs(useAuthStore());
 =======
 >>>>>>> df1469f0 (Initial commit)
+=======
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '~/store/auth'
+const { authenticated } = storeToRefs(useAuthStore());
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
 const {status: status_parametros, data: data_parametros} = await useFetch('/api/parametrosgenerales')
 const {status: status_facturas, data: data_parametrosfacturas} = await useFetch('/api/parametrosfacturas')
 const {status: status_cheques, data: data_parametroscheques } = await useFetch('/api/parametroscheques')
 const tableUI = {
 <<<<<<< HEAD
+<<<<<<< HEAD
     divide: 'divide-y divide-sea-green-600 dark:divide-sea-green-900',
 =======
     divide: 'divide-y divide-sea-green-300 dark:divide-sea-green',
 >>>>>>> df1469f0 (Initial commit)
+=======
+    divide: 'divide-y divide-sea-green-600 dark:divide-sea-green-900',
+>>>>>>> fbe786fb (Actualizado al 30-01-2025)
     th: {
         base: 'text-left rtl:text-right',
         padding: 'px-4 py-3.5',

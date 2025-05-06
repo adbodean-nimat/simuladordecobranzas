@@ -8,6 +8,10 @@ dist
 
 # Node dependencies
 node_modules
+<<<<<<< HEAD
+package-lock.json
+=======
+>>>>>>> df1469f0 (Initial commit)
 
 # Logs
 logs
@@ -19,7 +23,13 @@ logs
 .idea
 
 # Local env files
-.vscode
 .env
 .env.*
 !.env.example
+<<<<<<< HEAD
+
+# Crt Key
+*.crt
+*.key
+=======
+>>>>>>> df1469f0 (Initial commit)

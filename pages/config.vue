@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
     <div>
         <UContainer :ui="{ constrained: 'max-w-screen-2xl' }">
             <div class="text-center p-4 text-base">
@@ -164,10 +163,4 @@ const createUsuario = async () => {
     }
     refresh_usuarios();
 }
-=======
-    
-</template>
-
-<script setup lang="ts">
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
 </script>

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { Prisma } from "~/prisma/app/generated/prisma/client";
-=======
-import { Prisma } from "@prisma/client";
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
 import prisma from "~/lib/prisma";
 
 interface InteresBase {

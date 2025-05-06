@@ -4,13 +4,9 @@ interface MediosDePago {
     estado: boolean,
     nombre: string,
     medio_pago: string,
-<<<<<<< HEAD
     tipo_pago: string,
     dias: [],
     costo_financiacion: boolean
-=======
-    tipo_pago: string
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
 }
 
 export default defineEventHandler(async (event) => {
@@ -21,13 +17,9 @@ export default defineEventHandler(async (event) => {
             estado: body.estado,
             nombre: body.nombre,
             medio_pago: body.medio_pago,
-<<<<<<< HEAD
             tipo_pago: body.tipo_pago,
             dias: body.dias,
             costo_financiacion: body.costo_financiacion
-=======
-            tipo_pago: body.tipo_pago
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
         }
     })
     return data;

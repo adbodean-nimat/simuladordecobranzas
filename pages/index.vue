@@ -9,15 +9,7 @@
         <NuxtLink to="/parametros">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
-<<<<<<< HEAD
-<<<<<<< HEAD
               <UIcon name="i-heroicons-adjustments-horizontal-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
-=======
-              <UIcon name="i-heroicons-cog-solid" class="w-8 h-8 bg-sea-green-500 flex items-center" />
->>>>>>> df1469f0 (Initial commit)
-=======
-              <UIcon name="i-heroicons-adjustments-horizontal-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
             </template>
 
             
@@ -32,15 +24,7 @@
         <NuxtLink to="/financiacion">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
-<<<<<<< HEAD
-<<<<<<< HEAD
               <UIcon name="i-heroicons-percent-badge-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
-=======
-              <UIcon name="i-heroicons-percent-badge-solid" class="w-8 h-8 bg-sea-green-500 flex items-center" />
->>>>>>> df1469f0 (Initial commit)
-=======
-              <UIcon name="i-heroicons-percent-badge-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
             </template>
 
             
@@ -55,15 +39,7 @@
         <NuxtLink to="/tarjetas">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
-<<<<<<< HEAD
-<<<<<<< HEAD
               <UIcon name="i-heroicons-credit-card-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
-=======
-              <UIcon name="i-heroicons-credit-card-solid" class="w-8 h-8 bg-sea-green-500 flex items-center" />
->>>>>>> df1469f0 (Initial commit)
-=======
-              <UIcon name="i-heroicons-credit-card-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
             </template>
 
             
@@ -78,15 +54,7 @@
         <NuxtLink to="/simulador">
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
-<<<<<<< HEAD
-<<<<<<< HEAD
               <UIcon name="i-heroicons-currency-dollar-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
-=======
-              <UIcon name="i-heroicons-currency-dollar-solid" class="w-8 h-8 bg-sea-green-500 flex items-center" />
->>>>>>> df1469f0 (Initial commit)
-=======
-              <UIcon name="i-heroicons-currency-dollar-solid" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
             </template>
 
             
@@ -98,12 +66,7 @@
             </template>
           </UCard>
         </NuxtLink>
-<<<<<<< HEAD
-<<<<<<< HEAD
         <NuxtLink to="/simulador2">
-=======
-        <NuxtLink to="">
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
           <UCard :ui="Card" ref="wrapper"> 
             <template #header>
               <UIcon name="i-heroicons-currency-dollar" class="w-8 h-8 bg-primary dark:bg-sea-green-600 flex items-center" />
@@ -119,18 +82,8 @@
           </UCard>
         </NuxtLink>
         <!-- <UCard :ui="Card" ref="wrapper">
-<<<<<<< HEAD
           <template #header>
             <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-primary dark:bg-sea-green-600 flex items-center" />
-=======
-        <UCard :ui="Card" ref="wrapper">
-          <template #header>
-            <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-sea-green-500 flex items-center" />
->>>>>>> df1469f0 (Initial commit)
-=======
-          <template #header>
-            <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-primary dark:bg-sea-green-600 flex items-center" />
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
           </template>
 
           <template #footer>
@@ -139,29 +92,13 @@
         </UCard>
         <UCard :ui="Card" ref="wrapper">
           <template #header >
-<<<<<<< HEAD
-<<<<<<< HEAD
             <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-primary dark:bg-sea-green-600 flex items-center" />  
-=======
-            <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-sea-green-500 flex items-center" />  
->>>>>>> df1469f0 (Initial commit)
-=======
-            <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-primary dark:bg-sea-green-600 flex items-center" />  
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
           </template>
 
           <template #footer >
             
           </template>
-<<<<<<< HEAD
-<<<<<<< HEAD
         </UCard> -->
-=======
-        </UCard>
->>>>>>> df1469f0 (Initial commit)
-=======
-        </UCard> -->
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
       </div>
       
     </UContainer>
@@ -169,8 +106,6 @@
 </template>
 
 <script setup lang="ts">
-<<<<<<< HEAD
-<<<<<<< HEAD
 definePageMeta({
     title: 'Tablero - Simulador de cobranzas'
     })
@@ -184,27 +119,6 @@ const Card = {
           divide: 'divide-y divide-sea-green-200 dark:divide-sea-green-800',
           ring: 'ring-2 ring-sea-green-200 dark:ring-sea-green-800',
           rounded: 'rounded-md',
-=======
-
-=======
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
-definePageMeta({
-    title: 'Tablero - Simulador de cobranzas'
-    })
-
-const wrapper = ref<Array<HTMLElement | null>>([]);
-
-const Card = { 
-          base: '', 
-          background: 'bg-sea-green-50 dark:bg-sea-green-900',
-          divide: 'divide-y divide-sea-green-200 dark:divide-sea-green-800',
-          ring: 'ring-2 ring-sea-green-200 dark:ring-sea-green-800',
-<<<<<<< HEAD
-          rounded: 'rounded-lg',
->>>>>>> df1469f0 (Initial commit)
-=======
-          rounded: 'rounded-md',
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
           shadow: 'shadow',
           body: {
             base: '',

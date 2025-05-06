@@ -19,7 +19,10 @@ logs
 .idea
 
 # Local env files
-.vscode
 .env
 .env.*
 !.env.example
+
+# Crt Key
+*.crt
+*.key

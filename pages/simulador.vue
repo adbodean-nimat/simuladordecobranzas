@@ -13,43 +13,18 @@
             icon="clarity:dollar-line" 
             class="mb-8 max-w-2xl" 
             placeholder="Ingresar monto c/IVA" 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-            color="sea-green" 
->>>>>>> df1469f0 (Initial commit)
-=======
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
             v-model="monto" 
             v-maska="optionsMask"
           >
             <template #trailing>
-<<<<<<< HEAD
-<<<<<<< HEAD
               <span class="text-xs">ARS</span>
-=======
-              <span class="text-sea-green-500 sea-green:text-gray-400 text-xs">ARS</span>
->>>>>>> df1469f0 (Initial commit)
-=======
-              <span class="text-xs">ARS</span>
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
             </template>
           </UInput>
         </div>
         <div class="flex justify-center">
-<<<<<<< HEAD
           <template v-if="pagocerrado">
             <div class="flex flex-col w-full ">
               <UDivider label="¡¡PAGO CERRADO!!" type="dashed" :ui="{ label: 'text-sea-green-600 dark:text-sea-green-400 text-lg mb-2' }"/>
-=======
-          <template v-if="formData.mediospago?.map(item => item.calculable)[0] === '0.00'">
-            <div class="flex flex-col w-full ">
-<<<<<<< HEAD
-              <UDivider label="¡¡PAGO CERRADO!!" type="dashed" :ui="{ label: 'text-sea-green-500 dark:text-sea-green-400 text-lg mb-2' }"/>
->>>>>>> df1469f0 (Initial commit)
-=======
-              <UDivider label="¡¡PAGO CERRADO!!" type="dashed" :ui="{ label: 'text-sea-green-600 dark:text-sea-green-400 text-lg mb-2' }"/>
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
               <UTabs :items="itemsTabs">
                 <template #npc-npg="{ item }">
                   <div class="grid grid-cols-2 w-auto h-auto rounded-md gap-4 items-center">
@@ -76,15 +51,7 @@
                       </div>
                     </template>
                     <div><span>FINAL A FACTURAR y A COBRAR</span></div>
-<<<<<<< HEAD
-<<<<<<< HEAD
                     <div class="rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
-=======
-                    <div class=" rounded-md p-2 text-xl text-center bg-sea-green-500 dark:bg-sea-green-600">
->>>>>>> df1469f0 (Initial commit)
-=======
-                    <div class="rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
                       $ {{ formatterNumber.format(formData.totalimporte) }}
                     </div>
                   </div>
@@ -92,15 +59,6 @@
                 <template #pac="{ item }">
                   <div class="grid grid-cols-2 w-auto h-auto rounded-md gap-4 items-center">
                     <div class="text-lg">
-<<<<<<< HEAD
-=======
-                    
-                    </div>
-                    <div>
-                    
-                    </div>
-                    <div class="text-lg">
->>>>>>> df1469f0 (Initial commit)
                       <span>Ingresar en cabecera NPC, Dto. 2 -financiero-</span>
                     </div>
 
@@ -118,15 +76,7 @@
                       </div>
                     </template>
                     <div><span>FINAL A FACTURAR y A COBRAR</span></div>
-<<<<<<< HEAD
-<<<<<<< HEAD
                     <div class=" rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
-=======
-                    <div class=" rounded-md p-2 text-xl text-center bg-sea-green-500 dark:bg-sea-green-600">
->>>>>>> df1469f0 (Initial commit)
-=======
-                    <div class=" rounded-md p-2 text-xl text-center bg-primary-500 dark:bg-primary-400 text-white font-medium dark:text-gray-900">
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
                       $ {{ formatterNumber.format(formData.totalimporte) }}
                     </div>
                   </div>
@@ -136,7 +86,6 @@
             </div>              
             </template> 
         </div>
-<<<<<<< HEAD
         <div class="tab">
           <template v-if="formData.monto">
             <UButton @click="addMore" icon="i-material-symbols-add-circle" size="md" square variant="soft" class="mb-4">Agregar</UButton>
@@ -167,87 +116,12 @@
                     <template v-if="item.fecha">
                       <UFormGroup label="">
                         <UBadge size="lg">{{  item.dias + ' días' }}</UBadge>
-=======
-        <template v-if="formData.monto">
-        <UButton @click="addMore" icon="i-material-symbols-add-circle" size="md" square variant="soft" class="mb-4">Agregar</UButton>
-    
-        <div class="grid grid-rows-3 grid-flow-col gap-4">
-          <div class="row-span-3">
-            
-            <div class="grid grid-flow-col auto-rows-auto auto-cols-max gap-4 mb-2 p-2 items-end" v-for="(item, i) in formData.mediospago" :key="i">
-              <template v-if="data_mediosdepagos">
-                <UFormGroup>
-                  <UBadge size="lg" variant="soft">{{ i + 1 }}</UBadge>
-                </UFormGroup>
-              </template>
-              <template v-if="data_mediosdepagos">
-                <UFormGroup label="Medio de pago">
-                  <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.map(data => data.nombre)" v-model="item.nombre"/>
-                </UFormGroup>
-              </template>
-              <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
-                <UFormGroup label="Nro. cuota">
-                  <USelect color="white" variant="outline" placeholder="" :options="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map((data : any) => data.interes_base)[0].map((x:any) => x.nro_cuota)" v-model="item.cuota"/>
-                </UFormGroup>
-              </template>
-              <template v-if="item.nombre == 'CHEQUE'">
-                <UFormGroup label="Fecha">
-                  <UInput v-model="item.fecha" variant="outline" placeholder="" type="date"></UInput>
-                </UFormGroup>
-              </template>
-              <template v-if="item.nombre == 'CHEQUE'">
-                <template v-if="item.fecha">
-                <UFormGroup label="">
-                  <UBadge size="lg">{{  item.dias + ' días' }}</UBadge>
-                </UFormGroup>
-                </template>
-                <template v-else>
-                  <UFormGroup></UFormGroup>
-                </template>
-              </template>
-              <template v-if="item.nombre">
-                <UFormGroup label="Dto.">
-                  <template v-if="Number(item.dto) < 0">
-                    <UBadge size="lg" color="red">{{ item.dto +'%'}}</UBadge>
-                  </template>
-                  <template v-else>
-                    <UBadge size="lg">{{ item.dto +'%'}}</UBadge>
-                  </template>
-                </UFormGroup>
-              </template>
-              
-              <UFormGroup label="Importe a pagar">
-                <UInput v-model="item.importe" variant="outline" placeholder="" icon="clarity:dollar-line" v-maska="optionsMask"></UInput>
-              </UFormGroup>
-              
-              <UButton class="flex-none" @click="remove(i)" icon="i-heroicons-trash-solid" size="sm" square variant="soft"></UButton>
-              <UButton class="flex-none" @click="copyItem(i)" icon="i-heroicons-clipboard-document-solid" size="sm" square variant="soft"></UButton>  
-            </div>
-          </div>
-          <div class="col-span-2">
-            <div class="grid grid-flow-col auto-rows-auto auto-cols-max grid-cols-5 gap-4 mb-2 p-2 justify-start items-end" v-for="(item, y) in formData.mediospago" :key="y">
-                <div class="col-start-1 col-end-4">
-                  <template v-if="item.impacto">
-                    <UFormGroup size="2xs" label="Impacto sobre el neto de facturas, antes de descuento financiero">
-                      <UBadge size="lg" variant="solid">
-                        {{ '$ '+ formatterNumber.format(Number(item.impacto)) }}
-                      </UBadge>
-                    </UFormGroup>
-                  </template>
-                </div>
-                <div>
-                  <template v-if="formData.monto && item.dto">
-                    <template v-if="Number(item.calculable) > 0">
-                      <UFormGroup size="2xs" label="Importe deseable" @click="toast.add({ title: 'Copiado!' });copy(item.calculable)">
-                        <UBadge size="lg">{{'$ ' + formatterNumber.format(Number(item.calculable)) }}</UBadge>
->>>>>>> df1469f0 (Initial commit)
                       </UFormGroup>
                     </template>
                     <template v-else>
                       <UFormGroup></UFormGroup>
                     </template>
                   </template>
-<<<<<<< HEAD
                   <template v-if="item.nombre">
                     <UFormGroup label="Dto.">
                       <template v-if="Number(item.dto) < 0">
@@ -340,62 +214,11 @@
             </UModal>
           </template>
         </div>
-=======
-                </div>
-                <div>
-                  <template v-if="item.importe">
-                    <template v-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] == 'TC'">
-                      <UFormGroup size="xs" label="">
-                        <UBadge size="md" color="amber">{{ !item.importe ? item.cuota +' CUOTAS DE $ ' + formatterNumber.format(Number(formData.monto.replace(",","")) / Number(item.cuota)) : item.cuota + ' CUOTAS DE $ ' + formatterNumber.format((Number(item.importe.replace(",","")) / Number(item.cuota)))}}</UBadge>
-                      </UFormGroup>
-                    </template>
-                    <template v-else-if="data_mediosdepagos?.filter(data => data.nombre == item.nombre).map(x => x.tipo_pago)[0] !== 'TC'">
-                      <UFormGroup size="xs" label="">
-                        <UBadge size="md" color="amber">{{ item.nombre == "MAESTRO" || item.nombre == "VISA ELECTRON" ||  item.nombre == "CABAL DEBITO" ? 'DÉBITO $ ' + item.importe : item.nombre + ' $ ' + item.importe }}</UBadge>
-                      </UFormGroup>
-                    </template>
-                  </template>
-                </div>
-            </div>
-          </div>
-          <div class="col-span-2 row-span-2">
-                       
-          <!-- <pre>
-              {{ formData }}
-            </pre> -->
-          </div>
-        </div>
-        <UModal v-model="isOpen" prevent-close>
-          <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-            <template #header>
-              <div class="flex items-center justify-between">
-                <h3 class="text-base flex justify-center font-semibold leading-6 text-gray-900 dark:text-white">
-                  <UIcon :name="'i-heroicons-exclamation-circle'" size="md" class="h-6 w-6 mr-2 text-red-400 dark:text-red-500"  />
-                  Advertencia
-                </h3>
-                <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpen = false" />
-              </div>
-            </template>
-
-            <div>
-              <span> No aceptamos más de 60 días.</span>
-            </div>
-
-            <template #footer>
-              <div class="float-end pb-4">
-                <UButton label="Ok" icon="" @click="isOpen = false" variant="soft" />
-              </div>
-            </template>
-          </UCard>
-        </UModal>
-        </template>
->>>>>>> df1469f0 (Initial commit)
       </UContainer>
     </div>
 </template>
 
 <script setup lang="ts">
-<<<<<<< HEAD
 definePageMeta({
   title: 'VENTAS / ACOPIOS (con PRE)'
 })
@@ -408,26 +231,10 @@ const toast = useToast()
 const pagocerrado = ref(false)
 const isOpen = ref(false)
 const diaHoy = ref(DateTime.now().weekday)
-=======
-import type { MaskInputOptions} from 'maska'
-import { useClipboard } from '@vueuse/core'
-import { DateTime } from 'luxon'
-
-const toast = useToast()
-const isOpen = ref(false)
-
->>>>>>> df1469f0 (Initial commit)
 const optionsMask = reactive<MaskInputOptions>({
   number: {locale: 'es-US', fraction: 2}
 })
 
-<<<<<<< HEAD
-=======
-definePageMeta({
-  title: 'VENTAS / ACOPIOS (con PRE)'
-})
-
->>>>>>> df1469f0 (Initial commit)
 const itemsTabs = [{
   label: 'NPC-NPG',
   icon: 'i-heroicons-information-circle',
@@ -442,17 +249,13 @@ const itemsTabs = [{
     const {status: status_mediosdepagos, data: data_mediosdepagos} = await useFetch('/api/mediosdepagos')
     const {status: status_cheques, data: data_cheques} = await useFetch('/api/parametroscheques')
     const maxdtofinanciero = data_parametrosgrales.value ? data_parametrosgrales.value[0].max_dto_financiero : 0
-<<<<<<< HEAD
     const tolerencia = data_parametrosgrales.value ? data_parametrosgrales.value[0].tolerncia_dif : 0
-=======
->>>>>>> df1469f0 (Initial commit)
     const monto = ref()
     const cabacera = ref()
     const totalimporte = ref()
     const nrocuotas = ref()
     const formatter = new Intl.NumberFormat("es-US",{style: "currency", currency: "ARS", currencyDisplay: "symbol", minimumFractionDigits: 2})
     const formatterNumber = new Intl.NumberFormat("es-US",{minimumFractionDigits: 2, maximumFractionDigits: 2})
-<<<<<<< HEAD
 
     const dataMediosPagos: any = status_mediosdepagos.value == 'success' ? data_mediosdepagos.value?.filter(element =>  element.estado == true).map((data : any) => {
       
@@ -467,8 +270,6 @@ const itemsTabs = [{
       
     }) : ''
 
-=======
->>>>>>> df1469f0 (Initial commit)
     const formData = ref(
       {
         monto: monto, 
@@ -517,14 +318,11 @@ const itemsTabs = [{
       ]
     }
     watch(formData.value, async (newVal, oldVal)=>{
-<<<<<<< HEAD
 
       if(newVal.monto > 0){
         gsap.to(".tab", {duration: 1.4, x: 0, y: 10})
       }
 
-=======
->>>>>>> df1469f0 (Initial commit)
       let monto = formData.value.monto.replaceAll(",","");
       
       let totalImpacto = formData.value?.mediospago.reduce((acc, act)=> acc + Number(act.impacto), 0)
@@ -532,7 +330,6 @@ const itemsTabs = [{
       
       cabacera.value = totalImporte ? Number(totalImporte) >= Number(monto) ? 0.00 : ((Number(monto) - Number(totalImporte)) / Number(monto) * 100) : ''
       totalimporte.value = totalImporte ? Number(totalImporte) : ''
-<<<<<<< HEAD
       pagocerrado.value = Number(monto) > 0 ? totalImpacto >= (Number(monto) * (1-Number(tolerencia)/100)) && totalImpacto <= (Number(monto) * (1+Number(tolerencia)/100)) ? true : false : false
       formData.value.mediospago.forEach(item =>
        { 
@@ -540,36 +337,13 @@ const itemsTabs = [{
         const fechaHastaUltima = data_cheques.value?.findLast(data => data.hasta)?.hasta;
         //console.log(fechaHastaUltima)
         
-=======
-
-      formData.value.mediospago.forEach(item =>
-       { 
-<<<<<<< HEAD
->>>>>>> df1469f0 (Initial commit)
-=======
-        
-        const fechaHastaUltima = data_cheques.value?.findLast(data => data.hasta)?.hasta;
-        console.log(fechaHastaUltima)
-        
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
         const now = DateTime.now().toISODate()
         let fcheque = DateTime.fromISO(item.fecha)
         let fnow = DateTime.fromISO(now)
         let diff = fcheque.diff(fnow,['days']).toObject()
-<<<<<<< HEAD
-<<<<<<< HEAD
         //console.log(diff?.days ?? '')
         item.dias = diff?.days ? Number(diff.days).toString() : ''
         const aviso = Number(item.dias) >= Number(fechaHastaUltima) ? isOpen.value = true : false
-=======
-        item.dias = diff?.days ? Number(diff.days).toString() : ''
-        
->>>>>>> df1469f0 (Initial commit)
-=======
-        console.log(diff?.days ?? '')
-        item.dias = diff?.days ? Number(diff.days).toString() : ''
-        const aviso = Number(item.dias) >= Number(fechaHastaUltima) ? isOpen.value = true : false
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
         let importe = item.importe.replaceAll(",", "");
         const TC = data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.tipo_pago)[0]
         nrocuotas.value = ''
@@ -586,26 +360,11 @@ const itemsTabs = [{
         const itemDto2 = data_cheques.value?.find((element)=> Number(item.dias) >= Number(element.desde) && Number(item.dias) <= Number(element.hasta))
         
         item.dto = 
-<<<<<<< HEAD
-<<<<<<< HEAD
                 TC == 'TC' && item.cuota ? data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map((data: any) => data.interes_base?.filter((x:any) => x?.nro_cuota == item.cuota)).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0]
                 : TC == 'CHEQ' ? (itemDto2?.dto ? itemDto2?.dto : 0)
                 : data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.interes_base).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0] as any
 
 
-=======
-                TC == 'TC' && item.cuota ? data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.interes_base?.filter((x:any) => x?.nro_cuota == item.cuota)).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0]
-                : TC == 'CHEQ' ? (itemDto2?.dto ? itemDto2?.dto : 0)
-                : data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.interes_base).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0] as any
-
->>>>>>> df1469f0 (Initial commit)
-=======
-                TC == 'TC' && item.cuota ? data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map((data: any) => data.interes_base?.filter((x:any) => x?.nro_cuota == item.cuota)).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0]
-                : TC == 'CHEQ' ? (itemDto2?.dto ? itemDto2?.dto : 0)
-                : data_mediosdepagos.value?.filter(data => data.nombre == item.nombre).map(data => data.interes_base).map((data:any) => (100-((100 - (Number(maxdtofinanciero) / 100) * 100)*((1 + data[0]?.interes_base / 100)*100)/100)).toFixed(2))[0] as any
-
-
->>>>>>> fbe786fb (Actualizado al 30-01-2025)
         item.impacto = 
                 item.importe ?  (Number(importe) / (1 - Number(item.dto) / 100)).toFixed(2)
                 : '' as any 

@@ -80,7 +80,7 @@
                             <template #editor="{ data, field }">
                                 <Select v-model="data[field]" :options="roles" optionLabel="label" optionValue="value" placeholder="Seleccione un rol" fluid>
                                     <template #option="slotProps">
-                                        <Tag :value="slotProps.option.value == 1 ? 'Administrador' : 'Editor'" />
+                                        <Tag :value="slotProps.option.value == 1 ? 'Administrador': slotProps.option.value == 2 ? 'Editor' : 'Editor dólar'" />
                                     </template>
                                 </Select>
                             </template>

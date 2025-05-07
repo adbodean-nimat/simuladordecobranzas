@@ -145,7 +145,7 @@
                 <div class="grid grid-flow-col auto-rows-auto auto-cols-max gap-4 mb-2 p-2 items-end" v-for="(item, y) in formData.mediospago" :key="y">
                     <div class="col-start-1 col-end-4">
                       <template v-if="item.impacto">
-                        <UFormGroup label="Impacto sobre el neto de facturas, antes de descuento financiero">
+                        <UFormGroup label="Impacto sobre el neto de fra., antes de dto. financiero">
                           <UBadge size="lg" variant="solid">
                             {{ '$ '+ formatterNumber.format(Number(item.impacto)) }}
                           </UBadge>

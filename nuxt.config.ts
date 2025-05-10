@@ -5,10 +5,6 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
     layoutTransition: { name: 'layout', mode: 'out-in' },
   },
-  routeRules:{
-    '/': { prerender: true },
-    '/login': { prerender: true }
-  },
   runtimeConfig: {
     public: {
       apiToken: 'adadsadsasdfada',
@@ -21,18 +17,25 @@ export default defineNuxtConfig({
     port: 3000
   },
   compatibilityDate: '2024-04-03',
-  devtools: { enabled: true },
+  devtools: { 
+    enabled: true 
+  },
+  googleFonts: {
+    families: {
+      Inter: '200..700'
+    }
+  },
   modules: [
     '@nuxt/ui',
-    '@nuxt/fonts',
-    'nuxt-security',
     '@primevue/nuxt-module',
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     '@nuxt/icon',
-    'v-gsap-nuxt'
+    'v-gsap-nuxt',
+    'nuxt-security',
+    '@nuxtjs/google-fonts'
   ],
   experimental: {
     cookieStore: true

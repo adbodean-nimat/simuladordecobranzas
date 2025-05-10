@@ -1,11 +1,11 @@
 <template>
     <UContainer :ui="{ constrained: 'max-w-screen-2xl'}">
-      <nav class="flex flex-row items-center justify-between h-16"> 
-            <div>
+      <div class="flex flex-row items-center justify-between w-full h-16"> 
+            <div class="flex flex-row items-center">
                 <UHorizontalNavigation :ui="navbar" :links="links" />
             </div>
             
-            <div class="flex justify-end">
+            <div class="flex flex-row justify-end">
               <Dolar />
               <ClientOnly>
                 <UButton
@@ -20,10 +20,10 @@
                   <div class="w-5 h-5" />
                 </template>   
               </ClientOnly>
-                <template v-if="!authenticated" style="float: right">
-                  <UHorizontalNavigation :links="linkLogin"/>
-                </template>
-                <template v-if="authenticated" style="float: right">
+              <template v-if="!authenticated" class="justify-end float-right">
+                <UHorizontalNavigation :links="linkLogin"/>
+              </template>
+              <template v-if="authenticated" class="float-right">
                     <UDropdown :items="dropItems" :popper="{ placement: 'bottom-start' }">
                       <template v-if="avatar">
                         <UAvatar :src="'data:image/png;base64,'+ avatar" alt="Avatar" icon="i-material-symbols-account-circle" size="sm" color="gray" variant="ghost" :label="fullName" aria-label="Theme" />
@@ -92,7 +92,7 @@
                   <!-- <UHorizontalNavigation :links="linkLogout"/> -->
                 </template>
             </div>
-        </nav>
+          </div>
     </UContainer>
 </template>
 

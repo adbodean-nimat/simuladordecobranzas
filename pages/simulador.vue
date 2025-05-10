@@ -261,7 +261,7 @@ const itemsTabs = [{
       
       const esHoy = data.dias.some((dia: any) => dia.id == diaHoy.value)
 
-      console.log(esHoy)
+      //console.log(esHoy)
       return {
         name: data.nombre,
         disabled: data.dias == 0 ? false : esHoy ? false : true ,

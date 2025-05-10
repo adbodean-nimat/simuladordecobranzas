@@ -44,7 +44,7 @@
   definePageMeta({
     title: 'Costo de financiación'
     })
-  console.log(rol.value[0])
+  //console.log(rol.value[0])
   const data_tarjetas = ref()
   const data_tarjetas2 = ref()
   const sort = ref<{

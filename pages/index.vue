@@ -81,24 +81,6 @@
             </template>
           </UCard>
         </NuxtLink>
-        <!-- <UCard :ui="Card" ref="wrapper">
-          <template #header>
-            <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-primary dark:bg-sea-green-600 flex items-center" />
-          </template>
-
-          <template #footer>
-            
-          </template>
-        </UCard>
-        <UCard :ui="Card" ref="wrapper">
-          <template #header >
-            <UIcon name="i-heroicons-light-bulb" class="w-5 h-5 bg-primary dark:bg-sea-green-600 flex items-center" />  
-          </template>
-
-          <template #footer >
-            
-          </template>
-        </UCard> -->
       </div>
       
     </UContainer>

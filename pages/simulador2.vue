@@ -26,11 +26,12 @@
             </UModal>
           </UTooltip>
           
-              <USelectMenu icon="i-heroicons-funnel-solid" trailingIcon="i-heroicons-arrows-up-down-20-solid" color="primary" size="xl" variant="none" :options="['Cliente', 'Factura', 'Remito']" v-model="cambiarinput"></USelectMenu>
+          <USelectMenu icon="i-heroicons-funnel-solid" trailingIcon="i-heroicons-arrows-up-down-20-solid" color="primary" size="xl" variant="none" :options="['Cliente', 'Factura', 'Remito']" v-model="cambiarinput"></USelectMenu>
           
           <template v-if="cambiarinput == 'Factura'">
             <UButtonGroup size="xl" orientation="horizontal" :ui="{base: 'appearance-none', rounded: 'rounded-lg', form: 'form-input'}">
               <UInput 
+                name="search"
                 :ui="{base: 'w-64'}"
                 size="xl"
                 type="number" 
@@ -44,6 +45,7 @@
           <template v-if="cambiarinput == 'Remito'">
             <UButtonGroup size="xl" orientation="horizontal" :ui="{base: 'appearance-none', rounded: 'rounded-lg', form: 'form-input'}">
               <UInput 
+                name="search"
                 :ui="{base: 'w-64'}"
                 size="xl"
                 padded
@@ -57,7 +59,8 @@
           </template>
           <template v-if="cambiarinput == 'Cliente'">
             <UButtonGroup size="xl" orientation="horizontal" :ui="{base: 'appearance-none', rounded: 'rounded-lg', form: 'form-input'}">
-              <UInput 
+              <UInput
+                name="search" 
                 :ui="{base: 'w-64'}"
                 size="xl"
                 padded
@@ -520,7 +523,7 @@ const onUpdateSelection = (selectedRows: any[]) => {
   formData.value.dtofinanciero = (((Number(formData.value.descuento_debitos) / Number(formData.value.montofactura)) * 100)).toString()
 }
 const onUpdateSelection2 = (selectedRows: any[]) => {
-  console.log('Currently selected rows:', selectedRows)
+  //console.log('Currently selected rows:', selectedRows)
   formData.value.montoNC = selectedRows.reduce((acc : any, row : any) => acc + row.SALDO, 0)
   formData.value.monto2 = Number(selectedRows.reduce((acc : any, row : any) => acc + row.MONTO_COBRAR, 0)).toString()
 }
@@ -557,7 +560,7 @@ defineShortcuts({
     }
   },
   enter: { 
-    usingInput: true,
+    usingInput: 'search',
     handler: () => {
       cambiarinput.value == 'Cliente' ? consultaSaldosCliente() : cambiarinput.value == 'Factura' ? consultaSaldosFactura() : consultaSaldosRemito()
     }

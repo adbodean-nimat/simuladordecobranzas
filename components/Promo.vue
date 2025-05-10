@@ -26,7 +26,7 @@ const storePromoDia = usePromoStore()
 await callOnce(storePromoDia.getPromoDia)
 useIntervalFn(() => {
   storePromoDia.getPromoDia()
-}, 100000)
+}, 1000000)
 </script>
 <style scoped>
 .marquee_part {

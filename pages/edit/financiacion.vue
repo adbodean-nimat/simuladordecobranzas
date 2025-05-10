@@ -298,7 +298,7 @@ const onRowEditSave3 = async (e: any) => {
 }
 
 const removeIdVisaMasterNativa = async (e: any) => {
-    console.log(e)
+    //console.log(e)
     const res = await $fetch('/api/visamasternativa/'+e, {
         method: 'DELETE'
     })
@@ -307,7 +307,7 @@ const removeIdVisaMasterNativa = async (e: any) => {
 }
 
 const removeIdNaranja = async (e: any) => {
-    console.log(e)
+    //console.log(e)
     const res = await $fetch('/api/naranja/'+e, {
         method: 'DELETE'
     })
@@ -316,7 +316,7 @@ const removeIdNaranja = async (e: any) => {
 }
 
 const removeIdCuotaSimple = async (e: any) => {
-    console.log(e)
+    //console.log(e)
     const res = await $fetch('/api/cuotasimple/'+e, {
         method: 'DELETE'
     })

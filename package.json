@@ -58,6 +58,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/luxon": "^3.4.2",
+    "nuxt-pdfmake": "^0.0.46",
     "prisma": "^6.7.0"
   }
 }

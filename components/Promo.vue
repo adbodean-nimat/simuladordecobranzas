@@ -1,23 +1,23 @@
 <template v-if="promoDia">
-      <section class="marquee">
-        <div v-gsap.set="{xPercent: -20}" class="marquee_inner">
-          <div v-gsap.to="{ xPercent: -100, repeat: -1, duration: 20, ease: 'none' }" class="marquee_part">
-            <UIcon name="fxemoji:loudspeaker" /> PROMO DEL DÍA: {{ storePromoDia.datapromodia }}
-          </div>
-          <div v-gsap.to="{ xPercent: -100, repeat: -1, duration: 20, ease: 'none' }" class="marquee_part">
-            <UIcon name="fxemoji:loudspeaker" /> PROMO DEL DÍA: {{ storePromoDia.datapromodia }}
-          </div>
-          <div v-gsap.to="{ xPercent: -100, repeat: -1, duration: 20, ease: 'none' }" class="marquee_part">
-            <UIcon name="fxemoji:loudspeaker" /> PROMO DEL DÍA: {{ storePromoDia.datapromodia }}
-          </div>
-          <div v-gsap.to="{ xPercent: -100, repeat: -1, duration: 20, ease: 'none' }" class="marquee_part">
-            <UIcon name="fxemoji:loudspeaker" /> PROMO DEL DÍA: {{ storePromoDia.datapromodia }}
-          </div>
-          <div v-gsap.to="{ xPercent: -100, repeat: -1, duration: 20, ease: 'none' }" class="marquee_part">
-            <UIcon name="fxemoji:loudspeaker" /> PROMO DEL DÍA: {{ storePromoDia.datapromodia }}
-          </div>
-        </div>
-      </section>
+  <section class="marquee">
+    <div class="marquee_inner">
+      <div v-gsap.to="{ xPercent: -100, repeat: -1, duration: 20, ease: 'linear' }" class="marquee_part">
+        <UIcon name="fxemoji:loudspeaker" /> PROMO DEL DÍA: {{ storePromoDia.datapromodia }}
+      </div>
+      <div v-gsap.to="{ xPercent: -100, repeat: -1, duration: 20, ease: 'linear' }" class="marquee_part">
+        <UIcon name="fxemoji:loudspeaker" /> PROMO DEL DÍA: {{ storePromoDia.datapromodia }}
+      </div>
+      <div v-gsap.to="{ xPercent: -100, repeat: -1, duration: 20, ease: 'linear' }" class="marquee_part">
+        <UIcon name="fxemoji:loudspeaker" /> PROMO DEL DÍA: {{ storePromoDia.datapromodia }}
+      </div>
+      <div v-gsap.to="{ xPercent: -100, repeat: -1, duration: 20, ease: 'linear' }" class="marquee_part">
+        <UIcon name="fxemoji:loudspeaker" /> PROMO DEL DÍA: {{ storePromoDia.datapromodia }}
+      </div>
+      <div v-gsap.to="{ xPercent: -100, repeat: -1, duration: 20, ease: 'linear' }" class="marquee_part">
+        <UIcon name="fxemoji:loudspeaker" /> PROMO DEL DÍA: {{ storePromoDia.datapromodia }}
+      </div>
+    </div>
+  </section>
 </template>
 <script setup lang="ts">
 import { usePromoStore } from '~/store/promo';
@@ -48,9 +48,9 @@ useIntervalFn(() => {
 
 .marquee_inner {
   -webkit-font-smoothing: antialiased;
-    width: fit-content;
-    display: flex;
-    flex: auto;
-    flex-direction: row;
+  width: fit-content;
+  display: flex;
+  flex: auto;
+  flex-direction: row;
 }
 </style>

@@ -1,25 +1,23 @@
 import prisma from "~/lib/prisma";
 
 interface CostoFinanciacionNaranja {
-    cuotas: string,
-    tasas_interes: string
+  cuotas: string;
+  tasas_interes: string;
 }
 
 export default defineEventHandler(async (event) => {
-  try{
-
-    const id = Number(event.context.params?.id)
-    const body = await readBody<CostoFinanciacionNaranja>(event)
+  try {
+    const id = Number(event.context.params?.id);
+    const body = await readBody<CostoFinanciacionNaranja>(event);
     const data = await prisma.costo_financiacion_naranja.update({
-        where: { id },
-        data: {
-            cuotas: body.cuotas,
-            tasas_interes: body.tasas_interes 
-        }
-    })
+      where: { id },
+      data: {
+        cuotas: body.cuotas,
+        tasas_interes: body.tasas_interes,
+      },
+    });
     return data;
-  }
-  catch(error){
-    console.log(error)
+  } catch (error) {
+    console.error(error);
   }
 });

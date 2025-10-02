@@ -5,7 +5,13 @@ export default defineNuxtConfig({
     pageTransition: { name: "page", mode: "out-in" },
     layoutTransition: { name: "layout", mode: "out-in" },
   },
+  nitro: {
+    experimental: {
+      websocket: true,
+    },
+  },
   runtimeConfig: {
+    webhookSecret: "jlkjlkjñlkñlkj",
     public: {
       apiToken: "adadsadsasdfada",
       apiBase: "adadsadsasd",
@@ -28,16 +34,23 @@ export default defineNuxtConfig({
   modules: [
     "@nuxt/ui",
     "@primevue/nuxt-module",
-    "@pinia/nuxt",
-    "pinia-plugin-persistedstate/nuxt",
     "@nuxtjs/tailwindcss",
     "@nuxtjs/color-mode",
     "@nuxt/icon",
-    "v-gsap-nuxt",
     "nuxt-security",
     "@nuxtjs/google-fonts",
     "nuxt-pdfmake",
+    "@pinia/nuxt",
+    "pinia-plugin-persistedstate/nuxt",
+    "@vueuse/nuxt",
+    "v-gsap-nuxt",
   ],
+  vgsap: {
+    presets: [],
+    breakpoint: 768,
+    scroller: "",
+    composable: true,
+  },
   experimental: {
     cookieStore: true,
   },

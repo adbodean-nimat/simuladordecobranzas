@@ -1,17 +1,16 @@
 import prisma from "~/lib/prisma";
 
 export default defineEventHandler(async (event) => {
-  try{
+  try {
     const data = await prisma.costo_financiacion_naranja.findMany({
       orderBy: [
         {
-          id: 'asc',
-        }
-      ]
-    })
+          id: "asc",
+        },
+      ],
+    });
     return data;
-  }
-  catch(error){
-    console.log(error)
+  } catch (error) {
+    console.error(error);
   }
 });

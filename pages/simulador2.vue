@@ -658,7 +658,7 @@ const consultaSaldosCliente = async () => {
       },
       async onResponseError({ request, response, options }) {
         // Log error
-        console.log("[fetch response error]", request, response.status, response.body);
+        console.error("[fetch response error]", request, response.status, response.body);
       },
     });
     const array = response.filter((data: any) => data.CVCL_TIPO_VAR == 'FCA' || data.CVCL_TIPO_VAR == 'FCB').map((data: any) => {
@@ -794,7 +794,7 @@ const consultaSaldosRemito = async () => {
       },
       async onResponseError({ request, response, options }) {
         // Log error
-        console.log("[fetch response error]", request, response.status, response.body);
+        console.error("[fetch response error]", request, response.status, response.body);
       },
     });
     const array = response.filter((data: any) => data.CVCL_TIPO_VAR == 'FCA' || data.CVCL_TIPO_VAR == 'FCB').map((data: any) => {
@@ -926,7 +926,7 @@ const consultaSaldosFactura = async () => {
       },
       async onResponseError({ request, response, options }) {
         // Log error
-        console.log("[fetch response error]", request, response.status, response.body);
+        console.error("[fetch response error]", request, response.status, response.body);
       },
     });
     const array = response.map((data: any) => {
@@ -1029,7 +1029,7 @@ const consultaSaldosQR = async () => {
       },
       async onResponseError({ request, response, options }) {
         // Log error
-        console.log("[fetch response error]", request, response.status, response.body);
+        console.error("[fetch response error]", request, response.status, response.body);
       },
     });
     const array = response.map((data: any) => {

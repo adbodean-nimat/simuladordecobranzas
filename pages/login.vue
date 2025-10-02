@@ -1,6 +1,6 @@
 <template>
     <div>
-        <NuxtRouteAnnouncer />  
+        <NuxtRouteAnnouncer />
         <UContainer :ui="{ constrained: 'max-w-screen-sm' }">
             <div class="text-center p-4 text-lg font-bold">
                 <h2>Inicio sesión</h2>
@@ -32,9 +32,8 @@ definePageMeta({
     layout: 'login'
 })
 const toast = useToast()
+const { authenticated, roles } = storeToRefs(useAuthStore());
 const { authenticateUser } = useAuthStore();
-const { authenticated, roles} = storeToRefs(useAuthStore());
-
 const state = reactive({
     username: '',
     password: ''
@@ -47,62 +46,62 @@ const info = reactive({
 
 type Schema = z.output<typeof schema>
 const form = ref<Form<Schema>>()
-    const schema = z.object({
+const schema = z.object({
     username: z.string(),
     password: z.string()
 })
 const login = async (event: FormSubmitEvent<Schema>) => {
-        const response : any = await $fetch(runtimeConfig.public.apiLogin, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
-            body: {
-                username: state.username,
-                password: state.password
-            },
-            async onResponse({ request, response, options }) {
-                if(response.status === 400){
-                    toast.add({title: 'Usuario o contraseña incorrectos', description: 'Por favor, verifique sus credenciales.', icon:'i-heroicons-exclamation-circle', color:"red"});           
-                }
-                if (response.status === 500){
-                    toast.add({title:'Error interno del servidor', description: 'Por favor, intente más tarde.', icon:'i-heroicons-exclamation-circle', color:"red"});
-                }
-                
+    const response: any = await $fetch(runtimeConfig.public.apiLogin, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: {
+            username: state.username,
+            password: state.password
+        },
+        async onResponse({ request, response, options }) {
+            if (response.status === 400) {
+                toast.add({ title: 'Usuario o contraseña incorrectos', description: 'Por favor, verifique sus credenciales.', icon: 'i-heroicons-exclamation-circle', color: "red" });
             }
-        }).then((response : any) => {
-            return response
-        }).catch((err)=> console.log(err));
-
-        const response_roles = await $fetch('/api/roles');
-        const response_usuarios = await $fetch('/api/usuarios');
-
-        if (response && response_roles && response_usuarios) {
-            
-            roles.value = (response_usuarios as any[])?.map((user: any) => {
-                return {
-                    ...user,
-                    rol: (response_roles as any[])?.filter((rol: any) => rol.id === user.id_roles).map((rol: any) => rol.nombre) || []
-                }
-            }) || [];
-            
-            const isRol = roles.value.filter((user: any) => user.usuario_ad === state.username).map((user: any) => user.rol)[0]
-            
-            info.fullname = response.user.name
-            info.avatar = response.avatar
-
-            if (isRol === undefined){
-                throw toast.add({title:'Acceso denegado', description: 'No tienes permisos para acceder a esta aplicación.', icon:'i-heroicons-exclamation-circle', color:"red"});
+            if (response.status === 500) {
+                toast.add({ title: 'Error interno del servidor', description: 'Por favor, intente más tarde.', icon: 'i-heroicons-exclamation-circle', color: "red" });
             }
 
-            await authenticateUser({
-                username: state.username, 
-                avatar: info.avatar, 
-                fullname: info.fullname, 
-                rol: isRol
-            });
-
-            if (authenticated) {
-                await navigateTo('/')
-            }
         }
+    }).then((response: any) => {
+        return response
+    }).catch((err) => console.error(err));
+
+    const response_roles = await $fetch('/api/roles');
+    const response_usuarios = await $fetch('/api/usuarios');
+
+    if (response && response_roles && response_usuarios) {
+
+        roles.value = (response_usuarios as any[])?.map((user: any) => {
+            return {
+                ...user,
+                rol: (response_roles as any[])?.filter((rol: any) => rol?.id === user?.id_roles).map((rol: any) => rol?.nombre) || []
+            }
+        }) || [];
+
+        const isRol = roles?.value.filter((user: any) => user.usuario_ad === state.username).map((user: any) => user.rol)[0]
+
+        info.fullname = response?.user.name || ''
+        info.avatar = response?.avatar || ''
+
+        if (isRol === undefined) {
+            throw toast.add({ title: 'Acceso denegado', description: 'No tienes permisos para acceder a esta aplicación.', icon: 'i-heroicons-exclamation-circle', color: "red" });
+        }
+
+        await authenticateUser({
+            username: state?.username || '',
+            avatar: info?.avatar || '',
+            fullname: info?.fullname || '',
+            rol: isRol || []
+        });
+
+        if (authenticated) {
+            await navigateTo('/')
+        }
+    }
 };
 </script>

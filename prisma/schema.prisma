@@ -196,6 +196,68 @@ model filtro_clientes_plataforma {
   perfil_crediticio Json? @db.Json
 }
 
+model gdc_chapastiposqueladefinen {
+  id          Int     @id @default(autoincrement())
+  Cod_tipo    String? @db.VarChar(3)
+  Nombre_tipo String?
+}
+
+model gdc_clasif8artquesecompran {
+  id             Int     @id @default(autoincrement())
+  Cod_clasif8    String? @db.VarChar(4)
+  Nombre_clasif8 String?
+  Observacion    String?
+}
+
+model gdc_deposanoconsiderarparastock {
+  id           Int     @id @default(autoincrement())
+  Cod_Depos    String? @db.VarChar(3)
+  Nombre_Depos String?
+}
+
+model gdc_modosdestockminimo {
+  id                Int      @id @default(autoincrement())
+  Cod_modo_stock    Decimal? @db.Decimal
+  Nombre_modo_stock String?
+}
+
+model gdc_npstockcomprom_vtasespeciales_pendentregaaclientes {
+  id        Int     @id @default(autoincrement())
+  Cod_NP    String? @db.VarChar(3)
+  Nombre_NP String?
+
+  @@map("gdc_npstockcomprom-vtasespeciales-pendentregaaclientes")
+}
+
+model gdc_remitosdeventas {
+  id          Int     @id @default(autoincrement())
+  Cod_Comp    String? @db.VarChar(3)
+  Nombre_Comp String?
+}
+
+model gdd_clientes_distribuciones {
+  id                                Int      @id @default(autoincrement())
+  cod_cliente                       Decimal? @db.Decimal
+  nombre_cliente                    String?
+  perfilcomercial_cliente           String?
+  domicilio_cliente                 String?
+  zonas_distribucion_cliente        String?
+  nro_whatsapp_cliente              String?
+  rubros_ventas                     Json[]
+  habilitado                        Boolean?
+  localidad_cliente                 String?
+  provincia_cliente                 String?
+  nombre_zonas_distribucion_cliente String?
+}
+
+model gdd_parametros_distribuciones {
+  id                             Int      @id @default(autoincrement())
+  perfil_comercial_defecto       String?
+  dto_financiero                 Decimal? @db.Decimal
+  cant_dias_desde_cambios_precio Decimal? @db.Decimal
+  cant_modif_minimo              Decimal? @db.Decimal
+}
+
 model lista_de_precios_breve_uso_interno {
   id                Int     @id(map: "lista_de_precio_breve_uso_interno_pkey") @default(autoincrement())
   arts_articulo_emp String? @db.VarChar(30)

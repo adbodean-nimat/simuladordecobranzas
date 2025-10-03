@@ -40,9 +40,9 @@ export const useDolarStore = defineStore("dolar", {
     },
     listenWs() {
       const proto = location.protocol === "https:" ? "wss:" : "ws:";
-      /* console.log(
+      console.log(
         "Connecting WS to " + proto + "//" + location.host + "/ws/cotizaciones"
-      ); */
+      );
       const ws = new WebSocket(`${proto}//${location.host}/ws/cotizaciones`);
       ws.onmessage = (evt) => {
         const m = JSON.parse(evt.data);

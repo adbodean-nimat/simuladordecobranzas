@@ -20,7 +20,7 @@ function setSnapshot(row: any) {
 
 export default defineEventHandler(async (event) => {
   try {
-    const secret = useRuntimeConfig().webhookSecret as string | undefined;
+    const { webhookSecret: secret } = useRuntimeConfig(event);
     if (!secret) {
       console.error("FALTA NUXT_WEBHOOK_SECRET");
       setResponseStatus(event, 500);
@@ -39,6 +39,8 @@ export default defineEventHandler(async (event) => {
     const sig = getHeader(event, "x-webhook-signature") || "";
     const exp =
       "sha256=" + crypto.createHmac("sha256", secret).update(raw).digest("hex");
+    //console.log("sig:", sig);
+    //console.log("exp:", exp);
     if (sig !== exp) {
       console.error("Firma inválida");
       setResponseStatus(event, 400);

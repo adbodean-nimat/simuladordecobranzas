@@ -12,7 +12,7 @@
           <span class="italic">{{ DateTime.fromISO(storeDolar.fechaDolar || '').toLocaleString(DateTime.DATETIME_SHORT)
             + ' - ' + storeDolar.usuarioDolar }}</span>
         </template>
-        <UBadge class="w-max" size="lg" variant="soft">Dólar $ {{ formatterNumber.format(Number(storeDolar.dolarHoy)) }}
+        <UBadge class="w-max" size="lg" variant="soft">Dólar $ {{ formatterNumber.format(Number(dolarHoy)) }}
         </UBadge>
       </UTooltip>
     </div>
@@ -37,19 +37,18 @@ import { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia';
 import { useDolarStore } from '~/store/dolar'
 import { useAuthStore } from '~/store/auth'
-const authStore = useAuthStore()
-const { authenticated } = storeToRefs(authStore);
-//const { updateDolar } = useDolarStore()
-// import { useIntervalFn } from '@vueuse/core'
+const { authenticated } = storeToRefs(useAuthStore());
+const { dolarHoy } = storeToRefs(useDolarStore());
 const fullName = computed(() => authenticated.value ? useCookie('fullname').value : '');
 const formatterNumber = new Intl.NumberFormat("es-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 const storeDolar = useDolarStore()
-await callOnce(storeDolar.getDolar)
+//await callOnce(storeDolar.getDolar)
+//console.log("Dolar.vue - Dólar actual: " + dolarHoy.value)
 const toast = useToast()
 const edit = ref<boolean>(false)
 const onEditSave = async (dolar: number, user: string) => {
   useDolarStore().updateDolar(dolar, user);
-  storeDolar.getDolar();
+  useDolarStore().getDolar();
   edit.value = false;
   toast.add({ title: "Modificado correctamente" })
 }
@@ -63,6 +62,7 @@ defineShortcuts({
 })
 
 onMounted(() => {
+  useDolarStore().getDolar();
   useDolarStore().listenWs();
 })
 </script>

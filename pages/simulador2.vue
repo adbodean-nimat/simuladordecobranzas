@@ -1,8 +1,15 @@
 <template>
   <div>
     <UContainer :ui="{ constrained: 'max-w-screen-2xl' }">
-      <div class="text-center p-4 text-base">
+      <div class="flex justify-center gap-2 items-center text-center pt-4 text-base">
         <h2>CUENTAS A COBRAR</h2>
+        <div class="justify-items-end"
+          v-if="authenticated && rol.includes('Administrador') || authenticated && rol.includes('Editor')">
+          <UButton icon="i-heroicons-pencil-square" size="sm" variant="soft" square label="Editar tipos de comprobantes"
+            to="/edit/tiposdecomprobantes" :trailing="false"></UButton>
+        </div>
+      </div>
+      <div class="text-center pb-4 text-base">
         <p>Varias facturas, varios medios de pago.</p>
       </div>
       <div class="flex justify-center mb-8">
@@ -426,10 +433,13 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '~/store/auth';
+const { authenticated, rol } = storeToRefs(useAuthStore());
 import type { MaskInputOptions } from 'maska'
 import { useClipboard } from '@vueuse/core'
 import { formatDistanceStrict, differenceInCalendarDays } from "date-fns";
-import { es } from "date-fns/locale";
+import { da, es } from "date-fns/locale";
 import { DateTime } from 'luxon'
 import dayjs from 'dayjs'
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -485,6 +495,7 @@ const { data: data_parametrosgrales } = await useFetch('/api/parametrosgenerales
 const { status: status_mediosdepagos, data: data_mediosdepagos } = await useFetch('/api/mediosdepagos')
 const { status: status_facturas, data: data_facturas } = await useFetch('/api/parametrosfacturas')
 const { status: status_cheques, data: data_cheques } = await useFetch('/api/parametroscheques')
+const { status: status_tiposdecomprobantes, data: data_tiposdecomprobantes } = await useFetch('/api/tiposdecomprobantes')
 const formatter = new Intl.NumberFormat("es-US", { style: "currency", currency: "ARS", currencyDisplay: "symbol", minimumFractionDigits: 2 })
 const formatterNumber = new Intl.NumberFormat("es-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 const config = useRuntimeConfig()
@@ -577,7 +588,7 @@ const optionsMask = reactive<MaskInputOptions>({
 })
 
 definePageMeta({
-  title: 'CUENTAS A COBRAR'
+  title: 'Cuentas a Cobrar - Simulador de Cobranzas',
 })
 defineShortcuts({
   Q: {
@@ -661,7 +672,10 @@ const consultaSaldosCliente = async () => {
         console.error("[fetch response error]", request, response.status, response.body);
       },
     });
-    const array = response.filter((data: any) => data.CVCL_TIPO_VAR == 'FCA' || data.CVCL_TIPO_VAR == 'FCB').map((data: any) => {
+    const array = response.filter((item: any) => {
+      const dataTipo = data_tiposdecomprobantes.value?.filter(datatipo => datatipo.signo?.includes('Débito')) || []
+      return item.CVCL_TIPO_VAR == dataTipo?.find(find => find.codigo == item.CVCL_TIPO_VAR)?.codigo
+    }).map((data: any) => {
       const toNow = formatDistanceStrict(new Date(), data.FECHA_EMI, {
         unit: 'day',
         locale: es
@@ -700,7 +714,10 @@ const consultaSaldosCliente = async () => {
         MONTO: ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100) : 0) / 100))
       }
     })
-    getdata.dataNC = response.filter((data: any) => data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB').map((data: any) => {
+    getdata.dataNC = response.filter((item: any) => {
+      const dataTipo = data_tiposdecomprobantes.value?.filter(datatipo => datatipo.signo?.includes('Crédito')) || []
+      return item.CVCL_TIPO_VAR == dataTipo?.find(find => find.codigo == item.CVCL_TIPO_VAR)?.codigo
+    }).map((data: any) => {
       const toNow = formatDistanceStrict(new Date(), data.FECHA_EMI, {
         unit: 'day',
         locale: es
@@ -797,7 +814,10 @@ const consultaSaldosRemito = async () => {
         console.error("[fetch response error]", request, response.status, response.body);
       },
     });
-    const array = response.filter((data: any) => data.CVCL_TIPO_VAR == 'FCA' || data.CVCL_TIPO_VAR == 'FCB').map((data: any) => {
+    const array = response.filter((item: any) => {
+      const dataTipo = data_tiposdecomprobantes.value?.filter(datatipo => datatipo.signo?.includes('Débito')) || []
+      return item.CVCL_TIPO_VAR == dataTipo?.find(find => find.codigo == item.CVCL_TIPO_VAR)?.codigo
+    }).map((data: any) => {
       const toNow = formatDistanceStrict(new Date(), data.FECHA_EMI, {
         unit: 'day',
         locale: es
@@ -836,7 +856,10 @@ const consultaSaldosRemito = async () => {
         MONTO: ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100) : 0) / 100))
       }
     })
-    getdata.dataNC = response.filter((data: any) => data.CVCL_TIPO_VAR == 'NCA' || data.CVCL_TIPO_VAR == 'NCB' || data.CVCL_TIPO_VAR == 'CCA' || data.CVCL_TIPO_VAR == 'CCB').map((data: any) => {
+    /* getdata.dataNC = response.filter((item: any) => {
+      const dataTipo = data_tiposdecomprobantes.value?.filter(datatipo => datatipo.signo?.includes('Crédito')) || []
+      return item.CVCL_TIPO_VAR == dataTipo?.find(find => find.codigo == item.CVCL_TIPO_VAR)?.codigo
+    }).map((data: any) => {
       const toNow = formatDistanceStrict(new Date(), data.FECHA_EMI, {
         unit: 'day',
         locale: es
@@ -873,7 +896,7 @@ const consultaSaldosRemito = async () => {
         MONTO_COBRAR: -data.SALDO,
         MONTO: 0
       }
-    })
+    }) */
     if (array.length == 0) {
       toast.add({ title: 'No encuentro remito con saldo.', description: 'Por favor, ingrese otro nro. de cliente.', icon: 'i-heroicons-exclamation-circle', color: "red" });
       return

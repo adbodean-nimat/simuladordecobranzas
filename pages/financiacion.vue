@@ -9,7 +9,7 @@
             to="/edit/mediosdepago" :trailing="false"></UButton>
         </div>
       </div>
-      <div class="text-center p-4 text-base">
+      <div class="text-center pb-4 text-base">
         <p>Recargos financieros</p>
       </div>
       <div class="tab">

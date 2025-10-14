@@ -248,6 +248,7 @@ model gdd_clientes_distribuciones {
   localidad_cliente                 String?
   provincia_cliente                 String?
   nombre_zonas_distribucion_cliente String?
+  contacto                          String?
 }
 
 model gdd_parametros_distribuciones {
@@ -358,6 +359,13 @@ model simulador_cobranzas_roles {
   nombre                       String?
   descripcion                  String?
   simulador_cobranzas_usuarios simulador_cobranzas_usuarios[]
+}
+
+model simulador_cobranzas_tipos_de_comprobantes {
+  id     Int     @id @default(autoincrement())
+  codigo String? @db.VarChar(3)
+  nombre String?
+  signo  String?
 }
 
 model simulador_cobranzas_usuarios {

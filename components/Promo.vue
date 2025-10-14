@@ -1,5 +1,5 @@
-<template v-if="promoDia">
-  <div class="marquee bg-sea-green-800" @mouseenter="pauseMarquee" @mouseleave="playMarquee">
+<template>
+  <div v-if="promoDia" class="marquee bg-sea-green-800" @mouseenter="pauseMarquee" @mouseleave="playMarquee">
     <div class="marquee-container overflow-hidden">
       <div ref="marqueeContent" class="marquee-content whitespace-nowrap">
         <span class="marquee_part">
@@ -52,7 +52,7 @@ import { usePromoStore } from '~/store/promo';
 import { useIntervalFn } from '@vueuse/core'
 const storePromoDia = usePromoStore()
 await callOnce(storePromoDia.getPromoDia)
-const { datapromodia } = storeToRefs(usePromoStore())
+const { datapromodia, promoDia } = storeToRefs(usePromoStore())
 
 useIntervalFn(() => {
   storePromoDia.getPromoDia()

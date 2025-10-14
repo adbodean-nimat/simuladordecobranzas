@@ -11,18 +11,19 @@
                             <div class="text-sea-green-900 dark:text-white text-center">
                                 <Toolbar class="mb-1 border-none">
                                     <template #start>
-                                        <UButton @click="isOpenModal = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
+                                        <UButton @click="isOpenModal = true" icon="i-material-symbols-add-circle"
+                                            size="sm" square variant="soft">Agregar</UButton>
                                     </template>
                                 </Toolbar>
-                                <DataTable :value="data_parametros" editMode="row" v-model:editingRows="editingRows" dataKey="id" @row-edit-save="onRowEditSave1"
-                                    :pt="{
-                                        table: { class: 'w-full'},
-                                        columnHeaderContent: { class: '!text-gray-500 dark:!text-gray-400'},
+                                <DataTable :value="data_parametros" editMode="row" v-model:editingRows="editingRows"
+                                    dataKey="id" @row-edit-save="onRowEditSave1" :pt="{
+                                        table: { class: 'w-full' },
+                                        columnHeaderContent: { class: '!text-gray-500 dark:!text-gray-400' },
                                         headerrow: { class: 'border-solid border-b border-sea-green-600 dark:border-sea-green-900' },
                                         bodyrow: { class: 'border-solid border-t border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400' },
                                         column: {
-                                            bodycell: ({ state } : any) => ({
-                                                style:  state['d_editing']&&'padding-top: 0.75rem; padding-bottom: 0.75rem'
+                                            bodycell: ({ state }: any) => ({
+                                                style: state['d_editing'] && 'padding-top: 0.75rem; padding-bottom: 0.75rem'
                                             })
                                         }
                                     }">
@@ -71,10 +72,13 @@
                                             <UInput v-model="data[field]" fluid />
                                         </template>
                                     </Column>
-                                    <Column :rowEditor="true" style="width: 5%; min-width: 8rem" bodyStyle="text-align:right"></Column>
+                                    <Column :rowEditor="true" style="width: 5%; min-width: 8rem"
+                                        bodyStyle="text-align:right"></Column>
                                     <Column style="width: 5%;" bodyStyle="text-align:left">
                                         <template #body="{ data }">
-                                            <UButton class="flex-none" icon="i-heroicons-trash-solid" size="sm" variant="link" color="red" squre @click="removeIdParametros(data.id)"></UButton> 
+                                            <UButton class="flex-none" icon="i-heroicons-trash-solid" size="sm"
+                                                variant="link" color="red" squre @click="removeIdParametros(data.id)">
+                                            </UButton>
                                         </template>
                                     </Column>
                                 </DataTable>
@@ -82,44 +86,61 @@
                                     <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
                                         <template #header>
                                             <div class="flex items-center justify-between">
-                                                <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                                                Agregar datos
+                                                <h3
+                                                    class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                                                    Agregar datos
                                                 </h3>
-                                                <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpenModal = false" />
+                                                <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"
+                                                    class="-my-1" @click="isOpenModal = false" />
                                             </div>
                                         </template>
 
                                         <div class="grid grid-rows-7 gap-4">
                                             <div class="col-span">
-                                                <label for="max_dto_financiero" class="block font-bold mb-3">MAXIMO DTO.FINANCIERO</label>
-                                                <UInput id="max_dto_financiero" v-model="agregarDatos.max_dto_financiero" fluid />
+                                                <label for="max_dto_financiero" class="block font-bold mb-3">MAXIMO
+                                                    DTO.FINANCIERO</label>
+                                                <UInput id="max_dto_financiero"
+                                                    v-model="agregarDatos.max_dto_financiero" fluid />
                                             </div>
                                             <div class="col-span">
-                                                <label for="tolerncia_dif" class="block font-bold mb-3">TOLERENCIA DIFERENCIA PARA CERRAR PAGOS</label>
+                                                <label for="tolerncia_dif" class="block font-bold mb-3">TOLERENCIA
+                                                    DIFERENCIA PARA CERRAR PAGOS</label>
                                                 <UInput id="tolerncia_dif" v-model="agregarDatos.tolerncia_dif" fluid />
                                             </div>
                                             <div class="col-span">
-                                                <label for="unidad_tiempo_cheq" class="block font-bold mb-3">UNIDAD DE TIEMPO PARA CHEQUES</label>
-                                                <UInput id="unidad_tiempo_cheq" v-model="agregarDatos.unidad_tiempo_cheq" fluid />
+                                                <label for="unidad_tiempo_cheq" class="block font-bold mb-3">UNIDAD DE
+                                                    TIEMPO PARA CHEQUES</label>
+                                                <UInput id="unidad_tiempo_cheq"
+                                                    v-model="agregarDatos.unidad_tiempo_cheq" fluid />
                                             </div>
                                             <div class="col-span">
-                                                <label for="unidad_tiempo_tc" class="block font-bold mb-3">UNIDAD DE TIEMPO PARA TARJETAS DE CREDITO</label>
-                                                <UInput id="unidad_tiempo_tc" v-model="agregarDatos.unidad_tiempo_tc" fluid />
+                                                <label for="unidad_tiempo_tc" class="block font-bold mb-3">UNIDAD DE
+                                                    TIEMPO PARA TARJETAS DE
+                                                    CREDITO</label>
+                                                <UInput id="unidad_tiempo_tc" v-model="agregarDatos.unidad_tiempo_tc"
+                                                    fluid />
                                             </div>
                                             <div class="col-span">
-                                                <label for="abv_tarjetas_credito" class="block font-bold mb-3">ABREVIATURA PARA TARJETAS DE CREDITO</label>
-                                                <UInput id="abv_tarjetas_credito" v-model="agregarDatos.abv_tarjetas_credito" fluid />
+                                                <label for="abv_tarjetas_credito"
+                                                    class="block font-bold mb-3">ABREVIATURA PARA TARJETAS DE
+                                                    CREDITO</label>
+                                                <UInput id="abv_tarjetas_credito"
+                                                    v-model="agregarDatos.abv_tarjetas_credito" fluid />
                                             </div>
                                             <div class="col-span">
-                                                <label for="abv_tarjetas_debito" class="block font-bold mb-3">ABREVIATURA PARA TARJETAS DE DEBITO</label>
-                                                <UInput id="abv_tarjetas_debito" v-model="agregarDatos.abv_tarjetas_debito" fluid />
+                                                <label for="abv_tarjetas_debito"
+                                                    class="block font-bold mb-3">ABREVIATURA PARA TARJETAS DE
+                                                    DEBITO</label>
+                                                <UInput id="abv_tarjetas_debito"
+                                                    v-model="agregarDatos.abv_tarjetas_debito" fluid />
                                             </div>
                                             <div class="col-span">
                                                 <label for="tasa_iva" class="block font-bold mb-3">TASA IVA</label>
                                                 <UInput id="tasa_iva" v-model="agregarDatos.tasa_iva" fluid />
                                             </div>
                                             <div class="col-span">
-                                                <label for="tasa_iva" class="block font-bold mb-3">INTERÉS DIARIO PARA ACTUALIZAR FACTURAS</label>
+                                                <label for="tasa_iva" class="block font-bold mb-3">INTERÉS DIARIO PARA
+                                                    ACTUALIZAR FACTURAS</label>
                                                 <UInput id="tasa_iva" v-model="agregarDatos.interes_diario" fluid />
                                             </div>
                                             <div class="col-span">
@@ -129,8 +150,10 @@
                                         </div>
                                         <template #footer>
                                             <div class="float-end pb-4">
-                                                <UButton label="Cancelar" icon="i-heroicons-x-mark-20-solid" @click="isOpenModal = false" variant="link" color="black" />
-                                                <UButton label="Guardar" icon="i-heroicons-check" @click="submitCreate1"  variant="soft"/>
+                                                <UButton label="Cancelar" icon="i-heroicons-x-mark-20-solid"
+                                                    @click="isOpenModal = false" variant="link" color="black" />
+                                                <UButton label="Guardar" icon="i-heroicons-check" @click="submitCreate1"
+                                                    variant="soft" />
                                             </div>
                                         </template>
                                     </UCard>
@@ -145,18 +168,19 @@
                             <div class="text-sea-green-900 dark:text-white text-center">
                                 <Toolbar class="mb-1 border-none">
                                     <template #start>
-                                        <UButton @click="isOpenModal2 = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
+                                        <UButton @click="isOpenModal2 = true" icon="i-material-symbols-add-circle"
+                                            size="sm" square variant="soft">Agregar</UButton>
                                     </template>
                                 </Toolbar>
-                                <DataTable :value="data_parametrosfacturas" editMode="row" v-model:editingRows="editingRows2" dataKey="id" @row-edit-save="onRowEditSave2"
-                                    :pt="{
-                                        table: { class: 'w-full'},
-                                        columnHeaderContent: { class: '!text-gray-500 dark:!text-gray-400'},
+                                <DataTable :value="data_parametrosfacturas" editMode="row"
+                                    v-model:editingRows="editingRows2" dataKey="id" @row-edit-save="onRowEditSave2" :pt="{
+                                        table: { class: 'w-full' },
+                                        columnHeaderContent: { class: '!text-gray-500 dark:!text-gray-400' },
                                         headerrow: { class: 'border-solid border-b border-sea-green-600 dark:border-sea-green-900' },
                                         bodyrow: { class: 'border-solid border-t border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400' },
                                         column: {
-                                            bodycell: ({ state } : any) => ({
-                                                style:  state['d_editing']&&'padding-top: 0.75rem; padding-bottom: 0.75rem'
+                                            bodycell: ({ state }: any) => ({
+                                                style: state['d_editing'] && 'padding-top: 0.75rem; padding-bottom: 0.75rem'
                                             })
                                         }
                                     }">
@@ -175,10 +199,13 @@
                                             <UInput v-model="data[field]" fluid />
                                         </template>
                                     </Column>
-                                    <Column :rowEditor="true" style="width: 5%; min-width: 8rem" bodyStyle="text-align:right"></Column>
+                                    <Column :rowEditor="true" style="width: 5%; min-width: 8rem"
+                                        bodyStyle="text-align:right"></Column>
                                     <Column style="width: 5%;" bodyStyle="text-align:left">
                                         <template #body="{ data }">
-                                            <UButton class="flex-none" icon="i-heroicons-trash-solid" size="sm" variant="link" color="red" squre @click="removeIdParametrosFacturas(data.id)"></UButton> 
+                                            <UButton class="flex-none" icon="i-heroicons-trash-solid" size="sm"
+                                                variant="link" color="red" squre
+                                                @click="removeIdParametrosFacturas(data.id)"></UButton>
                                         </template>
                                     </Column>
                                 </DataTable>
@@ -186,16 +213,19 @@
                                     <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
                                         <template #header>
                                             <div class="flex items-center justify-between">
-                                                <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                                                Agregar datos
+                                                <h3
+                                                    class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                                                    Agregar datos
                                                 </h3>
-                                                <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpenModal2 = false" />
+                                                <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"
+                                                    class="-my-1" @click="isOpenModal2 = false" />
                                             </div>
                                         </template>
 
                                         <div class="grid grid-rows-7 gap-4">
                                             <div class="col-span">
-                                                <label for="max_dto_financiero" class="block font-bold mb-3">DESDE</label>
+                                                <label for="max_dto_financiero"
+                                                    class="block font-bold mb-3">DESDE</label>
                                                 <UInput id="max_dto_financiero" v-model="agregarDatos2.desde" fluid />
                                             </div>
                                             <div class="col-span">
@@ -203,23 +233,29 @@
                                                 <UInput id="tolerncia_dif" v-model="agregarDatos2.hasta" fluid />
                                             </div>
                                             <div class="col-span">
-                                                <label for="unidad_tiempo_cheq" class="block font-bold mb-3">DESCUENTO</label>
+                                                <label for="unidad_tiempo_cheq"
+                                                    class="block font-bold mb-3">DESCUENTO</label>
                                                 <UInput id="unidad_tiempo_cheq" v-model="agregarDatos2.dto" fluid />
                                             </div>
                                         </div>
 
                                         <template #footer>
                                             <div class="float-end pb-4">
-                                                <UButton label="Cancelar" icon="i-heroicons-x-mark-20-solid" @click="isOpenModal2 = false" variant="link" color="black" />
-                                                <UButton label="Guardar" icon="i-heroicons-check" @click="submitCreate2"  variant="soft"/>
+                                                <UButton label="Cancelar" icon="i-heroicons-x-mark-20-solid"
+                                                    @click="isOpenModal2 = false" variant="link" color="black" />
+                                                <UButton label="Guardar" icon="i-heroicons-check" @click="submitCreate2"
+                                                    variant="soft" />
                                             </div>
                                         </template>
                                     </UCard>
                                 </UModal>
-                                    <div class="flex justify-around text-left px-3 py-3.5 border-t border-sea-green-600 dark:border-sea-green-900">
-                                        <span>INTERES DIARIO a aplicar sobre base CONTADO EFECTIVO, para actualizar facturas con 61 días o más</span>
-                                        <span>0.417000%</span>
-                                    </div>
+                                <div
+                                    class="flex justify-around text-left px-3 py-3.5 border-t border-sea-green-600 dark:border-sea-green-900">
+                                    <span>INTERES DIARIO a aplicar sobre base CONTADO EFECTIVO, para actualizar facturas
+                                        con 61 días o
+                                        más</span>
+                                    <span>0.417000%</span>
+                                </div>
                             </div>
                         </template>
                     </UAccordion>
@@ -230,18 +266,19 @@
                             <div class="text-sea-green-900 dark:text-white text-center">
                                 <Toolbar class="mb-1 border-none">
                                     <template #start>
-                                        <UButton @click="isOpenModal3 = true" icon="i-material-symbols-add-circle" size="sm" square variant="soft">Agregar</UButton>
+                                        <UButton @click="isOpenModal3 = true" icon="i-material-symbols-add-circle"
+                                            size="sm" square variant="soft">Agregar</UButton>
                                     </template>
                                 </Toolbar>
-                                <DataTable :value="data_parametroscheques" editMode="row" v-model:editingRows="editingRows3" dataKey="id" @row-edit-save="onRowEditSave3"
-                                    :pt="{
-                                        table: { class: 'w-full'},
-                                        columnHeaderContent: { class: '!text-gray-500 dark:!text-gray-400'},
+                                <DataTable :value="data_parametroscheques" editMode="row"
+                                    v-model:editingRows="editingRows3" dataKey="id" @row-edit-save="onRowEditSave3" :pt="{
+                                        table: { class: 'w-full' },
+                                        columnHeaderContent: { class: '!text-gray-500 dark:!text-gray-400' },
                                         headerrow: { class: 'border-solid border-b border-sea-green-600 dark:border-sea-green-900' },
                                         bodyrow: { class: 'border-solid border-t border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400' },
                                         column: {
-                                            bodycell: ({ state } : any) => ({
-                                                style:  state['d_editing']&&'padding-top: 0.75rem; padding-bottom: 0.75rem'
+                                            bodycell: ({ state }: any) => ({
+                                                style: state['d_editing'] && 'padding-top: 0.75rem; padding-bottom: 0.75rem'
                                             })
                                         }
                                     }">
@@ -260,10 +297,13 @@
                                             <UInput v-model="data[field]" fluid />
                                         </template>
                                     </Column>
-                                    <Column :rowEditor="true" style="width: 5%; min-width: 8rem" bodyStyle="text-align:right"></Column>
+                                    <Column :rowEditor="true" style="width: 5%; min-width: 8rem"
+                                        bodyStyle="text-align:right"></Column>
                                     <Column style="width: 5%;" bodyStyle="text-align:left">
                                         <template #body="{ data }">
-                                            <UButton class="flex-none" icon="i-heroicons-trash-solid" size="sm" variant="link" color="red" squre @click="removeIdParametrosCheques(data.id)"></UButton> 
+                                            <UButton class="flex-none" icon="i-heroicons-trash-solid" size="sm"
+                                                variant="link" color="red" squre
+                                                @click="removeIdParametrosCheques(data.id)"></UButton>
                                         </template>
                                     </Column>
                                 </DataTable>
@@ -271,16 +311,19 @@
                                     <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
                                         <template #header>
                                             <div class="flex items-center justify-between">
-                                                <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                                                Agregar datos
+                                                <h3
+                                                    class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                                                    Agregar datos
                                                 </h3>
-                                                <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpenModal3 = false" />
+                                                <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"
+                                                    class="-my-1" @click="isOpenModal3 = false" />
                                             </div>
                                         </template>
 
                                         <div class="grid grid-rows-7 gap-4">
                                             <div class="col-span">
-                                                <label for="max_dto_financiero" class="block font-bold mb-3">DESDE</label>
+                                                <label for="max_dto_financiero"
+                                                    class="block font-bold mb-3">DESDE</label>
                                                 <UInput id="max_dto_financiero" v-model="agregarDatos3.desde" fluid />
                                             </div>
                                             <div class="col-span">
@@ -288,15 +331,18 @@
                                                 <UInput id="tolerncia_dif" v-model="agregarDatos3.hasta" fluid />
                                             </div>
                                             <div class="col-span">
-                                                <label for="unidad_tiempo_cheq" class="block font-bold mb-3">DESCUENTO</label>
+                                                <label for="unidad_tiempo_cheq"
+                                                    class="block font-bold mb-3">DESCUENTO</label>
                                                 <UInput id="unidad_tiempo_cheq" v-model="agregarDatos3.dto" fluid />
                                             </div>
                                         </div>
 
                                         <template #footer>
                                             <div class="float-end pb-4">
-                                                <UButton label="Cancelar" icon="i-heroicons-x-mark-20-solid" @click="isOpenModal3 = false" variant="link" color="black" />
-                                                <UButton label="Guardar" icon="i-heroicons-check" @click="submitCreate3"  variant="soft"/>
+                                                <UButton label="Cancelar" icon="i-heroicons-x-mark-20-solid"
+                                                    @click="isOpenModal3 = false" variant="link" color="black" />
+                                                <UButton label="Guardar" icon="i-heroicons-check" @click="submitCreate3"
+                                                    variant="soft" />
                                             </div>
                                         </template>
                                     </UCard>
@@ -311,27 +357,28 @@
 </template>
 <script setup lang="ts">
 definePageMeta({
+    title: 'Parámetros - Simulador de cobranzas',
     middleware: ['auth', '3-editor']
 })
 import { useDolarStore } from '~/store/dolar'
-const {status: status_parametros, data: data_parametros, refresh: refresh_parametros} = await useFetch('/api/parametrosgenerales')
-const {status: status_facturas, data: data_parametrosfacturas, refresh: refresh_parametrosfacturas} = await useFetch('/api/parametrosfacturas')
-const {status: status_cheques, data: data_parametroscheques, refresh: refresh_parametroscheques} = await useFetch('/api/parametroscheques')
+const { status: status_parametros, data: data_parametros, refresh: refresh_parametros } = await useFetch('/api/parametrosgenerales')
+const { status: status_facturas, data: data_parametrosfacturas, refresh: refresh_parametrosfacturas } = await useFetch('/api/parametrosfacturas')
+const { status: status_cheques, data: data_parametroscheques, refresh: refresh_parametroscheques } = await useFetch('/api/parametroscheques')
 const { getDolar } = useDolarStore()
 const toast = useToast()
 const isOpenModal = ref(false)
 const editingRows = ref([]);
 const agregarDatos = ref({
-        max_dto_financiero: '',
-        tolerncia_dif: '',
-        unidad_tiempo_cheq: '',
-        unidad_tiempo_tc: '',
-        abv_tarjetas_credito: '',
-        abv_tarjetas_debito: '',
-        tasa_iva: '',
-        interes_diario: '',
-        fecha_alta: new Date(),
-        dolar: ''
+    max_dto_financiero: '',
+    tolerncia_dif: '',
+    unidad_tiempo_cheq: '',
+    unidad_tiempo_tc: '',
+    abv_tarjetas_credito: '',
+    abv_tarjetas_debito: '',
+    tasa_iva: '',
+    interes_diario: '',
+    fecha_alta: new Date(),
+    dolar: ''
 })
 
 const isOpenModal2 = ref(false)
@@ -368,10 +415,10 @@ const parametros3 = [{
 
 const onRowEditSave1 = async (e: any) => {
     let { newData, index } = e;
-    
+
     const Id = newData.id
-    
-    const res = await $fetch('/api/parametrosgenerales/'+Id, {
+
+    const res = await $fetch('/api/parametrosgenerales/' + Id, {
         method: 'PUT',
         body: {
             max_dto_financiero: newData.max_dto_financiero,
@@ -386,16 +433,16 @@ const onRowEditSave1 = async (e: any) => {
             dolar: newData.dolar
         }
     })
-    toast.add({title: "Modificado correctamente"})
+    toast.add({ title: "Modificado correctamente" })
     refresh_parametros();
     getDolar();
 }
 
 const removeIdParametros = async (e: any) => {
-    const res = await $fetch('/api/parametrosgenerales/'+e, {
+    const res = await $fetch('/api/parametrosgenerales/' + e, {
         method: 'DELETE'
     })
-    toast.add({title: "Eliminado correctamente"})
+    toast.add({ title: "Eliminado correctamente" })
     refresh_parametros();
 }
 
@@ -415,20 +462,20 @@ const submitCreate1 = async () => {
             dolar: agregarDatos.value?.dolar
         }
     })
-    toast.add({title: "Agregado correctamente"})
+    toast.add({ title: "Agregado correctamente" })
     isOpenModal.value = false
     refresh_parametros();
 }
 
 const onRowEditSave2 = async (e: any) => {
     let { newData, index } = e;
-    
+
     const Id = newData.id
     const Desde = newData.desde
     const Hasta = newData.hasta
     const Dto = newData.dto
-    
-    const res = await $fetch('/api/parametrosfacturas/'+Id , {
+
+    const res = await $fetch('/api/parametrosfacturas/' + Id, {
         method: 'PUT',
         body: {
             desde: Desde,
@@ -436,15 +483,15 @@ const onRowEditSave2 = async (e: any) => {
             dto: Dto
         }
     })
-    toast.add({title: "Modificado correctamente"})
+    toast.add({ title: "Modificado correctamente" })
     refresh_parametrosfacturas();
 }
 
 const removeIdParametrosFacturas = async (e: any) => {
-    const res = await $fetch('/api/parametrosfacturas/'+e, {
+    const res = await $fetch('/api/parametrosfacturas/' + e, {
         method: 'DELETE'
     })
-    toast.add({title: "Eliminado correctamente"})
+    toast.add({ title: "Eliminado correctamente" })
     refresh_parametrosfacturas();
 }
 
@@ -457,20 +504,20 @@ const submitCreate2 = async () => {
             dto: agregarDatos2.value?.dto
         }
     })
-    toast.add({title: "Agregado correctamente"})
+    toast.add({ title: "Agregado correctamente" })
     isOpenModal2.value = false
     refresh_parametrosfacturas();
 }
 
 const onRowEditSave3 = async (e: any) => {
     let { newData, index } = e;
-    
+
     const Id = newData.id
     const Desde = newData.desde
     const Hasta = newData.hasta
     const Dto = newData.dto
-    
-    const res = await $fetch('/api/parametroscheques/'+Id , {
+
+    const res = await $fetch('/api/parametroscheques/' + Id, {
         method: 'PUT',
         body: {
             desde: Desde,
@@ -478,15 +525,15 @@ const onRowEditSave3 = async (e: any) => {
             dto: Dto
         }
     })
-    toast.add({title: "Modificado correctamente"})
+    toast.add({ title: "Modificado correctamente" })
     refresh_parametroscheques();
 }
 
 const removeIdParametrosCheques = async (e: any) => {
-    const res = await $fetch('/api/parametroscheques/'+e, {
+    const res = await $fetch('/api/parametroscheques/' + e, {
         method: 'DELETE'
     })
-    toast.add({title: "Eliminado correctamente"})
+    toast.add({ title: "Eliminado correctamente" })
     refresh_parametroscheques();
 }
 
@@ -499,7 +546,7 @@ const submitCreate3 = async () => {
             dto: agregarDatos3.value?.dto
         }
     })
-    toast.add({title: "Agregado correctamente"})
+    toast.add({ title: "Agregado correctamente" })
     isOpenModal3.value = false
     refresh_parametroscheques();
 }

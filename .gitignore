@@ -27,3 +27,6 @@ logs
 # Crt Key
 *.crt
 *.key
+
+# Prisma
+prisma/schema.prisma

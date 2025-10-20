@@ -43,14 +43,14 @@ export const useDolarStore = defineStore("dolar", {
         "Connecting WS to " + proto + "//" + location.host + "/ws/cotizaciones"
       );
       const ws = new WebSocket(`${proto}//${location.host}/ws/cotizaciones`);
-      ws.onopen = () => {
+      /* ws.onopen = () => {
         console.log("WebSocket connected!");
         this.isConnected = true;
         if (this.retryTimeout) {
           clearTimeout(this.retryTimeout); // Clear the retry timeout on successful connection
           this.retryTimeout = null;
         }
-      };
+      }; */
       ws.onmessage = (evt) => {
         const m = JSON.parse(evt.data);
         if (m.type === "DL_UPDATE" || m.type === "DL_SNAPSHOT") {
@@ -59,11 +59,11 @@ export const useDolarStore = defineStore("dolar", {
           this.usuarioDolar = String(m.row?.usuario_dolar ?? "");
         }
       };
-      ws.onerror = (error) => {
+      /* ws.onerror = (error) => {
         console.error("WebSocket error:", error);
         this.isConnected = false;
-      };
-      ws.onclose = () => {
+      }; */
+      /* ws.onclose = () => {
         console.log("WebSocket closed. Retrying...");
         this.isConnected = false;
         if (!this.isConnected) {
@@ -72,7 +72,7 @@ export const useDolarStore = defineStore("dolar", {
             this.listenWs();
           }, this.retryInterval);
         }
-      };
+      }; */
       return ws;
     },
   },

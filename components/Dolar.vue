@@ -42,7 +42,7 @@ const { dolarHoy } = storeToRefs(useDolarStore());
 const fullName = computed(() => authenticated.value ? useCookie('fullname').value : '');
 const formatterNumber = new Intl.NumberFormat("es-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 const storeDolar = useDolarStore()
-//await callOnce(storeDolar.getDolar)
+await callOnce(storeDolar.getDolar)
 console.log("Dolar.vue - Dólar actual: " + dolarHoy.value)
 const toast = useToast()
 const edit = ref<boolean>(false)

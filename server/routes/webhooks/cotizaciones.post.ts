@@ -1,5 +1,6 @@
 // SIN /api => server/routes/webhooks/cotizaciones.post.ts
 // CON /api => server/api/webhooks/cotizaciones.post.ts
+import { pl } from "date-fns/locale";
 import {
   defineEventHandler,
   readRawBody,
@@ -56,13 +57,14 @@ export default defineEventHandler(async (event) => {
       return;
     }
     //console.log("Webhook DL recibido:", row);
+    //console.log(payload);
     const dolar = Number(row.COTI_COTIZACION);
     const fecha = row.COTI_FECHA ? payload.detectedAt : new Date();
-
+    //console.log("Dolar:", dolar, "Fecha:", fecha);
     // 4) persistir en PG (tomar el primer registro)
     const first =
       await prisma.simulador_cobranzas_parametros_generales.findFirst({
-        orderBy: { id: "asc" },
+        where: { id: 1 },
       });
     const updated = first
       ? await prisma.simulador_cobranzas_parametros_generales.update({

@@ -26,6 +26,7 @@ import { number, z } from 'zod'
 import type { Form, FormSubmitEvent } from '#ui/types'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '~/store/auth'
+import decodeJwt from '~/utils/decodeJwt'
 const runtimeConfig = useRuntimeConfig()
 definePageMeta({
     title: 'Login - Simulador de cobranzas',
@@ -68,7 +69,8 @@ const login = async (event: FormSubmitEvent<Schema>) => {
 
         }
     }).then((response: any) => {
-        return response
+        const decoded = decodeJwt(response.token);
+        return decoded
     }).catch((err) => console.error(err));
 
     const response_roles = await $fetch('/api/roles');

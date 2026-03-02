@@ -133,7 +133,7 @@
               </template>
               <template #MONTO-data="{ row }">
                 <UBadge size="lg"
-                  :label="row.MONTO == 0 ? '$ ' + row.MONTO : row.MONTO > 0 ? 'Descuentos $ ' + formatterNumber.format(row.MONTO) : 'Débitos $ ' + formatterNumber.format(row.MONTO)"
+                  :label="row.MONTO == 0 ? 'Sin descuentos' : row.MONTO > 0 ? 'Descuentos $ ' + formatterNumber.format(row.MONTO) : 'Débitos $ ' + formatterNumber.format(row.MONTO)"
                   :color="row.MONTO == 0 ? 'gray' : row.MONTO > 0 ? 'emerald' : 'orange'" variant="soft" />
               </template>
             </UTable>
@@ -709,9 +709,13 @@ const consultaSaldosCliente = async () => {
         SALDO: data.SALDO,
         FECHA_DIFF: fechaDif,
         INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toString() : '',
-        DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100).toString() : 0,
-        MONTO_COBRAR: ((data.SALDO) * (1 - ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100) : 0) / 100))),
-        MONTO: ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100) : 0) / 100))
+        DTO_FINANCIERO: data.CVCL_TIPO_VAR == '222' || data.CVCL_TIPO_VAR == '234' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100).toString() : 0,
+        MONTO_COBRAR: ((data.SALDO) * (1 - ((data.CVCL_TIPO_VAR == '222' || data.CVCL_TIPO_VAR == '234' ? 0 : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100) : 0) / 100))),
+        MONTO: ((data.SALDO) * ((
+          data.CVCL_TIPO_VAR == '222' || data.CVCL_TIPO_VAR == '234' ? 0 
+          : dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto 
+          : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100) 
+          : 0) / 100))
       }
     })
     getdata.dataNC = response.filter((item: any) => {
@@ -851,7 +855,7 @@ const consultaSaldosRemito = async () => {
         SALDO: data.SALDO,
         FECHA_DIFF: fechaDif,
         INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toString() : '',
-        DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100).toString() : 0,
+        DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100).toString() : data.CVCL_TIPO_VAR === '222' || data.CVCL_TIPO_VAR === '234' ? 0 : 0,
         MONTO_COBRAR: ((data.SALDO) * (1 - ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100) : 0) / 100))),
         MONTO: ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100) : 0) / 100))
       }
@@ -986,7 +990,7 @@ const consultaSaldosFactura = async () => {
         SALDO: data.SALDO,
         FECHA_DIFF: fechaDif,
         INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toString() : '',
-        DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100).toString() : 0,
+        DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100).toString() : data.CVCL_TIPO_VAR === '222' || data.CVCL_TIPO_VAR === '234' ? 0 : 0,
         MONTO_COBRAR: ((data.SALDO) * (1 - ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100) : 0) / 100))),
         MONTO: ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100) : 0) / 100))
       }
@@ -1089,7 +1093,7 @@ const consultaSaldosQR = async () => {
         SALDO: data.SALDO,
         FECHA_DIFF: fechaDif,
         INTERES_MAX_DTO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? (Number(interesdiario) * fechaDif).toFixed(2) : 0,
-        DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100).toFixed(2) : 0,
+        DTO_FINANCIERO: dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100).toFixed(2) : data.CVCL_TIPO_VAR === '222' || data.CVCL_TIPO_VAR === '234' ? 0 : 0,
         MONTO_COBRAR: ((data.SALDO) * (1 - ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100) : 0) / 100))),
         MONTO: ((data.SALDO) * ((dtoFacturas[0]?.dto ? dtoFacturas[0]?.dto : fechaDif >= Number(fechaHastaUltima) ? ((1 - ((1 - (Number(maxdtofinanciero) / 100)) * (1 + (Number(interesdiario) / 100) * fechaDif))) * 100) : 0) / 100))
       }

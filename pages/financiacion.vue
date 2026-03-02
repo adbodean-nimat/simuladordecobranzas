@@ -16,6 +16,8 @@
         <template v-if="data_tarjetas">
           <UAccordion variant="soft" multiple size="xl" :items="data_tarjetas" class="grid grid-cols-3 gap-4">
             <template v-for="row in data_tarjetas" :key="row.slot" #[row.slot]="{ item }">
+              <!-- <UButton style="float: right;" icon="i-heroicons-clipboard-document" size="sm" variant="soft" label="Copiar"
+                  @click="copiarTexto(item.label, item.data)"></UButton> -->
               <div class="text-sea-green-900 dark:text-white">
                 <UTable v-model:sort="sort" :columns="selectedColumns" :rows="item.data" class="w-full">
                   <template #tasas_interes-data="{ row }">
@@ -37,9 +39,11 @@ import { useAuthStore } from '~/store/auth';
 const { authenticated, rol } = storeToRefs(useAuthStore());
 import type { JsonValue } from '@prisma/client/runtime/library';
 import type { SerializeObject } from 'nitropack';
+import { useClipboard } from '@vueuse/core'
 definePageMeta({
   title: 'Costo de financiación'
 })
+const { copy } = useClipboard()
 //console.log(rol.value[0])
 const data_tarjetas = ref()
 const data_tarjetas2 = ref()
@@ -76,6 +80,32 @@ let formatter_percent = new Intl.NumberFormat('es-AR', {
 })
 
 let formatter_decimal = new Intl.NumberFormat("es-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+
+function formatTarjetaToText(label: any, json: any) {
+  if (!Array.isArray(json) || !json.length) return ''
+
+  const slot = label.toUpperCase()
+
+  const lineas = json
+    .sort((a, b) => a.nro_cuotas - b.nro_cuotas)
+    .map(item => {
+      const cuota = item.nro_cuotas
+      const interes = item.tasas_interes
+
+      return `${cuota} cuota${cuota > 1 ? 's' : ''}: ${interes}%`
+    })
+
+  return `${slot}\n\n` +
+  json
+    .sort((a, b) => a.nro_cuotas - b.nro_cuotas)
+    .map(i => `💳 ${i.nro_cuotas} cuota${i.nro_cuotas > 1 ? 's' : ''} → ${i.tasas_interes}% interés`)
+    .join('\n')
+}
+
+const copiarTexto = (label: any, data: any) => {
+  const texto = formatTarjetaToText(label, data)
+  copy(texto)
+}
 
 const columns = [{
   key: 'nro_cuotas',
